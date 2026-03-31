@@ -41,12 +41,13 @@ const HeroSection = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5, ease: 'easeOut' }}
-        className="absolute inset-0 z-[2] sm:hidden"
+        style={{ y: bgY }}
+        className="absolute inset-[-10%] z-[2] sm:hidden"
       >
         <img
           src={coverArt}
           alt=""
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover scale-90"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-deep-black via-deep-black/60 to-deep-black/30" />
       </motion.div>
