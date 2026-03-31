@@ -28,19 +28,34 @@ const HeroSection = () => {
       />
 
       {/* Content */}
+      {/* Full background cover art on mobile */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: 'easeOut' }}
+        className="absolute inset-0 z-[2] sm:hidden"
+      >
+        <img
+          src={coverArt}
+          alt=""
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-deep-black via-deep-black/60 to-deep-black/30" />
+      </motion.div>
+
       <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-5xl mx-auto">
-        {/* Cover art */}
+        {/* Cover art - desktop only */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.5, ease: 'easeOut' }}
-          className="mb-8 relative"
+          className="mb-8 relative hidden sm:block"
         >
           <div className="absolute inset-0 bg-gradient-to-t from-deep-black via-transparent to-transparent z-10 pointer-events-none" />
           <img
             src={coverArt}
             alt="The Art of ISM - Mr. CAP"
-            className="w-full max-w-[calc(100%-2rem)] sm:w-80 md:w-96 h-auto rounded-sm shadow-2xl text-center object-cover"
+            className="sm:w-80 md:w-96 h-auto rounded-sm shadow-2xl object-cover"
             style={{
               boxShadow: '0 0 80px hsl(355 100% 24% / 0.3), 0 0 120px hsl(0 0% 0% / 0.5)',
             }}
