@@ -1,5 +1,6 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { chapters } from '@/data/bookContent';
 import { useReadingProgress, useFavorites } from '@/hooks/useReadingProgress';
 import AnimatedSection from '@/components/AnimatedSection';
