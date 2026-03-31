@@ -41,8 +41,16 @@ const ChapterReader = () => {
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
   return (
     <div className="min-h-screen bg-deep-black">
+      {/* Scroll progress bar */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-[2px] bg-primary origin-left z-[100]"
+        style={{ scaleX }}
+      />
       <FloatingNav />
 
       {/* Smoke overlay for experience mode */}
