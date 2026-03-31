@@ -5,7 +5,7 @@ import coverArt from '@/assets/art_of_ism_book_3.png';
 import titleArt from '@/assets/title_2.png';
 
 const HeroSection = () => {
-  const sectionRef = useRef<HTMLSectionElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
