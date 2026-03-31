@@ -1,0 +1,62 @@
+import { Link } from 'react-router-dom';
+import AnimatedSection from './AnimatedSection';
+import { chapters } from '@/data/bookContent';
+
+const TOCGrid = () => {
+  return (
+    <section id="chapters" className="relative py-32 px-6">
+      <div className="absolute inset-0 bg-gradient-to-b from-deep-black via-smoke to-deep-black pointer-events-none" />
+
+      <div className="relative max-w-6xl mx-auto">
+        <AnimatedSection>
+          <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4 text-center">The Chapters</p>
+          <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-16">
+            Table of <span className="text-gold-gradient">Contents</span>
+          </h2>
+        </AnimatedSection>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {chapters.map((chapter, i) => (
+            <AnimatedSection key={chapter.number} delay={i * 80}>
+              <Link
+                to={`/chapter/${chapter.number}`}
+                className="group block relative p-6 bg-card border border-border rounded-sm overflow-hidden hover:border-primary/40 transition-all duration-500"
+                style={{
+                  boxShadow: 'inset 0 0 0 0 hsl(355 100% 24% / 0)',
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.boxShadow =
+                    '0 0 30px hsl(355 100% 24% / 0.2), inset 0 0 30px hsl(355 100% 24% / 0.05)';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.boxShadow =
+                    'inset 0 0 0 0 hsl(355 100% 24% / 0)';
+                }}
+              >
+                {/* Chapter number watermark */}
+                <span className="absolute top-2 right-4 font-display text-7xl font-bold text-foreground/[0.03] leading-none select-none">
+                  {String(chapter.number).padStart(2, '0')}
+                </span>
+
+                <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary mb-2">
+                  Chapter {chapter.number}
+                </p>
+                <h3 className="font-display text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
+                  {chapter.title}
+                </h3>
+                <p className="text-sm text-muted-foreground italic">
+                  {chapter.summary}
+                </p>
+
+                {/* Bottom gold line on hover */}
+                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </Link>
+            </AnimatedSection>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default TOCGrid;
