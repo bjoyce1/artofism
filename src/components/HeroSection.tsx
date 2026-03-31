@@ -90,7 +90,7 @@ const HeroSection = () => {
           transition={{ duration: 1, delay: 1 }}
           className="font-ui text-xs uppercase tracking-[0.4em] text-muted-foreground mb-12"
         >
-          by Mr. CAP
+          ​
         </motion.p>
 
         {/* CTAs */}
