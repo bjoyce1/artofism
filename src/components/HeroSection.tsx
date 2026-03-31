@@ -71,15 +71,8 @@ const HeroSection = () => {
           />
         </motion.div>
 
-        {/* Title art */}
-        <motion.img
-          src={titleArt}
-          alt="The Art of ISM"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.5 }}
-          className="w-72 sm:w-96 md:w-[480px] h-auto gold-shimmer mb-6"
-        />
+
+
 
         {/* Subtitle */}
         <motion.p
