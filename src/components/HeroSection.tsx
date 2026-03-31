@@ -40,7 +40,7 @@ const HeroSection = () => {
           <img
             src={coverArt}
             alt="The Art of ISM - Mr. CAP"
-            className="w-full max-w-[calc(100%-2rem)] sm:w-80 md:w-96 h-auto rounded-sm shadow-2xl"
+            className="w-full max-w-[calc(100%-2rem)] sm:w-80 md:w-96 h-auto rounded-sm shadow-2xl text-center object-cover"
             style={{
               boxShadow: '0 0 80px hsl(355 100% 24% / 0.3), 0 0 120px hsl(0 0% 0% / 0.5)',
             }}
