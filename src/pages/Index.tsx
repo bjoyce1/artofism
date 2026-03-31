@@ -19,6 +19,7 @@ const Index = () => {
       <QuoteVault />
       <AboutAuthorSection />
       <FinalCTA />
+      <AmbientAudioToggle />
     </div>
   );
 };
