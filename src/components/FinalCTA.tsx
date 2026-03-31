@@ -37,7 +37,7 @@ const FinalCTA = () => {
               href="https://mrcap1.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-3 border border-muted text-muted-foreground text-sm uppercase tracking-[0.2em] hover:border-primary/40 hover:text-primary transition-all duration-300"
+              className="gold-dust px-8 py-3 border border-muted text-muted-foreground text-sm uppercase tracking-[0.2em] hover:border-primary/40 hover:text-primary transition-all duration-300"
             >
               Visit Mr. CAP
             </a>

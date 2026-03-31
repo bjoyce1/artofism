@@ -97,7 +97,7 @@ const HeroSection = () => {
           </a>
           <Link
             to="/codes"
-            className="px-8 py-3 border border-muted text-muted-foreground text-sm uppercase tracking-[0.2em] hover:border-primary/40 hover:text-primary transition-all duration-300"
+            className="gold-dust px-8 py-3 border border-muted text-muted-foreground text-sm uppercase tracking-[0.2em] hover:border-primary/40 hover:text-primary transition-all duration-300"
           >
             View the Code
           </Link>
