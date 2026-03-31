@@ -1,9 +1,17 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useRef } from 'react';
 import coverArt from '@/assets/art_of_ism_book_3.png';
 import titleArt from '@/assets/title_2.png';
 
 const HeroSection = () => {
+  const sectionRef = useRef<HTMLSectionElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Smoke overlays */}
