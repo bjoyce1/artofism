@@ -1,11 +1,19 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useRef } from 'react';
 import coverArt from '@/assets/art_of_ism_book_3.png';
 import titleArt from '@/assets/title_2.png';
 
 const HeroSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Smoke overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-deep-black via-deep-black/95 to-deep-black z-0" />
       <div
@@ -33,12 +41,13 @@ const HeroSection = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5, ease: 'easeOut' }}
-        className="absolute inset-0 z-[2] sm:hidden"
+        style={{ y: bgY }}
+        className="absolute inset-[-10%] z-[2] sm:hidden"
       >
         <img
           src={coverArt}
           alt=""
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover scale-90"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-deep-black via-deep-black/60 to-deep-black/30" />
       </motion.div>
