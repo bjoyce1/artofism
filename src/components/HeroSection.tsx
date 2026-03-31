@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useRef } from 'react';
 import coverArt from '@/assets/art_of_ism_book_3.png';
 import titleArt from '@/assets/title_2.png';
+import heroTitle from '@/assets/hero-title.png';
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
