@@ -23,7 +23,7 @@ const FinalCTA = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center font-ui mt-12">
             <a
               href="#introduction"
-              className="px-8 py-3 bg-primary text-primary-foreground text-sm uppercase tracking-[0.2em] hover:brightness-110 transition-all duration-300"
+              className="gold-dust px-8 py-3 bg-primary text-primary-foreground text-sm uppercase tracking-[0.2em] hover:brightness-110 transition-all duration-300"
             >
               Read Again
             </a>
