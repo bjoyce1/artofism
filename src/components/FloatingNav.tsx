@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import logo from '@/assets/logo.png';
 
 const navItems = [
   { label: 'Home', path: '/' },
@@ -47,8 +48,8 @@ const FloatingNav = () => {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="text-gold-gradient font-display text-xl font-bold tracking-wider">
-            ISM
+          <Link to="/" className="flex items-center">
+            <img src={logo} alt="The Art of ISM" className="h-8 w-auto" />
           </Link>
 
           {/* Desktop */}
