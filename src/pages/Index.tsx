@@ -1,5 +1,6 @@
 import FloatingNav from '@/components/FloatingNav';
 import HeroSection from '@/components/HeroSection';
+import AmbientAudioToggle from '@/components/AmbientAudioToggle';
 import DedicationSection from '@/components/DedicationSection';
 import IntroductionLayout from '@/components/IntroductionLayout';
 import TOCGrid from '@/components/TOCGrid';
@@ -18,6 +19,7 @@ const Index = () => {
       <QuoteVault />
       <AboutAuthorSection />
       <FinalCTA />
+      <AmbientAudioToggle />
     </div>
   );
 };
