@@ -20,7 +20,7 @@ const TOCGrid = () => {
             <AnimatedSection key={chapter.number} delay={i * 80}>
               <Link
                 to={`/chapter/${chapter.number}`}
-                className="group block relative p-6 bg-card border border-border rounded-sm overflow-hidden hover:border-primary/40 transition-all duration-500"
+                className="gold-dust group block relative p-6 bg-card border border-border rounded-sm overflow-hidden hover:border-primary/40 transition-all duration-500"
                 style={{
                   boxShadow: 'inset 0 0 0 0 hsl(355 100% 24% / 0)',
                 }}

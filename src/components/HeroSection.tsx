@@ -85,19 +85,19 @@ const HeroSection = () => {
         >
           <a
             href="#introduction"
-            className="px-8 py-3 bg-primary text-primary-foreground text-sm uppercase tracking-[0.2em] hover:brightness-110 transition-all duration-300"
+            className="gold-dust px-8 py-3 bg-primary text-primary-foreground text-sm uppercase tracking-[0.2em] hover:brightness-110 transition-all duration-300"
           >
             Begin the Book
           </a>
           <a
             href="#chapters"
-            className="px-8 py-3 border border-primary/40 text-primary text-sm uppercase tracking-[0.2em] hover:bg-primary/10 transition-all duration-300"
+            className="gold-dust px-8 py-3 border border-primary/40 text-primary text-sm uppercase tracking-[0.2em] hover:bg-primary/10 transition-all duration-300"
           >
             Explore Chapters
           </a>
           <Link
             to="/codes"
-            className="px-8 py-3 border border-muted text-muted-foreground text-sm uppercase tracking-[0.2em] hover:border-primary/40 hover:text-primary transition-all duration-300"
+            className="gold-dust px-8 py-3 border border-muted text-muted-foreground text-sm uppercase tracking-[0.2em] hover:border-primary/40 hover:text-primary transition-all duration-300"
           >
             View the Code
           </Link>

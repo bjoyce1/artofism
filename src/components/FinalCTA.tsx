@@ -23,13 +23,13 @@ const FinalCTA = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center font-ui mt-12">
             <a
               href="#introduction"
-              className="px-8 py-3 bg-primary text-primary-foreground text-sm uppercase tracking-[0.2em] hover:brightness-110 transition-all duration-300"
+              className="gold-dust px-8 py-3 bg-primary text-primary-foreground text-sm uppercase tracking-[0.2em] hover:brightness-110 transition-all duration-300"
             >
               Read Again
             </a>
             <Link
               to="/codes"
-              className="px-8 py-3 border border-primary/40 text-primary text-sm uppercase tracking-[0.2em] hover:bg-primary/10 transition-all duration-300"
+              className="gold-dust px-8 py-3 border border-primary/40 text-primary text-sm uppercase tracking-[0.2em] hover:bg-primary/10 transition-all duration-300"
             >
               Explore the Codes
             </Link>
@@ -37,7 +37,7 @@ const FinalCTA = () => {
               href="https://mrcap1.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-3 border border-muted text-muted-foreground text-sm uppercase tracking-[0.2em] hover:border-primary/40 hover:text-primary transition-all duration-300"
+              className="gold-dust px-8 py-3 border border-muted text-muted-foreground text-sm uppercase tracking-[0.2em] hover:border-primary/40 hover:text-primary transition-all duration-300"
             >
               Visit Mr. CAP
             </a>
