@@ -81,7 +81,7 @@ const HeroSection = () => {
           transition={{ duration: 1, delay: 0.8 }}
           className="font-ui text-sm sm:text-base uppercase tracking-[0.3em] text-muted-foreground mb-2"
         >
-          A Code of Thought, Movement, and Mastery
+          ​
         </motion.p>
 
         <motion.p
