@@ -120,6 +120,21 @@ const HeroSection = () => {
             View the Code
           </Link>
         </motion.div>
+
+        {/* Title logo with parallax */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 1.5 }}
+          style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '60%']) }}
+          className="mt-16"
+        >
+          <img
+            src={heroTitle}
+            alt="The Art of ISM"
+            className="w-64 sm:w-80 md:w-96 h-auto gold-shimmer"
+          />
+        </motion.div>
       </div>
 
       {/* Scroll indicator */}
