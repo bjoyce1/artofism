@@ -91,7 +91,7 @@ const HeroSection = () => {
           </a>
           <a
             href="#chapters"
-            className="px-8 py-3 border border-primary/40 text-primary text-sm uppercase tracking-[0.2em] hover:bg-primary/10 transition-all duration-300"
+            className="gold-dust px-8 py-3 border border-primary/40 text-primary text-sm uppercase tracking-[0.2em] hover:bg-primary/10 transition-all duration-300"
           >
             Explore Chapters
           </a>
