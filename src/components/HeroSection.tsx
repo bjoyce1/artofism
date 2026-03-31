@@ -13,7 +13,7 @@ const HeroSection = () => {
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Smoke overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-deep-black via-deep-black/95 to-deep-black z-0" />
       <div
