@@ -47,7 +47,7 @@ const HeroSection = () => {
         <img
           src={coverArt}
           alt=""
-          className="w-full h-full object-cover scale-75"
+          className="w-full h-full object-contain"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-deep-black via-deep-black/60 to-deep-black/30" />
       </motion.div>
