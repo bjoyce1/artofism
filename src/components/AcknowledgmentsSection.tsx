@@ -3,7 +3,7 @@ import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 
 /* ─── Data ─── */
 const MENTORS = [
-  'Mac Drew', 'Robert T', 'Success', 'International Lace', 'Love',
+  'Mac Drew', 'Robert T', 'Success', 'Lace', 'Love',
   'Avalanche', 'Quick', 'Sin', 'Professor', 'Candy Man', 'RIP',
 ];
 
