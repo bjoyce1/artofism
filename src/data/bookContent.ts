@@ -381,8 +381,7 @@ export const chapters: Chapter[] = [
   {
     number: 8,
     title: "The Realest",
-    summary: "Authenticity under pressure",
-    tagline: "Real doesn't need validation. It doesn't announce itself. It doesn't chase attention. It doesn't perform for approval. It just is.",
+    summary: "Real recognizes real",
     content: [
       "Real doesn't need validation. It doesn't announce itself. It doesn't chase attention. It doesn't perform for approval. It just is.",
       "That's something I learned early. Because in a world full of noise… authenticity stands out without trying.",
