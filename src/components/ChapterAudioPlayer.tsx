@@ -110,10 +110,10 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => setExpanded(true)}
-            className="fixed bottom-20 sm:bottom-6 left-4 sm:left-6 z-50 flex items-center gap-2 px-4 py-2.5 bg-card/90 backdrop-blur-lg border border-primary/30 rounded-full text-xs uppercase tracking-[0.12em] text-primary hover:border-primary/60 transition-all shadow-lg shadow-black/40"
+            className="fixed bottom-20 sm:bottom-6 left-4 sm:left-6 z-50 flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 bg-card/90 backdrop-blur-lg border border-primary/30 rounded-full text-xs uppercase tracking-[0.12em] text-primary hover:border-primary/60 transition-all shadow-lg shadow-primary/20"
             style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}
           >
-            <Music size={14} />
+            <img src={albumArt} alt="The Art of ISM" className="w-8 h-8 rounded-full object-cover shadow-md shadow-primary/30" />
             <span className="hidden sm:inline">{song.title}</span>
             <span className="sm:hidden">Play</span>
           </motion.button>
@@ -128,22 +128,25 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-20 sm:bottom-6 left-4 right-4 sm:left-6 sm:right-auto sm:w-[420px] z-50 bg-card/95 backdrop-blur-xl border border-border rounded-2xl sm:rounded-xl p-4 shadow-2xl shadow-black/50"
+            className="fixed bottom-20 sm:bottom-6 left-4 right-4 sm:left-6 sm:right-auto sm:w-[420px] z-50 bg-card/95 backdrop-blur-xl border border-primary/20 rounded-2xl sm:rounded-xl p-4 shadow-2xl shadow-primary/15"
             style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}
           >
             {/* Close */}
             <button
               onClick={() => setExpanded(false)}
-              className="absolute top-2 right-3 text-muted-foreground hover:text-foreground text-xs uppercase tracking-widest transition-colors"
+              className="absolute top-2 right-3 text-muted-foreground hover:text-foreground text-xs uppercase tracking-widest transition-colors z-10"
             >
               ✕
             </button>
 
             {/* Track info */}
-            <div className="flex items-center gap-3 mb-3">
-              <img src={albumArt} alt="The Art of ISM" className="w-10 h-10 rounded-lg object-cover shrink-0 shadow-md" />
+            <div className="flex items-center gap-4 mb-4">
+              <div className="relative shrink-0">
+                <div className="absolute -inset-1 bg-primary/20 rounded-xl blur-md" />
+                <img src={albumArt} alt="The Art of ISM" className="relative w-16 h-16 rounded-xl object-cover shadow-lg shadow-primary/25" />
+              </div>
               <div className="min-w-0">
-                <p className="text-sm font-display text-foreground truncate">{song.title}</p>
+                <p className="text-base font-display text-foreground truncate">{song.title}</p>
                 <p className="text-xs text-muted-foreground font-ui">Mr. CAP — Chapter {chapterNumber}</p>
               </div>
             </div>
