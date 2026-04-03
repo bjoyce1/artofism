@@ -158,8 +158,7 @@ export const chapters: Chapter[] = [
   {
     number: 3,
     title: "International Club Hopper",
-    summary: "Moving through the world on your own terms",
-    tagline: "Move how you feel—not how it looks.",
+    summary: "Lifestyle meets awareness",
     content: [
       "The lights hit different when you stop caring who's watching.",
       "City to city. Night to night. Different rooms, same energy. Music loud. People moving. Eyes everywhere.",
