@@ -113,8 +113,7 @@ export const chapters: Chapter[] = [
   {
     number: 2,
     title: "Focus",
-    summary: "Choosing what deserves your attention",
-    tagline: "Not everything that moves deserves your attention.",
+    summary: "Discipline creates direction",
     content: [
       "The room was quiet. Not empty—just still. The kind of stillness you only get late at night, when the world slows down and the noise finally fades.",
       "Monitors glowing. Beats looping low in the background. Thoughts moving faster than everything else.",
