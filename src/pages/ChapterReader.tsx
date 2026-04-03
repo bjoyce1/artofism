@@ -6,6 +6,7 @@ import { useReadingProgress, useFavorites } from '@/hooks/useReadingProgress';
 import AnimatedSection from '@/components/AnimatedSection';
 import FloatingNav from '@/components/FloatingNav';
 import { Heart, ChevronLeft, ChevronRight, Copy, Check, Eye, BookOpen } from 'lucide-react';
+import ChapterAudioPlayer from '@/components/ChapterAudioPlayer';
 
 const ChapterReader = () => {
   const { id } = useParams();
@@ -214,6 +215,9 @@ const ChapterReader = () => {
           </div>
         </div>
       </article>
+
+      {/* Chapter Audio Player */}
+      <ChapterAudioPlayer chapterNumber={chapterNum} />
     </div>
   );
 };
