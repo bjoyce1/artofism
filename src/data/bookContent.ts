@@ -64,8 +64,7 @@ export const chapters: Chapter[] = [
   {
     number: 1,
     title: "Evolution of the 16th Letter",
-    summary: "Redefining identity from the ground up",
-    tagline: "The 16th letter. P. Simple on the surface. Just another character in the alphabet. Something you learn early, repeat often, and never think twice about.",
+    summary: "Identity becomes philosophy",
     content: [
       "Game is something you don't just learn… it's something you recognize when you see it.",
       "Most people inherit meaning. They don't question it. They don't challenge it. They don't rebuild it. They take words as they were given and spend their entire lives living inside definitions they never created.",
