@@ -2,7 +2,7 @@ export interface Chapter {
   number: number;
   title: string;
   summary: string;
-  tagline: string;
+  tagline?: string;
   content: string[];
   code: {
     title: string;
