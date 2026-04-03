@@ -30,7 +30,6 @@ interface Props {
 
 const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
   const song = CHAPTER_SONGS[chapterNumber];
-  if (!song) return null;
 
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -41,9 +40,11 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
 
-  const { data: { publicUrl } } = supabase.storage
-    .from('music')
-    .getPublicUrl(song.file);
+  const publicUrl = song
+    ? supabase.storage.from('music').getPublicUrl(song.file).data.publicUrl
+    : '';
+
+  if (!song) return null;
 
   const togglePlay = useCallback(() => {
     const audio = audioRef.current;
