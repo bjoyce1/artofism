@@ -29,19 +29,21 @@ const HeroSection = () => {
           src={mobileHeroBg}
           alt=""
           className="w-full h-[115%] object-cover object-[50%_25%] sm:hidden"
+          loading="eager"
         />
         <img
           src={heroBg}
           alt=""
           className="w-full h-[115%] object-cover object-[20%_20%] hidden sm:block sm:object-[left_top]"
+          loading="eager"
         />
-        {/* Base vignette — subtle top & bottom fade */}
+        {/* Base vignette */}
         <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--deep-black))] via-transparent to-[hsl(var(--deep-black)/0.35)]" />
-        {/* Mobile: lighter even overlay so the photo breathes */}
-        <div className="absolute inset-0 bg-[hsl(var(--deep-black)/0.30)] sm:bg-transparent" />
-        {/* Desktop: right-side fade for text contrast */}
-        <div className="absolute inset-0 hidden sm:block bg-gradient-to-l from-[hsl(var(--deep-black)/0.75)] via-[hsl(var(--deep-black)/0.15)] to-transparent" />
-        {/* Warm cinematic bottom glow */}
+        {/* Mobile overlay */}
+        <div className="absolute inset-0 bg-[hsl(var(--deep-black)/0.45)] sm:bg-transparent" />
+        {/* Desktop: left-to-right gradient for text readability */}
+        <div className="absolute inset-0 hidden sm:block bg-gradient-to-l from-[hsl(var(--deep-black)/0.80)] via-[hsl(var(--deep-black)/0.20)] to-transparent" />
+        {/* Bottom fade */}
         <div
           className="absolute bottom-0 left-0 right-0 h-[25%]"
           style={{
@@ -74,7 +76,7 @@ const HeroSection = () => {
         style={{ y: contentY }}
         className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-10 lg:px-20 flex items-center justify-center sm:justify-end min-h-[100dvh]"
       >
-        <div className="flex flex-col items-center text-center sm:items-end sm:text-right sm:max-w-[55%] lg:max-w-[50%] pt-[65dvh] pb-8 sm:pt-16 sm:pb-10">
+        <div className="flex flex-col items-center text-center sm:items-end sm:text-right sm:max-w-[55%] lg:max-w-[50%] pt-[55dvh] pb-8 sm:pt-16 sm:pb-10">
           {/* Logo */}
           <motion.img
             src={ismLogo}
@@ -85,46 +87,59 @@ const HeroSection = () => {
             className="w-56 sm:w-80 md:w-[400px] lg:w-[460px] h-auto mb-4 sm:mb-5 drop-shadow-[0_0_60px_hsl(43_76%_52%/0.25)]"
           />
 
-          {/* Subtitle */}
+          {/* Subhead */}
           <motion.h2
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.5 }}
-            className="font-heading text-xs sm:text-base md:text-lg uppercase tracking-[0.15em] sm:tracking-[0.18em] text-foreground/85 mb-3 sm:mb-5 leading-relaxed"
+            className="font-heading text-sm sm:text-base md:text-lg uppercase tracking-[0.15em] sm:tracking-[0.18em] text-foreground/85 mb-3 sm:mb-4 leading-relaxed"
           >
             A Code of Thought,
             <br />
             Movement, and Mastery
           </motion.h2>
 
-          {/* Description */}
-          <motion.p
+          {/* Power line / hook */}
+          <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.7 }}
+            className="mb-3 sm:mb-4"
+          >
+            <p className="font-display text-base sm:text-lg md:text-xl text-foreground/95 leading-relaxed">
+              This is not motivation.
+            </p>
+            <p className="font-display text-base sm:text-lg md:text-xl text-primary font-semibold leading-relaxed">
+              This is a system.
+            </p>
+          </motion.div>
+
+          {/* Micro copy */}
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.85 }}
             className="font-body text-[11px] sm:text-sm text-muted-foreground max-w-xs sm:max-w-sm mb-3 sm:mb-4 leading-relaxed"
           >
-            A philosophy built from experience. Refined through movement.
-            Tested under pressure. This isn't just something you read —
-            it's something you live.
+            Learn how to think sharper, move smarter, and operate beyond limits.
           </motion.p>
 
           {/* Tagline */}
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.9 }}
+            transition={{ duration: 0.9, delay: 1.0 }}
             className="font-heading italic text-base sm:text-xl md:text-2xl text-primary mb-6 sm:mb-8"
             style={{ textShadow: '0 0 30px hsl(43 76% 52% / 0.3)' }}
           >
             It's all ISM.
           </motion.p>
 
-          {/* CTAs — stacked on mobile, row on desktop */}
+          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1.1 }}
+            transition={{ duration: 0.9, delay: 1.15 }}
             className="flex flex-col gap-3 font-ui mb-8 sm:mb-10 w-full sm:w-auto sm:flex-row"
           >
             <a
@@ -138,7 +153,7 @@ const HeroSection = () => {
               href="#chapters"
               className="gold-dust inline-flex items-center justify-center px-6 py-3.5 sm:px-7 sm:py-3 border border-primary/30 text-primary text-xs uppercase tracking-[0.2em] rounded-full hover:bg-primary/10 hover:border-primary/50 transition-all duration-500 backdrop-blur-sm active:scale-[0.97]"
             >
-              Explore Chapters
+              Explore the Chapters
             </a>
             <Link
               to="/codes"
@@ -148,11 +163,11 @@ const HeroSection = () => {
             </Link>
           </motion.div>
 
-          {/* Stats bar — 2x2 grid on mobile, row on desktop */}
+          {/* Stats bar */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1.3 }}
+            transition={{ duration: 0.9, delay: 1.35 }}
             className="grid grid-cols-4 gap-0 sm:flex sm:items-center"
           >
             {stats.map((stat, i) => (
