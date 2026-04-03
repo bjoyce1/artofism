@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useRef } from 'react';
 import heroBg from '@/assets/hero-bg.png';
+import mobileHeroBg from '@/assets/mobile-hero-bg.png';
 import ismLogo from '@/assets/ism-logo.png';
 
 const stats = [
