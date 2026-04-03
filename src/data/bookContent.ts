@@ -2,6 +2,7 @@ export interface Chapter {
   number: number;
   title: string;
   summary: string;
+  tagline?: string;
   content: string[];
   code: {
     title: string;
@@ -63,7 +64,7 @@ export const chapters: Chapter[] = [
   {
     number: 1,
     title: "Evolution of the 16th Letter",
-    summary: "Redefining identity from the ground up",
+    summary: "Identity becomes philosophy",
     content: [
       "Game is something you don't just learn… it's something you recognize when you see it.",
       "Most people inherit meaning. They don't question it. They don't challenge it. They don't rebuild it. They take words as they were given and spend their entire lives living inside definitions they never created.",
@@ -112,7 +113,7 @@ export const chapters: Chapter[] = [
   {
     number: 2,
     title: "Focus",
-    summary: "Choosing what deserves your attention",
+    summary: "Discipline creates direction",
     content: [
       "The room was quiet. Not empty—just still. The kind of stillness you only get late at night, when the world slows down and the noise finally fades.",
       "Monitors glowing. Beats looping low in the background. Thoughts moving faster than everything else.",
@@ -157,7 +158,7 @@ export const chapters: Chapter[] = [
   {
     number: 3,
     title: "International Club Hopper",
-    summary: "Moving through the world on your own terms",
+    summary: "Lifestyle meets awareness",
     content: [
       "The lights hit different when you stop caring who's watching.",
       "City to city. Night to night. Different rooms, same energy. Music loud. People moving. Eyes everywhere.",
@@ -202,7 +203,7 @@ export const chapters: Chapter[] = [
   {
     number: 4,
     title: "How You Feel About It",
-    summary: "Reading energy and rising above perception",
+    summary: "Perception reveals truth",
     content: [
       "You can feel it before anyone says a word. Not in what they do… but in what they don't.",
       "The way eyes linger just a little too long. The way conversations shift when you walk in. The way energy changes without explanation.",
@@ -246,7 +247,7 @@ export const chapters: Chapter[] = [
   {
     number: 5,
     title: "Words of ISM",
-    summary: "Speaking with intention, building with language",
+    summary: "Words become power",
     content: [
       "There's a difference between talking… and speaking with intention.",
       "Anybody can say something. Anybody can make noise. Anybody can fill space with words.",
@@ -293,7 +294,7 @@ export const chapters: Chapter[] = [
   {
     number: 6,
     title: "Let Me Touch It",
-    summary: "Mastering temptation and staying in control",
+    summary: "Temptation tests control",
     content: [
       "Temptation doesn't knock. It pulls.",
       "It shows up in motion. In energy. In presence. In the way someone walks across a room… the way attention shifts without permission… the way desire moves before logic even gets a chance to speak.",
@@ -335,7 +336,7 @@ export const chapters: Chapter[] = [
   {
     number: 7,
     title: "Space Age ISM",
-    summary: "Thinking beyond limits, operating in dimensions",
+    summary: "Mindset transcends limits",
     content: [
       "Some people are ahead of their time. Others… are operating outside of it.",
       "That's where I found myself. Not thinking like the room. Not moving like the environment. Not limited by what people considered normal.",
@@ -380,7 +381,7 @@ export const chapters: Chapter[] = [
   {
     number: 8,
     title: "The Realest",
-    summary: "Authenticity under pressure",
+    summary: "Real recognizes real",
     content: [
       "Real doesn't need validation. It doesn't announce itself. It doesn't chase attention. It doesn't perform for approval. It just is.",
       "That's something I learned early. Because in a world full of noise… authenticity stands out without trying.",
@@ -429,7 +430,7 @@ export const chapters: Chapter[] = [
   {
     number: 9,
     title: "For Money",
-    summary: "What money reveals about people",
+    summary: "Money exposes character",
     content: [
       "Money reveals people. Not slowly. Not subtly. Immediately.",
       "Because the moment money enters the equation… everything changes. Morals shift. Loyalty bends. Decisions get different.",
@@ -471,7 +472,7 @@ export const chapters: Chapter[] = [
   {
     number: 10,
     title: "Nothing Without It",
-    summary: "Control over currency, not the reverse",
+    summary: "Control defines value",
     content: [
       "Chapter 9 showed you what money does to people. This is about what you do with it.",
       "Everybody wants it. Money. They chase it. They stress over it. They measure themselves by it. Like it's the final answer.",
@@ -512,7 +513,7 @@ export const chapters: Chapter[] = [
   {
     number: 11,
     title: "CAPISM",
-    summary: "The full system, lived and embodied",
+    summary: "Philosophy becomes legacy",
     content: [
       "Dearly beloved… We gather here today… To celebrate this thing… Called ISM.",
       "Not just a word. Not just a mindset. A way of living. A system. A code.",
