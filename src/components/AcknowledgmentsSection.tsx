@@ -410,13 +410,6 @@ const AcknowledgmentsSection = () => {
             {MENTORS.map((name, i) => (
               <HonorCard key={name} name={name} index={i} shimmerActive={mentorShimmer === i} />
             ))}
-            <HonorCard
-              name={BIG_RIP.name}
-              sub={BIG_RIP.sub}
-              prominent
-              index={MENTORS.length}
-              shimmerActive={mentorShimmer === MENTORS.length}
-            />
           </GroupSection>
 
           {/* Group 2: Legacy – darker, slower, more reverent */}
