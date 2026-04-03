@@ -74,7 +74,7 @@ const HeroSection = () => {
         style={{ y: contentY }}
         className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-10 lg:px-20 flex items-center justify-center sm:justify-end min-h-[100dvh]"
       >
-        <div className="flex flex-col items-center text-center sm:items-end sm:text-right sm:max-w-[55%] lg:max-w-[50%] pt-20 pb-8 sm:pt-16 sm:pb-10">
+        <div className="flex flex-col items-center text-center sm:items-end sm:text-right sm:max-w-[55%] lg:max-w-[50%] pt-[65dvh] pb-8 sm:pt-16 sm:pb-10">
           {/* Logo */}
           <motion.img
             src={ismLogo}
