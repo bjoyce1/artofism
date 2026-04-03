@@ -430,8 +430,7 @@ export const chapters: Chapter[] = [
   {
     number: 9,
     title: "For Money",
-    summary: "What money reveals about people",
-    tagline: "Money reveals people.",
+    summary: "Money exposes character",
     content: [
       "Money reveals people. Not slowly. Not subtly. Immediately.",
       "Because the moment money enters the equation… everything changes. Morals shift. Loyalty bends. Decisions get different.",
