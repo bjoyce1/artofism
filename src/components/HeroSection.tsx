@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useRef } from 'react';
 import heroBg from '@/assets/hero-bg.png';
+import mobileHeroBg from '@/assets/mobile-hero-bg.png';
 import ismLogo from '@/assets/ism-logo.png';
 
 const stats = [
@@ -25,9 +26,14 @@ const HeroSection = () => {
       {/* Background image with parallax */}
       <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
         <img
+          src={mobileHeroBg}
+          alt=""
+          className="w-full h-[115%] object-cover object-[50%_25%] sm:hidden"
+        />
+        <img
           src={heroBg}
           alt=""
-          className="w-full h-[115%] object-cover object-[20%_20%] sm:object-[left_top]"
+          className="w-full h-[115%] object-cover object-[20%_20%] hidden sm:block sm:object-[left_top]"
         />
         {/* Base vignette — subtle top & bottom fade */}
         <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--deep-black))] via-transparent to-[hsl(var(--deep-black)/0.35)]" />
@@ -68,7 +74,7 @@ const HeroSection = () => {
         style={{ y: contentY }}
         className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-10 lg:px-20 flex items-center justify-center sm:justify-end min-h-[100dvh]"
       >
-        <div className="flex flex-col items-center text-center sm:items-end sm:text-right sm:max-w-[55%] lg:max-w-[50%] pt-20 pb-8 sm:pt-16 sm:pb-10">
+        <div className="flex flex-col items-center text-center sm:items-end sm:text-right sm:max-w-[55%] lg:max-w-[50%] pt-[65dvh] pb-8 sm:pt-16 sm:pb-10">
           {/* Logo */}
           <motion.img
             src={ismLogo}
