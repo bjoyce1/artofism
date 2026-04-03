@@ -336,8 +336,7 @@ export const chapters: Chapter[] = [
   {
     number: 7,
     title: "Space Age ISM",
-    summary: "Thinking beyond limits, operating in dimensions",
-    tagline: "Average minds operate in cycles. Advanced minds operate in dimensions.",
+    summary: "Mindset transcends limits",
     content: [
       "Some people are ahead of their time. Others… are operating outside of it.",
       "That's where I found myself. Not thinking like the room. Not moving like the environment. Not limited by what people considered normal.",
