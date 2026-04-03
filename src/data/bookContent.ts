@@ -247,8 +247,7 @@ export const chapters: Chapter[] = [
   {
     number: 5,
     title: "Words of ISM",
-    summary: "Speaking with intention, building with language",
-    tagline: "Words… build. They define. They direct. They create reality before reality even shows up.",
+    summary: "Words become power",
     content: [
       "There's a difference between talking… and speaking with intention.",
       "Anybody can say something. Anybody can make noise. Anybody can fill space with words.",
