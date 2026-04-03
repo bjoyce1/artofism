@@ -85,7 +85,7 @@ const ChapterReader = () => {
         </button>
       </div>
 
-      <article className="relative z-10 pt-20 sm:pt-24 pb-24 sm:pb-32 px-5 sm:px-6">
+      <article className="relative z-10 pt-20 sm:pt-24 pb-40 sm:pb-32 px-5 sm:px-6">
         <div className="max-w-3xl mx-auto">
           {/* Chapter number watermark */}
           {isExperience && (
