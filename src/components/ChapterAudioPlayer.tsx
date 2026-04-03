@@ -110,10 +110,10 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => setExpanded(true)}
-            className="fixed bottom-20 sm:bottom-6 left-4 sm:left-6 z-50 flex items-center gap-2 px-4 py-2.5 bg-card/90 backdrop-blur-lg border border-primary/30 rounded-full text-xs uppercase tracking-[0.12em] text-primary hover:border-primary/60 transition-all shadow-lg shadow-black/40"
+            className="fixed bottom-20 sm:bottom-6 left-4 sm:left-6 z-50 flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 bg-card/90 backdrop-blur-lg border border-primary/30 rounded-full text-xs uppercase tracking-[0.12em] text-primary hover:border-primary/60 transition-all shadow-lg shadow-primary/20"
             style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}
           >
-            <Music size={14} />
+            <img src={albumArt} alt="The Art of ISM" className="w-8 h-8 rounded-full object-cover shadow-md shadow-primary/30" />
             <span className="hidden sm:inline">{song.title}</span>
             <span className="sm:hidden">Play</span>
           </motion.button>
