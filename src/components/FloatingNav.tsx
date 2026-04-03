@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import logo from '@/assets/logo.png';
 
 const navItems = [
@@ -18,13 +19,23 @@ const FloatingNav = () => {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
     setMobileOpen(false);
   }, [location]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
 
   const handleNavClick = (path: string) => {
     setMobileOpen(false);
@@ -46,10 +57,11 @@ const FloatingNav = () => {
             ? 'bg-deep-black/90 backdrop-blur-xl border-b border-primary/10'
             : 'bg-transparent'
         }`}
+        style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center">
-            <img src={logo} alt="The Art of ISM" className="h-8 w-auto" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+          <Link to="/" className="flex items-center active:scale-95 transition-transform">
+            <img src={logo} alt="The Art of ISM" className="h-7 sm:h-8 w-auto" />
           </Link>
 
           {/* Desktop */}
@@ -78,38 +90,61 @@ const FloatingNav = () => {
           {/* Mobile toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden text-foreground hover:text-primary transition-colors"
+            className="md:hidden text-foreground hover:text-primary transition-colors p-2 -mr-2 active:scale-90 transition-transform"
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile drawer */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-40 bg-deep-black/98 backdrop-blur-xl flex flex-col items-center justify-center gap-8 font-ui">
-          {navItems.map(item => (
-            item.path.startsWith('/#') ? (
-              <button
+      {/* Mobile full-screen drawer */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 bg-deep-black/98 backdrop-blur-2xl flex flex-col items-center justify-center gap-6 font-ui"
+            style={{
+              paddingTop: 'env(safe-area-inset-top)',
+              paddingBottom: 'env(safe-area-inset-bottom)',
+            }}
+          >
+            {navItems.map((item, i) => (
+              <motion.div
                 key={item.label}
-                onClick={() => handleNavClick(item.path)}
-                className="text-lg uppercase tracking-[0.3em] text-muted-foreground hover:text-primary transition-colors duration-300"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ delay: i * 0.06, duration: 0.3 }}
               >
-                {item.label}
-              </button>
-            ) : (
-              <Link
-                key={item.label}
-                to={item.path}
-                className="text-lg uppercase tracking-[0.3em] text-muted-foreground hover:text-primary transition-colors duration-300"
-                onClick={() => setMobileOpen(false)}
-              >
-                {item.label}
-              </Link>
-            )
-          ))}
-        </div>
-      )}
+                {item.path.startsWith('/#') ? (
+                  <button
+                    onClick={() => handleNavClick(item.path)}
+                    className="text-xl uppercase tracking-[0.3em] text-muted-foreground hover:text-primary active:text-primary transition-colors duration-300 py-2"
+                  >
+                    {item.label}
+                  </button>
+                ) : (
+                  <Link
+                    to={item.path}
+                    className="text-xl uppercase tracking-[0.3em] text-muted-foreground hover:text-primary active:text-primary transition-colors duration-300 py-2"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                )}
+              </motion.div>
+            ))}
+
+            {/* Decorative divider */}
+            <div className="w-12 h-px bg-primary/20 mt-4" />
+            <p className="font-heading italic text-sm text-primary/50">It's all ISM.</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
