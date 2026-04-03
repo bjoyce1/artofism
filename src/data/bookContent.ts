@@ -294,8 +294,7 @@ export const chapters: Chapter[] = [
   {
     number: 6,
     title: "Let Me Touch It",
-    summary: "Mastering temptation and staying in control",
-    tagline: "Temptation doesn't knock. It pulls.",
+    summary: "Temptation tests control",
     content: [
       "Temptation doesn't knock. It pulls.",
       "It shows up in motion. In energy. In presence. In the way someone walks across a room… the way attention shifts without permission… the way desire moves before logic even gets a chance to speak.",
