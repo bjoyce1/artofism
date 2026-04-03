@@ -12,7 +12,7 @@ const LEGACY = [
 ];
 
 const CIRCLE = [
-  'Young Lace', 'Young Candy', 'Finesse', 'Cash', 'Dallas D', 'No Play', 'Wash', 'Chad',
+  'Young Lace', 'Young Candy', 'Finesse', 'Cash', 'Dallas D', 'No Play', 'Wash', 'Chad', 'Texas Redd',
 ];
 
 /* ─── Touch detection ─── */
