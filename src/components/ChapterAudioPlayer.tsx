@@ -141,9 +141,7 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
 
             {/* Track info */}
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
-                <Music size={18} className="text-primary" />
-              </div>
+              <img src={albumArt} alt="The Art of ISM" className="w-10 h-10 rounded-lg object-cover shrink-0 shadow-md" />
               <div className="min-w-0">
                 <p className="text-sm font-display text-foreground truncate">{song.title}</p>
                 <p className="text-xs text-muted-foreground font-ui">Mr. CAP — Chapter {chapterNumber}</p>
