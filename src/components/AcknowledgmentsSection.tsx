@@ -4,9 +4,8 @@ import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 /* ─── Data ─── */
 const MENTORS = [
   'Mac Drew', 'Robert T', 'Success', 'International Lace', 'Love',
-  'Avalanche', 'Quick', 'Sin', 'Professor', 'Candy Man',
+  'Avalanche', 'Quick', 'Sin', 'Professor', 'Candy Man', 'RIP',
 ];
-const BIG_RIP = { name: 'RIP', sub: '​' };
 
 const LEGACY = [
   'One 4 Da Money', 'Ivory P', 'Dre', 'Crow',
@@ -411,13 +410,6 @@ const AcknowledgmentsSection = () => {
             {MENTORS.map((name, i) => (
               <HonorCard key={name} name={name} index={i} shimmerActive={mentorShimmer === i} />
             ))}
-            <HonorCard
-              name={BIG_RIP.name}
-              sub={BIG_RIP.sub}
-              prominent
-              index={MENTORS.length}
-              shimmerActive={mentorShimmer === MENTORS.length}
-            />
           </GroupSection>
 
           {/* Group 2: Legacy – darker, slower, more reverent */}
