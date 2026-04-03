@@ -77,13 +77,13 @@ const QuoteVault = () => {
           ))}
         </div>
 
-        {/* Desktop: masonry grid */}
-        <div className="hidden sm:block columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+        {/* Desktop: uniform grid */}
+        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {quotes.map((quote, i) => (
             <AnimatedSection key={i} delay={i * 60}>
-              <div className="break-inside-avoid relative group p-8 bg-card border border-border rounded-sm hover:border-primary/30 transition-all duration-500">
+              <div className="relative group p-8 bg-card border border-border rounded-sm hover:border-primary/30 transition-all duration-500 h-full flex flex-col">
                 <span className="absolute top-3 left-4 font-display text-5xl text-primary/20 leading-none select-none">"</span>
-                <p className="font-display text-lg leading-relaxed text-foreground/90 mb-4 pt-6">
+                <p className="font-display text-lg leading-relaxed text-foreground/90 mb-4 pt-6 flex-1">
                   "{quote.text}"
                 </p>
                 <div className="flex items-center justify-between">
