@@ -1,20 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Home, BookOpen, List, Code2, User } from 'lucide-react';
 import logo from '@/assets/logo.png';
 
 const navItems = [
-  { label: 'Home', path: '/' },
-  { label: 'Introduction', path: '/#introduction' },
-  { label: 'Chapters', path: '/#chapters' },
-  { label: 'Codes', path: '/codes' },
-  { label: 'About', path: '/#about' },
+  { label: 'Home', path: '/', icon: Home },
+  { label: 'Introduction', path: '/#introduction', icon: BookOpen },
+  { label: 'Chapters', path: '/#chapters', icon: List },
+  { label: 'Codes', path: '/codes', icon: Code2 },
+  { label: 'About', path: '/#about', icon: User },
 ];
 
 const FloatingNav = () => {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -23,22 +21,7 @@ const FloatingNav = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location]);
-
-  // Lock body scroll when mobile menu is open
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => { document.body.style.overflow = ''; };
-  }, [mobileOpen]);
-
   const handleNavClick = (path: string) => {
-    setMobileOpen(false);
     if (path.startsWith('/#')) {
       const id = path.slice(2);
       if (location.pathname === '/') {
@@ -49,8 +32,15 @@ const FloatingNav = () => {
     }
   };
 
+  const isActive = (path: string) => {
+    if (path === '/') return location.pathname === '/' && !location.hash;
+    if (path === '/codes') return location.pathname === '/codes';
+    return false;
+  };
+
   return (
     <>
+      {/* Top bar — logo only on mobile, full nav on desktop */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 font-ui ${
           scrolled
@@ -64,7 +54,7 @@ const FloatingNav = () => {
             <img src={logo} alt="The Art of ISM" className="h-7 sm:h-8 w-auto" />
           </Link>
 
-          {/* Desktop */}
+          {/* Desktop nav links */}
           <div className="hidden md:flex items-center gap-8">
             {navItems.map(item => (
               item.path.startsWith('/#') ? (
@@ -86,65 +76,52 @@ const FloatingNav = () => {
               )
             ))}
           </div>
-
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden text-foreground hover:text-primary transition-colors p-2 -mr-2 active:scale-90 transition-transform"
-            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-          >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
         </div>
       </nav>
 
-      {/* Mobile full-screen drawer */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-deep-black/98 backdrop-blur-2xl flex flex-col items-center justify-center gap-6 font-ui"
-            style={{
-              paddingTop: 'env(safe-area-inset-top)',
-              paddingBottom: 'env(safe-area-inset-bottom)',
-            }}
-          >
-            {navItems.map((item, i) => (
-              <motion.div
-                key={item.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ delay: i * 0.06, duration: 0.3 }}
-              >
-                {item.path.startsWith('/#') ? (
-                  <button
-                    onClick={() => handleNavClick(item.path)}
-                    className="text-xl uppercase tracking-[0.3em] text-muted-foreground hover:text-primary active:text-primary transition-colors duration-300 py-2"
-                  >
-                    {item.label}
-                  </button>
-                ) : (
-                  <Link
-                    to={item.path}
-                    className="text-xl uppercase tracking-[0.3em] text-muted-foreground hover:text-primary active:text-primary transition-colors duration-300 py-2"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                )}
-              </motion.div>
-            ))}
+      {/* Mobile bottom tab bar */}
+      <div
+        className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-deep-black/95 backdrop-blur-xl border-t border-primary/10"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      >
+        <div className="flex items-center justify-around px-2 py-1.5">
+          {navItems.map(item => {
+            const Icon = item.icon;
+            const active = isActive(item.path);
 
-            {/* Decorative divider */}
-            <div className="w-12 h-px bg-primary/20 mt-4" />
-            <p className="font-heading italic text-sm text-primary/50">It's all ISM.</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            const className = `flex flex-col items-center gap-0.5 py-1.5 px-2 rounded-lg transition-all duration-200 active:scale-90 min-w-[3.5rem] ${
+              active ? 'text-primary' : 'text-muted-foreground'
+            }`;
+
+            const content = (
+              <>
+                <Icon size={20} strokeWidth={active ? 2.5 : 1.5} />
+                <span className="text-[9px] uppercase tracking-[0.1em] font-ui leading-none">
+                  {item.label === 'Introduction' ? 'Intro' : item.label}
+                </span>
+              </>
+            );
+
+            if (item.path.startsWith('/#')) {
+              return (
+                <button
+                  key={item.label}
+                  onClick={() => handleNavClick(item.path)}
+                  className={className}
+                >
+                  {content}
+                </button>
+              );
+            }
+
+            return (
+              <Link key={item.label} to={item.path} className={className}>
+                {content}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
     </>
   );
 };
