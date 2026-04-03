@@ -203,8 +203,7 @@ export const chapters: Chapter[] = [
   {
     number: 4,
     title: "How You Feel About It",
-    summary: "Reading energy and rising above perception",
-    tagline: "Energy doesn't lie.",
+    summary: "Perception reveals truth",
     content: [
       "You can feel it before anyone says a word. Not in what they do… but in what they don't.",
       "The way eyes linger just a little too long. The way conversations shift when you walk in. The way energy changes without explanation.",
