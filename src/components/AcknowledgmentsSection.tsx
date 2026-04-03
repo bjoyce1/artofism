@@ -6,7 +6,7 @@ const MENTORS = [
   'Mac Drew', 'Robert T', 'Success', 'International Lace', 'Love',
   'Avalanche', 'Quick', 'Sin', 'Professor', 'Candy Man',
 ];
-const BIG_RIP = { name: 'RIP', sub: 'Real Independent Pimpin' };
+const BIG_RIP = { name: 'RIP', sub: '​' };
 
 const LEGACY = [
   'One 4 Da Money', 'Ivory P', 'Dre', 'Crow',
