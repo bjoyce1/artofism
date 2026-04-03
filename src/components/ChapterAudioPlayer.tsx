@@ -44,8 +44,6 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
     ? supabase.storage.from('music').getPublicUrl(song.file).data.publicUrl
     : '';
 
-  if (!song) return null;
-
   const togglePlay = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -96,6 +94,8 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
   }, []);
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+  if (!song) return null;
 
   return (
     <>

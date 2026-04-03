@@ -215,6 +215,9 @@ const ChapterReader = () => {
           </div>
         </div>
       </article>
+
+      {/* Chapter Audio Player */}
+      <ChapterAudioPlayer chapterNumber={chapterNum} />
     </div>
   );
 };
