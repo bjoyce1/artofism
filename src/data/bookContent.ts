@@ -472,8 +472,7 @@ export const chapters: Chapter[] = [
   {
     number: 10,
     title: "Nothing Without It",
-    summary: "Control over currency, not the reverse",
-    tagline: "Money is powerful… but it's not everything.",
+    summary: "Control defines value",
     content: [
       "Chapter 9 showed you what money does to people. This is about what you do with it.",
       "Everybody wants it. Money. They chase it. They stress over it. They measure themselves by it. Like it's the final answer.",
