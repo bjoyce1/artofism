@@ -27,18 +27,19 @@ const HeroSection = () => {
         <img
           src={heroBg}
           alt=""
-          className="w-full h-[115%] object-cover object-[25%_top] sm:object-left-top"
+          className="w-full h-[115%] object-cover object-[20%_20%] sm:object-[left_top]"
         />
-        {/* Cinematic overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--deep-black))] via-[hsl(var(--deep-black)/0.15)] to-[hsl(var(--deep-black)/0.5)]" />
-        {/* On mobile: darken more evenly for centered text. On desktop: darken right side */}
-        <div className="absolute inset-0 bg-[hsl(var(--deep-black)/0.45)] sm:bg-transparent" />
-        <div className="absolute inset-0 hidden sm:block bg-gradient-to-l from-[hsl(var(--deep-black)/0.80)] via-[hsl(var(--deep-black)/0.25)] to-transparent" />
-        {/* Warm bottom glow */}
+        {/* Base vignette — subtle top & bottom fade */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--deep-black))] via-transparent to-[hsl(var(--deep-black)/0.35)]" />
+        {/* Mobile: lighter even overlay so the photo breathes */}
+        <div className="absolute inset-0 bg-[hsl(var(--deep-black)/0.30)] sm:bg-transparent" />
+        {/* Desktop: right-side fade for text contrast */}
+        <div className="absolute inset-0 hidden sm:block bg-gradient-to-l from-[hsl(var(--deep-black)/0.75)] via-[hsl(var(--deep-black)/0.15)] to-transparent" />
+        {/* Warm cinematic bottom glow */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-[30%]"
+          className="absolute bottom-0 left-0 right-0 h-[25%]"
           style={{
-            background: 'linear-gradient(to top, hsl(var(--deep-black)), hsl(var(--deep-black) / 0.9) 30%, hsl(20 60% 8% / 0.4) 70%, transparent)',
+            background: 'linear-gradient(to top, hsl(var(--deep-black)), hsl(var(--deep-black) / 0.85) 40%, transparent)',
           }}
         />
       </motion.div>
