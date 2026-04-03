@@ -8,7 +8,7 @@ const MENTORS = [
 ];
 
 const LEGACY = [
-  'One 4 Da Money', 'Ivory P', 'Dre', 'Crow',
+  'One 4 Da Money', 'Ivory P', 'Dre', 'Crow', 'Wickett Crickett',
 ];
 
 const CIRCLE = [
