@@ -513,8 +513,7 @@ export const chapters: Chapter[] = [
   {
     number: 11,
     title: "CAPISM",
-    summary: "The full system, lived and embodied",
-    tagline: "CAPISM doesn't follow systems. It creates them.",
+    summary: "Philosophy becomes legacy",
     content: [
       "Dearly beloved… We gather here today… To celebrate this thing… Called ISM.",
       "Not just a word. Not just a mindset. A way of living. A system. A code.",
