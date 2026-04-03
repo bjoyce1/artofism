@@ -6,6 +6,7 @@ import IntroductionLayout from '@/components/IntroductionLayout';
 import TOCGrid from '@/components/TOCGrid';
 import QuoteVault from '@/components/QuoteVault';
 import AboutAuthorSection from '@/components/AboutAuthorSection';
+import AcknowledgmentsSection from '@/components/AcknowledgmentsSection';
 import FinalCTA from '@/components/FinalCTA';
 
 const Index = () => {
@@ -18,6 +19,7 @@ const Index = () => {
       <TOCGrid />
       <QuoteVault />
       <AboutAuthorSection />
+      <AcknowledgmentsSection />
       <FinalCTA />
       <AmbientAudioToggle />
     </div>
