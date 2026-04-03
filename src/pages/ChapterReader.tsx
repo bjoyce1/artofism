@@ -15,6 +15,8 @@ const ChapterReader = () => {
   const { saveProgress, readingMode, toggleMode } = useReadingProgress();
   const { toggleFavorite, isFavorite } = useFavorites();
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   useEffect(() => {
     if (chapter) {
@@ -40,9 +42,6 @@ const ChapterReader = () => {
     setCopiedIndex(idx);
     setTimeout(() => setCopiedIndex(null), 2000);
   };
-
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   return (
     <div className="min-h-[100dvh] bg-deep-black">
