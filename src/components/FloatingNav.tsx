@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, BookOpen, List, Code2, User } from 'lucide-react';
+import { motion } from 'framer-motion';
 import logo from '@/assets/logo.png';
 
 const navItems = [
@@ -89,7 +90,7 @@ const FloatingNav = () => {
             const Icon = item.icon;
             const active = isActive(item.path);
 
-            const className = `flex flex-col items-center gap-0.5 py-1.5 px-2 rounded-lg transition-all duration-200 active:scale-90 min-w-[3.5rem] ${
+            const baseClass = `flex flex-col items-center gap-0.5 py-1.5 px-2 rounded-lg min-w-[3.5rem] ${
               active ? 'text-primary' : 'text-muted-foreground'
             }`;
 
@@ -104,20 +105,28 @@ const FloatingNav = () => {
 
             if (item.path.startsWith('/#')) {
               return (
-                <button
+                <motion.button
                   key={item.label}
                   onClick={() => handleNavClick(item.path)}
-                  className={className}
+                  className={baseClass}
+                  whileTap={{ scale: 0.85 }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 20 }}
                 >
                   {content}
-                </button>
+                </motion.button>
               );
             }
 
             return (
-              <Link key={item.label} to={item.path} className={className}>
-                {content}
-              </Link>
+              <motion.div
+                key={item.label}
+                whileTap={{ scale: 0.85 }}
+                transition={{ type: 'spring', stiffness: 500, damping: 20 }}
+              >
+                <Link to={item.path} className={baseClass}>
+                  {content}
+                </Link>
+              </motion.div>
             );
           })}
         </div>
