@@ -72,8 +72,8 @@ const ChapterReader = () => {
 
       {/* Reading mode toggle — bottom safe area aware */}
       <div
-        className="fixed z-50 font-ui right-4 sm:right-6"
-        style={{ bottom: 'max(1rem, calc(env(safe-area-inset-bottom, 0px) + 0.75rem))' }}
+        className="fixed z-50 font-ui right-4 sm:right-6 bottom-20 sm:bottom-6"
+        style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}
       >
         <button
           onClick={toggleMode}
