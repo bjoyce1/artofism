@@ -8,6 +8,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import GatedChapter from "@/components/GatedChapter";
 import Index from "./pages/Index.tsx";
 import CodesHub from "./pages/CodesHub.tsx";
+import QuoteVaultPage from "./pages/QuoteVaultPage.tsx";
 import Auth from "./pages/Auth.tsx";
 import Unlock from "./pages/Unlock.tsx";
 import UnlockSuccess from "./pages/UnlockSuccess.tsx";
