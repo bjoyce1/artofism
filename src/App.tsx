@@ -5,8 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import GatedChapter from "@/components/GatedChapter";
 import Index from "./pages/Index.tsx";
-import ChapterReader from "./pages/ChapterReader.tsx";
 import CodesHub from "./pages/CodesHub.tsx";
 import Auth from "./pages/Auth.tsx";
 import Unlock from "./pages/Unlock.tsx";
@@ -29,8 +29,7 @@ const App = () => (
             <Route path="/unlock" element={<Unlock />} />
             <Route path="/unlock/success" element={<UnlockSuccess />} />
             <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
-            <Route path="/chapter/1" element={<ChapterReader />} />
-            <Route path="/chapter/:id" element={<ProtectedRoute><ChapterReader /></ProtectedRoute>} />
+            <Route path="/chapter/:id" element={<GatedChapter />} />
             <Route path="/codes" element={<ProtectedRoute><CodesHub /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
