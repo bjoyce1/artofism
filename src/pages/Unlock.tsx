@@ -5,9 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import FloatingNav from '@/components/FloatingNav';
 import AnimatedSection from '@/components/AnimatedSection';
 import { Button } from '@/components/ui/button';
-import { Check, BookOpen, Code2, Quote, Infinity, Smartphone, Download } from 'lucide-react';
-
-const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID || '';
+import { BookOpen, Code2, Quote, Infinity, Smartphone, Download } from 'lucide-react';
 
 const features = [
   { icon: BookOpen, text: 'Full online access' },
@@ -21,6 +19,7 @@ const features = [
 const Unlock = () => {
   const navigate = useNavigate();
   const { user, hasAccess, loading } = useAuth();
+  const [paypalClientId, setPaypalClientId] = useState('');
   const [paypalLoaded, setPaypalLoaded] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
@@ -32,19 +31,28 @@ const Unlock = () => {
     }
   }, [loading, hasAccess, navigate]);
 
+  // Fetch config
+  useEffect(() => {
+    supabase.functions.invoke('get-config').then(({ data }) => {
+      if (data?.paypalClientId) {
+        setPaypalClientId(data.paypalClientId);
+      }
+    });
+  }, []);
+
   // Load PayPal SDK
   useEffect(() => {
-    if (!PAYPAL_CLIENT_ID) return;
+    if (!paypalClientId) return;
     if (document.getElementById('paypal-sdk')) {
       setPaypalLoaded(true);
       return;
     }
     const script = document.createElement('script');
     script.id = 'paypal-sdk';
-    script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`;
+    script.src = `https://www.paypal.com/sdk/js?client-id=${paypalClientId}&currency=USD`;
     script.onload = () => setPaypalLoaded(true);
     document.body.appendChild(script);
-  }, []);
+  }, [paypalClientId]);
 
   // Render PayPal buttons
   useEffect(() => {

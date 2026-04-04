@@ -5,15 +5,19 @@ import { supabase } from '@/integrations/supabase/client';
 import { chapters } from '@/data/bookContent';
 import FloatingNav from '@/components/FloatingNav';
 import AnimatedSection from '@/components/AnimatedSection';
-import { Button } from '@/components/ui/button';
-import { BookOpen, Code2, Quote, Download, Heart, BarChart3, ChevronRight } from 'lucide-react';
-
-const BONUS_PDF_URL = import.meta.env.VITE_BONUS_PDF_URL || '';
+import { BookOpen, Code2, Quote, Download, Heart, ChevronRight } from 'lucide-react';
 
 const Library = () => {
   const { user, hasAccess, loading, accessLoading, signOut } = useAuth();
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [savedQuotes, setSavedQuotes] = useState<{ quote_text: string; chapter_slug: string | null }[]>([]);
+  const [bonusPdfUrl, setBonusPdfUrl] = useState('');
+
+  useEffect(() => {
+    supabase.functions.invoke('get-config').then(({ data }) => {
+      if (data?.bonusPdfUrl) setBonusPdfUrl(data.bonusPdfUrl);
+    });
+  }, []);
 
   useEffect(() => {
     if (!user) return;
@@ -52,7 +56,6 @@ const Library = () => {
   if (!user) return <Navigate to="/auth" replace />;
   if (!hasAccess) return <Navigate to="/unlock" replace />;
 
-  // Find the last read chapter
   const lastChapterSlug = Object.entries(progress).sort(([,a],[,b]) => b - a)[0]?.[0];
   const lastChapter = chapters.find(c => c.number.toString() === lastChapterSlug);
 
@@ -62,7 +65,6 @@ const Library = () => {
 
       <div className="pt-24 pb-32 px-6">
         <div className="max-w-4xl mx-auto">
-          {/* Header */}
           <AnimatedSection>
             <div className="flex items-center justify-between mb-12">
               <div>
@@ -80,7 +82,6 @@ const Library = () => {
             </div>
           </AnimatedSection>
 
-          {/* Continue Reading */}
           {lastChapter && (
             <AnimatedSection delay={50}>
               <Link
@@ -100,7 +101,6 @@ const Library = () => {
             </AnimatedSection>
           )}
 
-          {/* Quick Links */}
           <AnimatedSection delay={100}>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
               <Link to="/chapter/1" className="flex items-center gap-3 p-4 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors">
@@ -115,8 +115,8 @@ const Library = () => {
                 <Quote size={18} className="text-primary" />
                 <span className="text-foreground text-sm font-display">Quote Vault</span>
               </Link>
-              {BONUS_PDF_URL && (
-                <a href={BONUS_PDF_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors">
+              {bonusPdfUrl && (
+                <a href={bonusPdfUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors">
                   <Download size={18} className="text-primary" />
                   <span className="text-foreground text-sm font-display">Bonus PDF</span>
                 </a>
@@ -124,7 +124,6 @@ const Library = () => {
             </div>
           </AnimatedSection>
 
-          {/* Chapters Grid */}
           <AnimatedSection delay={150}>
             <h2 className="font-display text-2xl font-bold text-foreground mb-6">All Chapters</h2>
             <div className="grid gap-3 mb-12">
@@ -151,7 +150,6 @@ const Library = () => {
             </div>
           </AnimatedSection>
 
-          {/* Saved Quotes */}
           {savedQuotes.length > 0 && (
             <AnimatedSection delay={200}>
               <h2 className="font-display text-2xl font-bold text-foreground mb-6 flex items-center gap-3">
