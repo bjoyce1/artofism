@@ -32,6 +32,7 @@ const App = () => (
             <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
             <Route path="/chapter/:id" element={<GatedChapter />} />
             <Route path="/codes" element={<ProtectedRoute><CodesHub /></ProtectedRoute>} />
+            <Route path="/quote-vault" element={<ProtectedRoute><QuoteVaultPage /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
