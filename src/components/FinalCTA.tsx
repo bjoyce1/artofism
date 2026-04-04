@@ -24,18 +24,18 @@ const FinalCTA = () => {
 
         <AnimatedSection delay={200}>
           <div className="flex flex-col sm:flex-row gap-4 justify-center font-ui mb-12">
-            <a
-              href="#introduction"
+            <Link
+              to="/unlock"
               className="gold-dust px-8 py-3 bg-primary text-primary-foreground text-sm uppercase tracking-[0.2em] rounded-full hover:brightness-110 hover:shadow-[0_0_30px_hsl(43_76%_52%/0.4)] transition-all duration-300"
             >
-              Begin Again
-            </a>
-            <Link
-              to="/codes"
+              Get Full Access — $9.99
+            </Link>
+            <a
+              href="#introduction"
               className="gold-dust px-8 py-3 border border-primary/40 text-primary text-sm uppercase tracking-[0.2em] rounded-full hover:bg-primary/10 transition-all duration-300"
             >
-              Explore the Codes
-            </Link>
+              Read the Free Preview
+            </a>
           </div>
         </AnimatedSection>
 
