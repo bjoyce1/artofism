@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, BookOpen, List, Code2, User } from 'lucide-react';
+import { Home, BookOpen, List, Code2, User, Library, LogIn } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/hooks/useAuth';
 import logo from '@/assets/logo.png';
 
 const navItems = [
@@ -13,6 +14,7 @@ const navItems = [
 ];
 
 const FloatingNav = () => {
+  const { user, hasAccess } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
@@ -76,6 +78,15 @@ const FloatingNav = () => {
                 </Link>
               )
             ))}
+            {user && hasAccess ? (
+              <Link to="/library" className="text-sm uppercase tracking-[0.2em] text-primary hover:text-primary/80 transition-colors duration-300">
+                Library
+              </Link>
+            ) : (
+              <Link to={user ? "/unlock" : "/auth"} className="text-sm uppercase tracking-[0.2em] text-primary hover:text-primary/80 transition-colors duration-300">
+                {user ? "Get Access" : "Sign In"}
+              </Link>
+            )}
           </div>
         </div>
       </nav>
