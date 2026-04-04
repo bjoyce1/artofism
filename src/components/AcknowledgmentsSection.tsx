@@ -485,7 +485,25 @@ const AcknowledgmentsSection = () => {
             </motion.div>
           </motion.div>
 
-          {/* ── 5. CLOSING ── */}
+          {/* ── 5. ALBUM DOWNLOAD ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={closingInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 1, delay: 0.2, ease: 'easeOut' }}
+            className="flex justify-center mb-12"
+          >
+            <a
+              href={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/music/The_Art_of_ISM_Album.zip`}
+              download
+              className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl border border-primary/30 bg-card/60 backdrop-blur-xl text-primary font-display tracking-wide text-sm sm:text-base transition-all duration-500 hover:border-primary/60 hover:shadow-[0_0_30px_rgba(212,175,55,0.15)]"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-y-0.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download the Art of ISM Album
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+            </a>
+          </motion.div>
+
+          {/* ── 6. CLOSING ── */}
           <motion.p
             ref={closingRef}
             initial={{ opacity: 0 }}
