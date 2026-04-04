@@ -14,7 +14,135 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      entitlements: {
+        Row: {
+          active: boolean
+          granted_at: string
+          id: string
+          product_slug: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          granted_at?: string
+          id?: string
+          product_slug: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          granted_at?: string
+          id?: string
+          product_slug?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      purchases: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          product_slug: string
+          provider: string
+          provider_order_id: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          id?: string
+          product_slug: string
+          provider?: string
+          provider_order_id?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          product_slug?: string
+          provider?: string
+          provider_order_id?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reading_progress: {
+        Row: {
+          chapter_slug: string
+          id: string
+          progress_percent: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          chapter_slug: string
+          id?: string
+          progress_percent?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          chapter_slug?: string
+          id?: string
+          progress_percent?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      saved_quotes: {
+        Row: {
+          chapter_slug: string | null
+          created_at: string
+          id: string
+          quote_text: string
+          user_id: string
+        }
+        Insert: {
+          chapter_slug?: string | null
+          created_at?: string
+          id?: string
+          quote_text: string
+          user_id: string
+        }
+        Update: {
+          chapter_slug?: string | null
+          created_at?: string
+          id?: string
+          quote_text?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
