@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, BookOpen, List, Code2, User } from 'lucide-react';
+import { Home, BookOpen, List, Code2, User, Library, LogIn } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/hooks/useAuth';
 import logo from '@/assets/logo.png';
 
 const navItems = [
