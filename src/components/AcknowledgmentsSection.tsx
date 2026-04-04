@@ -493,7 +493,7 @@ const AcknowledgmentsSection = () => {
             className="flex justify-center mb-12"
           >
             <a
-              href={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/music/The_Art_of_ISM_Album.zip`}
+              href={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/music/The%20Art%20of%20ISM%20Album.zip`}
               download
               className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl border border-primary/30 bg-card/60 backdrop-blur-xl text-primary font-display tracking-wide text-sm sm:text-base transition-all duration-500 hover:border-primary/60 hover:shadow-[0_0_30px_rgba(212,175,55,0.15)]"
             >
