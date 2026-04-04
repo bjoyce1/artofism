@@ -66,11 +66,11 @@ const Library = () => {
       <div className="pt-24 pb-32 px-6">
         <div className="max-w-4xl mx-auto">
           <AnimatedSection>
-            <div className="flex items-center justify-between mb-12">
+            <div className="flex items-center justify-between mb-4">
               <div>
-                <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-2">Your Library</p>
-                <h1 className="font-display text-3xl sm:text-4xl font-bold text-foreground">
-                  The Art of <span className="text-gold-gradient">ISM</span>
+                <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-2">Your Access is Unlocked</p>
+                <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
+                  Welcome to <span className="text-gold-gradient">ISM</span>
                 </h1>
               </div>
               <button
@@ -80,6 +80,9 @@ const Library = () => {
                 Sign Out
               </button>
             </div>
+            <p className="text-muted-foreground text-lg mb-12">
+              Your access is unlocked. Enter the full interactive book experience.
+            </p>
           </AnimatedSection>
 
           {lastChapter && (
@@ -102,23 +105,23 @@ const Library = () => {
           )}
 
           <AnimatedSection delay={100}>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-              <Link to="/chapter/1" className="flex items-center gap-3 p-4 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+              <Link to="/chapter/1" className="flex items-center gap-3 p-5 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors">
                 <BookOpen size={18} className="text-primary" />
-                <span className="text-foreground text-sm font-display">Chapters</span>
+                <span className="text-foreground text-sm font-display">Explore the Chapters</span>
               </Link>
-              <Link to="/codes" className="flex items-center gap-3 p-4 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors">
+              <Link to="/codes" className="flex items-center gap-3 p-5 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors">
                 <Code2 size={18} className="text-primary" />
-                <span className="text-foreground text-sm font-display">The Codes</span>
+                <span className="text-foreground text-sm font-display">Open The Codes</span>
               </Link>
-              <Link to="/quote-vault" className="flex items-center gap-3 p-4 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors">
+              <Link to="/quote-vault" className="flex items-center gap-3 p-5 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors">
                 <Quote size={18} className="text-primary" />
-                <span className="text-foreground text-sm font-display">Quote Vault</span>
+                <span className="text-foreground text-sm font-display">Enter the Quote Vault</span>
               </Link>
               {bonusPdfUrl && (
-                <a href={bonusPdfUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors">
+                <a href={bonusPdfUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-5 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors">
                   <Download size={18} className="text-primary" />
-                  <span className="text-foreground text-sm font-display">Bonus PDF</span>
+                  <span className="text-foreground text-sm font-display">Download Bonus PDF</span>
                 </a>
               )}
             </div>
