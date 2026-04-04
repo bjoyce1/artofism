@@ -14,6 +14,7 @@ const navItems = [
 ];
 
 const FloatingNav = () => {
+  const { user, hasAccess } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
