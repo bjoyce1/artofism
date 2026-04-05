@@ -10,6 +10,7 @@ interface AuthContextType {
   accessLoading: boolean;
   signInWithMagicLink: (email: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
+  refreshAccess: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
