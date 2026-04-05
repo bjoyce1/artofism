@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
 
@@ -38,25 +38,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
+  const checkAccess = useCallback(async (userId: string) => {
+    setAccessLoading(true);
+    const { data } = await supabase
+      .from('entitlements')
+      .select('active')
+      .eq('user_id', userId)
+      .eq('product_slug', 'art-of-ism-full-access')
+      .eq('active', true)
+      .maybeSingle();
+    setHasAccess(!!data);
+    setAccessLoading(false);
+  }, []);
+
   useEffect(() => {
     if (!user) {
       setHasAccess(false);
       setAccessLoading(false);
       return;
     }
-    setAccessLoading(true);
-    supabase
-      .from('entitlements')
-      .select('active')
-      .eq('user_id', user.id)
-      .eq('product_slug', 'art-of-ism-full-access')
-      .eq('active', true)
-      .maybeSingle()
-      .then(({ data }) => {
-        setHasAccess(!!data);
-        setAccessLoading(false);
-      });
-  }, [user]);
+    checkAccess(user.id);
+  }, [user, checkAccess]);
+
+  const refreshAccess = useCallback(async () => {
+    if (!user) return;
+    await checkAccess(user.id);
+  }, [user, checkAccess]);
 
   const signInWithMagicLink = async (email: string) => {
     const { error } = await supabase.auth.signInWithOtp({
@@ -72,7 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, hasAccess, accessLoading, signInWithMagicLink, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, hasAccess, accessLoading, signInWithMagicLink, signOut, refreshAccess }}>
       {children}
     </AuthContext.Provider>
   );
