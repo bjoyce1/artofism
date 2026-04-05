@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import FloatingNav from '@/components/FloatingNav';
@@ -6,7 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
 
 const UnlockSuccess = () => {
-  const { user } = useAuth();
+  const { refreshAccess } = useAuth();
+
+  useEffect(() => {
+    refreshAccess();
+  }, [refreshAccess]);
 
   return (
     <div className="min-h-screen bg-deep-black flex items-center justify-center px-6">

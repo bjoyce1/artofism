@@ -18,7 +18,7 @@ const features = [
 
 const Unlock = () => {
   const navigate = useNavigate();
-  const { user, hasAccess, loading } = useAuth();
+  const { user, hasAccess, loading, refreshAccess } = useAuth();
   const [paypalClientId, setPaypalClientId] = useState('');
   const [paypalLoaded, setPaypalLoaded] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -85,6 +85,7 @@ const Unlock = () => {
           });
           if (fnError) throw fnError;
           if (result?.success) {
+            await refreshAccess();
             navigate('/unlock/success');
           } else {
             setError('Payment verification failed. Please contact support.');
