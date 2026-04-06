@@ -1,9 +1,13 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import FloatingNav from '@/components/FloatingNav';
+import { trackEvent } from '@/lib/analytics';
 
 const LockScreen = () => {
+  useEffect(() => { trackEvent('chapter_locked_view'); }, []);
+
   return (
     <div className="min-h-screen bg-deep-black flex items-center justify-center px-6">
       <FloatingNav />

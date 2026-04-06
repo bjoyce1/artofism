@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import AnimatedSection from './AnimatedSection';
+import { trackEvent } from '@/lib/analytics';
 
 const FinalCTA = () => {
   return (
@@ -26,6 +27,7 @@ const FinalCTA = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center font-ui mb-12">
             <Link
               to="/unlock"
+              onClick={() => trackEvent('get_book_click')}
               className="gold-dust px-8 py-3 bg-primary text-primary-foreground text-sm uppercase tracking-[0.2em] rounded-full hover:brightness-110 hover:shadow-[0_0_30px_hsl(43_76%_52%/0.4)] transition-all duration-300"
             >
               Get Full Access — $9.99
