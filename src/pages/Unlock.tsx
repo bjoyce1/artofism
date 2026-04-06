@@ -24,8 +24,15 @@ const Unlock = () => {
   const [paypalLoaded, setPaypalLoaded] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
+  const trackedRef = useRef(false);
 
-  // If already has access, redirect
+  // Track unlock page view
+  useEffect(() => {
+    if (!trackedRef.current) {
+      trackedRef.current = true;
+      trackEvent('unlock_page_view');
+    }
+  }, []);
   useEffect(() => {
     if (!loading && hasAccess) {
       navigate('/library', { replace: true });
@@ -70,6 +77,7 @@ const Unlock = () => {
         label: 'pay',
       },
       createOrder: (_data: any, actions: any) => {
+        trackEvent('checkout_start');
         return actions.order.create({
           purchase_units: [{
             amount: { value: '9.99', currency_code: 'USD' },
@@ -86,6 +94,7 @@ const Unlock = () => {
           });
           if (fnError) throw fnError;
           if (result?.success) {
+            trackEvent('checkout_success', { orderId: data.orderID });
             await refreshAccess();
             navigate('/unlock/success');
           } else {

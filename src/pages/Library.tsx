@@ -13,6 +13,15 @@ const Library = () => {
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [savedQuotes, setSavedQuotes] = useState<{ quote_text: string; chapter_slug: string | null }[]>([]);
   const [bonusPdfUrl, setBonusPdfUrl] = useState('');
+  const trackedRef = useRef(false);
+
+  // Track library enter
+  useEffect(() => {
+    if (!trackedRef.current) {
+      trackedRef.current = true;
+      trackEvent('library_enter');
+    }
+  }, []);
 
   useEffect(() => {
     supabase.functions.invoke('get-config').then(({ data }) => {
@@ -120,7 +129,7 @@ const Library = () => {
                 <span className="text-foreground text-sm font-display">Enter the Quote Vault</span>
               </Link>
               {bonusPdfUrl && (
-                <a href={bonusPdfUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-5 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors">
+                <a href={bonusPdfUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('pdf_download')} className="flex items-center gap-3 p-5 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors">
                   <Download size={18} className="text-primary" />
                   <span className="text-foreground text-sm font-display">Download Bonus PDF</span>
                 </a>
