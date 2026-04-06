@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import AnimatedSection from './AnimatedSection';
+import { trackEvent } from '@/lib/analytics';
 
 const FinalCTA = () => {
   return (

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
+import { trackEvent } from '@/lib/analytics';
 import { chapters } from '@/data/bookContent';
 import FloatingNav from '@/components/FloatingNav';
 import AnimatedSection from '@/components/AnimatedSection';
