@@ -13,6 +13,9 @@ import Auth from "./pages/Auth.tsx";
 import Unlock from "./pages/Unlock.tsx";
 import UnlockSuccess from "./pages/UnlockSuccess.tsx";
 import Library from "./pages/Library.tsx";
+import Privacy from "./pages/Privacy.tsx";
+import Terms from "./pages/Terms.tsx";
+import Refund from "./pages/Refund.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -33,6 +36,9 @@ const App = () => (
             <Route path="/chapter/:id" element={<GatedChapter />} />
             <Route path="/codes" element={<ProtectedRoute><CodesHub /></ProtectedRoute>} />
             <Route path="/quote-vault" element={<ProtectedRoute><QuoteVaultPage /></ProtectedRoute>} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/refund" element={<Refund />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

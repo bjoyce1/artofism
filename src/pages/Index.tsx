@@ -8,6 +8,7 @@ import QuoteVault from '@/components/QuoteVault';
 import AboutAuthorSection from '@/components/AboutAuthorSection';
 import AcknowledgmentsSection from '@/components/AcknowledgmentsSection';
 import FinalCTA from '@/components/FinalCTA';
+import Footer from '@/components/Footer';
 
 const Index = () => {
   return (
@@ -21,6 +22,7 @@ const Index = () => {
       <AboutAuthorSection />
       <AcknowledgmentsSection />
       <FinalCTA />
+      <Footer />
       <AmbientAudioToggle />
     </div>
   );
