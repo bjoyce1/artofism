@@ -49,7 +49,7 @@ export const introduction = {
     "This is not a book about being perfect. It's a book about being aware.",
     "So take your time with this. Don't just read it. Understand it. Don't just understand it. Apply it.",
     "Because this isn't about information. It's about transformation.",
-    "What follows is one perspective. One man's code. Built from experience. Refined through movement. Tested under pressure. And proven over time.",
+    "What follows is one perspective. One man's code. Built from experience. Refined through movement. Tested under pressure. And proven over time. \"REPUPNEB\" (Shout out Avalanche)",
     "And once you step into it… You'll never move the same way again.",
     "It's all ISM."
   ],
