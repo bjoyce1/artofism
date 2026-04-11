@@ -142,7 +142,7 @@ const HeroSection = () => {
             transition={{ delay: 1.1 }}
             className="mb-6 sm:mb-8"
           >
-            <SectionAudioButton sectionId="hero" audioSrc="/audio/00_hero.mp3" />
+            <SectionAudioButton sectionId="hero" fileName="00_hero.mp3" />
           </motion.div>
 
           {/* CTAs */}

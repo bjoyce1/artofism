@@ -15,7 +15,7 @@ const IntroductionLayout = () => {
             <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-16">
               Enter the <span className="text-gold-gradient">ISM</span>
             </h2>
-            <SectionAudioButton sectionId="introduction" audioSrc="/audio/02_introduction.mp3" className="-mt-12" />
+            <SectionAudioButton sectionId="introduction" fileName="02_introduction.mp3" className="-mt-12" />
           </div>
         </AnimatedSection>
 
