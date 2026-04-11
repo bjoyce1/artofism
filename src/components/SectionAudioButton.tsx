@@ -1,15 +1,19 @@
 import { Volume2, Pause } from 'lucide-react';
 import { useSectionAudio } from '@/hooks/useSectionAudio';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Props {
   sectionId: string;
-  audioSrc: string;
+  /** Filename inside the "audio" storage bucket, e.g. "00_hero.mp3" */
+  fileName: string;
   className?: string;
 }
 
-const SectionAudioButton = ({ sectionId, audioSrc, className = '' }: Props) => {
+const SectionAudioButton = ({ sectionId, fileName, className = '' }: Props) => {
   const { currentSection, isPlaying, toggle } = useSectionAudio();
   const active = currentSection === sectionId && isPlaying;
+
+  const audioSrc = supabase.storage.from('audio').getPublicUrl(fileName).data.publicUrl;
 
   return (
     <button

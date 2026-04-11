@@ -113,7 +113,7 @@ const ChapterReader = () => {
               </h1>
               <SectionAudioButton
                 sectionId={`chapter-${chapter.number}`}
-                audioSrc={`/audio/chapter_${String(chapter.number).padStart(2, '0')}.mp3`}
+                fileName={`chapter_${String(chapter.number).padStart(2, '0')}.mp3`}
                 className="-mt-2"
               />
             </div>
