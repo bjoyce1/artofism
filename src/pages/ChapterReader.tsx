@@ -5,6 +5,7 @@ import { chapters } from '@/data/bookContent';
 import { useReadingProgress, useFavorites } from '@/hooks/useReadingProgress';
 import AnimatedSection from '@/components/AnimatedSection';
 import FloatingNav from '@/components/FloatingNav';
+import SectionAudioButton from '@/components/SectionAudioButton';
 import { Heart, ChevronLeft, ChevronRight, Copy, Check, Eye, BookOpen } from 'lucide-react';
 import ChapterAudioPlayer from '@/components/ChapterAudioPlayer';
 
@@ -106,9 +107,16 @@ const ChapterReader = () => {
             <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-3">
               Chapter {chapter.number}
             </p>
-            <h1 className="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-foreground mb-3 sm:mb-4">
-              {chapter.title}
-            </h1>
+            <div className="flex items-center gap-3">
+              <h1 className="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-foreground mb-3 sm:mb-4">
+                {chapter.title}
+              </h1>
+              <SectionAudioButton
+                sectionId={`chapter-${chapter.number}`}
+                audioSrc={`/audio/chapter_${String(chapter.number).padStart(2, '0')}.mp3`}
+                className="-mt-2"
+              />
+            </div>
             <p className="font-body text-base sm:text-lg italic text-muted-foreground mb-12 sm:mb-16">
               {chapter.summary}
             </p>

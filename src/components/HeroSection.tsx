@@ -136,6 +136,15 @@ const HeroSection = () => {
             It's all ISM.
           </motion.p>
 
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.1 }}
+            className="mb-6 sm:mb-8"
+          >
+            <SectionAudioButton sectionId="hero" audioSrc="/audio/00_hero.mp3" />
+          </motion.div>
+
           {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
