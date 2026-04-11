@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
+import { SectionAudioProvider } from "@/hooks/useSectionAudio";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import GatedChapter from "@/components/GatedChapter";
 import Index from "./pages/Index.tsx";
@@ -24,6 +25,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AuthProvider>
+      <SectionAudioProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
@@ -42,6 +44,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+      </SectionAudioProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
