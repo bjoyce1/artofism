@@ -1,5 +1,6 @@
 import AnimatedSection from './AnimatedSection';
 import { introduction } from '@/data/bookContent';
+import SectionAudioButton from '@/components/SectionAudioButton';
 
 const IntroductionLayout = () => {
   return (
@@ -10,9 +11,12 @@ const IntroductionLayout = () => {
       <div className="relative max-w-3xl mx-auto">
         <AnimatedSection>
           <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4">Introduction</p>
-          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-16">
-            Enter the <span className="text-gold-gradient">ISM</span>
-          </h2>
+          <div className="flex items-center gap-3">
+            <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-16">
+              Enter the <span className="text-gold-gradient">ISM</span>
+            </h2>
+            <SectionAudioButton sectionId="introduction" audioSrc="/audio/02_introduction.mp3" className="-mt-12" />
+          </div>
         </AnimatedSection>
 
         {/* Pull quote */}

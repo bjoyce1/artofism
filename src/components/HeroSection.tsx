@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useRef } from 'react';
+import SectionAudioButton from '@/components/SectionAudioButton';
 import heroBg from '@/assets/hero-bg.png';
 import mobileHeroBg from '@/assets/mobile-hero-bg.png';
 import ismLogo from '@/assets/ism-logo.png';
@@ -134,6 +135,15 @@ const HeroSection = () => {
           >
             It's all ISM.
           </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.1 }}
+            className="mb-6 sm:mb-8"
+          >
+            <SectionAudioButton sectionId="hero" audioSrc="/audio/00_hero.mp3" />
+          </motion.div>
 
           {/* CTAs */}
           <motion.div

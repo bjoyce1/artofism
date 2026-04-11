@@ -1,5 +1,6 @@
 import AnimatedSection from './AnimatedSection';
 import { dedication } from '@/data/bookContent';
+import SectionAudioButton from '@/components/SectionAudioButton';
 
 const DedicationSection = () => {
   return (
@@ -10,6 +11,7 @@ const DedicationSection = () => {
         <AnimatedSection>
           <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mb-8" />
           <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-8">Dedication</p>
+          <SectionAudioButton sectionId="dedication" audioSrc="/audio/01_dedication.mp3" />
         </AnimatedSection>
 
         {dedication.text.map((line, i) => (
