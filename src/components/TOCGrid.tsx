@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom';
+import { Volume2 } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import { chapters } from '@/data/bookContent';
+
+// Chapters that have audio available in storage
+const audioAvailableChapters = [1, 2, 3];
 
 const TOCGrid = () => {
   return (
