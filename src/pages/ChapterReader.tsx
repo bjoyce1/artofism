@@ -128,19 +128,8 @@ const ChapterReader = () => {
             </p>
           </AnimatedSection>
 
-          {/* Floating narration control — visible during playback */}
-          {isChapterAudioPlaying && (
-            <div
-              className="fixed z-50 right-4 sm:right-6 top-14 sm:top-6"
-              style={{ marginTop: 'env(safe-area-inset-top, 0px)' }}
-            >
-              <SectionAudioButton
-                sectionId={chapterSectionId}
-                fileName={`chapter_${String(chapter.number).padStart(2, '0')}.mp3`}
-                className="w-10 h-10 shadow-lg shadow-primary/20"
-              />
-            </div>
-          )}
+
+
 
           {/* Body */}
           {isChapterAudioPlaying && duration > 0 ? (
