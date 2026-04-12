@@ -7,6 +7,8 @@ interface KaraokeTextProps {
   isPlaying: boolean;
   className?: string;
   dropCapFirst?: boolean;
+  /** Number of words spoken in the audio BEFORE the body text starts (e.g. title narration) */
+  titleWordsOffset?: number;
 }
 
 interface WordInfo {
@@ -15,7 +17,7 @@ interface WordInfo {
   globalIdx: number;
 }
 
-const KaraokeText = ({ paragraphs, currentTime, duration, isPlaying, className = '', dropCapFirst = false }: KaraokeTextProps) => {
+const KaraokeText = ({ paragraphs, currentTime, duration, isPlaying, className = '', dropCapFirst = false, titleWordsOffset = 0 }: KaraokeTextProps) => {
   const activeWordRef = useRef<HTMLSpanElement | null>(null);
 
   // Flatten all words with paragraph tracking
@@ -30,11 +32,17 @@ const KaraokeText = ({ paragraphs, currentTime, duration, isPlaying, className =
   }, [paragraphs]);
 
   // Calculate which word is active based on currentTime / duration
+  // Account for title words that are narrated before the body text
   const activeWordIdx = useMemo(() => {
     if (!isPlaying || duration <= 0 || words.length === 0) return -1;
+    const totalAudioWords = words.length + titleWordsOffset;
     const progress = Math.min(currentTime / duration, 1);
-    return Math.min(Math.floor(progress * words.length), words.length - 1);
-  }, [currentTime, duration, isPlaying, words]);
+    const globalWordIdx = Math.floor(progress * totalAudioWords);
+    // Subtract the offset — negative means we're still in the title narration
+    const bodyWordIdx = globalWordIdx - titleWordsOffset;
+    if (bodyWordIdx < 0) return -1;
+    return Math.min(bodyWordIdx, words.length - 1);
+  }, [currentTime, duration, isPlaying, words, titleWordsOffset]);
 
   // Auto-scroll to active word
   useEffect(() => {

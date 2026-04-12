@@ -99,7 +99,7 @@ const ChapterReader = () => {
             </div>
           )}
 
-          {/* Header */}
+      {/* Header */}
           <AnimatedSection>
             <Link
               to="/#chapters"
@@ -115,16 +115,32 @@ const ChapterReader = () => {
               <h1 className="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-foreground mb-3 sm:mb-4">
                 {chapter.title}
               </h1>
-              <SectionAudioButton
-                sectionId={chapterSectionId}
-                fileName={`chapter_${String(chapter.number).padStart(2, '0')}.mp3`}
-                className="-mt-2"
-              />
+              {!isChapterAudioPlaying && (
+                <SectionAudioButton
+                  sectionId={chapterSectionId}
+                  fileName={`chapter_${String(chapter.number).padStart(2, '0')}.mp3`}
+                  className="-mt-2"
+                />
+              )}
             </div>
             <p className="font-body text-base sm:text-lg italic text-muted-foreground mb-12 sm:mb-16">
               {chapter.summary}
             </p>
           </AnimatedSection>
+
+          {/* Floating narration control — visible during playback */}
+          {isChapterAudioPlaying && (
+            <div
+              className="fixed z-50 right-4 sm:right-6 top-14 sm:top-6"
+              style={{ marginTop: 'env(safe-area-inset-top, 0px)' }}
+            >
+              <SectionAudioButton
+                sectionId={chapterSectionId}
+                fileName={`chapter_${String(chapter.number).padStart(2, '0')}.mp3`}
+                className="w-10 h-10 shadow-lg shadow-primary/20"
+              />
+            </div>
+          )}
 
           {/* Body */}
           {isChapterAudioPlaying && duration > 0 ? (
@@ -134,6 +150,7 @@ const ChapterReader = () => {
               duration={duration}
               isPlaying={isChapterAudioPlaying}
               dropCapFirst
+              titleWordsOffset={`Chapter ${chapter.number} ${chapter.title}`.split(/\s+/).length}
             />
           ) : (
             <div className="space-y-5 sm:space-y-6">
