@@ -1,5 +1,6 @@
 import AnimatedSection from './AnimatedSection';
 import { aboutAuthor } from '@/data/bookContent';
+import SectionAudioButton from '@/components/SectionAudioButton';
 import coverArt from '@/assets/art_of_ism_book_3.png';
 
 const AboutAuthorSection = () => {
@@ -10,6 +11,7 @@ const AboutAuthorSection = () => {
       <div className="relative max-w-5xl mx-auto">
         <AnimatedSection>
           <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4 text-center">The Author</p>
+          <SectionAudioButton sectionId="about-mrcap" fileName="about-mrcap.mp3" className="mx-auto mb-6" />
           <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-16">
             About <span className="text-gold-gradient">Mr. CAP</span>
           </h2>
