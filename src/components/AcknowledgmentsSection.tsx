@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, useMemo } from 'react';
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import SectionAudioButton from '@/components/SectionAudioButton';
 
 /* ─── Data ─── */
 const MENTORS = [
