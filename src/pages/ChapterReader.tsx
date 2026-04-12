@@ -150,6 +150,7 @@ const ChapterReader = () => {
               duration={duration}
               isPlaying={isChapterAudioPlaying}
               dropCapFirst
+              titleWordsOffset={`Chapter ${chapter.number} ${chapter.title}`.split(/\s+/).length}
             />
           ) : (
             <div className="space-y-5 sm:space-y-6">
