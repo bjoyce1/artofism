@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, useMemo } from 'react';
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import SectionAudioButton from '@/components/SectionAudioButton';
 
 /* ─── Data ─── */
 const MENTORS = [
@@ -366,6 +367,7 @@ const AcknowledgmentsSection = () => {
             <p className="text-lg sm:text-xl font-display text-primary/80 italic mb-6">
               No journey is built alone.
             </p>
+            <SectionAudioButton sectionId="acknowledgments" fileName="Acknowledgments.mp3" className="mx-auto mb-6" />
             <p className="text-sm sm:text-base text-muted-foreground/90 font-body leading-relaxed max-w-2xl mx-auto">
               Everything in this world of ISM was shaped by movement, experience, pressure, perspective, and people. This section honors those who were part of the journey—those who gave game, showed love, stood solid, and left their mark on the path.
             </p>
