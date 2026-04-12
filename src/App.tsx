@@ -17,7 +17,7 @@ import Library from "./pages/Library.tsx";
 import Privacy from "./pages/Privacy.tsx";
 import Terms from "./pages/Terms.tsx";
 import Refund from "./pages/Refund.tsx";
-import AdminKaraoke from "./pages/AdminKaraoke.tsx";
+
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -42,7 +42,7 @@ const App = () => (
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/refund" element={<Refund />} />
-            <Route path="/admin/karaoke" element={<ProtectedRoute><AdminKaraoke /></ProtectedRoute>} />
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

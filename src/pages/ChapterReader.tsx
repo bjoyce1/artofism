@@ -7,7 +7,6 @@ import { useSectionAudio } from '@/hooks/useSectionAudio';
 import AnimatedSection from '@/components/AnimatedSection';
 import FloatingNav from '@/components/FloatingNav';
 import SectionAudioButton from '@/components/SectionAudioButton';
-import KaraokeText from '@/components/KaraokeText';
 import { Heart, ChevronLeft, ChevronRight, Copy, Check, Eye, BookOpen } from 'lucide-react';
 import ChapterAudioPlayer from '@/components/ChapterAudioPlayer';
 
@@ -18,7 +17,6 @@ const ChapterReader = () => {
   const chapter = chapters.find(c => c.number === chapterNum);
   const { saveProgress, readingMode, toggleMode } = useReadingProgress();
   const { toggleFavorite, isFavorite } = useFavorites();
-  const { currentSection, isPlaying, audioRef } = useSectionAudio();
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -42,8 +40,6 @@ const ChapterReader = () => {
   const next = chapters.find(c => c.number === chapterNum + 1);
   const isExperience = readingMode === 'experience';
   const chapterSectionId = `chapter-${chapter.number}`;
-  const isChapterAudioPlaying = currentSection === chapterSectionId && isPlaying;
-  const timestampsFileName = `chapter_${String(chapter.number).padStart(2, '0')}_timestamps.json`;
 
   const copyPrinciple = (text: string, idx: number) => {
     navigator.clipboard.writeText(text);
@@ -128,42 +124,30 @@ const ChapterReader = () => {
             </p>
           </AnimatedSection>
 
-          {/* Body — karaoke mode when audio is playing */}
-          {isChapterAudioPlaying ? (
-            <KaraokeText
-              paragraphs={chapter.content}
-              audioElement={audioRef.current}
-              isPlaying={isChapterAudioPlaying}
-              timestampsFileName={timestampsFileName}
-              pullQuotes={chapter.pullQuotes}
-              isExperience={isExperience}
-              isFirstParagraph={(i) => i === 0}
-            />
-          ) : (
-            <div className="space-y-5 sm:space-y-6">
-              {chapter.content.map((p, i) => {
-                const isPullQuote = chapter.pullQuotes.some(pq => p.includes(pq));
+          {/* Body */}
+          <div className="space-y-5 sm:space-y-6">
+            {chapter.content.map((p, i) => {
+              const isPullQuote = chapter.pullQuotes.some(pq => p.includes(pq));
 
-                if (isPullQuote && isExperience) {
-                  return (
-                    <AnimatedSection key={i} delay={i * 30}>
-                      <blockquote className="border-l-2 border-primary pl-6 sm:pl-8 my-8 sm:my-12">
-                        <p className="font-display text-xl sm:text-2xl italic text-primary leading-relaxed">{p}</p>
-                      </blockquote>
-                    </AnimatedSection>
-                  );
-                }
-
+              if (isPullQuote && isExperience) {
                 return (
-                  <AnimatedSection key={i} delay={i * 20}>
-                    <p className={`text-base sm:text-lg leading-[1.85] sm:leading-[1.9] text-foreground/90 ${i === 0 ? 'drop-cap' : ''}`}>
-                      {p}
-                    </p>
+                  <AnimatedSection key={i} delay={i * 30}>
+                    <blockquote className="border-l-2 border-primary pl-6 sm:pl-8 my-8 sm:my-12">
+                      <p className="font-display text-xl sm:text-2xl italic text-primary leading-relaxed">{p}</p>
+                    </blockquote>
                   </AnimatedSection>
                 );
-              })}
-            </div>
-          )}
+              }
+
+              return (
+                <AnimatedSection key={i} delay={i * 20}>
+                  <p className={`text-base sm:text-lg leading-[1.85] sm:leading-[1.9] text-foreground/90 ${i === 0 ? 'drop-cap' : ''}`}>
+                    {p}
+                  </p>
+                </AnimatedSection>
+              );
+            })}
+          </div>
 
           {/* Code section */}
           <AnimatedSection delay={200}>
