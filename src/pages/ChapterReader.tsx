@@ -4,6 +4,7 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 import { chapters } from '@/data/bookContent';
 import { useReadingProgress, useFavorites } from '@/hooks/useReadingProgress';
 import { useSectionAudio } from '@/hooks/useSectionAudio';
+import KaraokeText from '@/components/KaraokeText';
 import AnimatedSection from '@/components/AnimatedSection';
 import FloatingNav from '@/components/FloatingNav';
 import SectionAudioButton from '@/components/SectionAudioButton';
@@ -17,6 +18,7 @@ const ChapterReader = () => {
   const chapter = chapters.find(c => c.number === chapterNum);
   const { saveProgress, readingMode, toggleMode } = useReadingProgress();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { currentSection, isPlaying: audioIsPlaying, currentTime, duration } = useSectionAudio();
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
