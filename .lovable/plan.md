@@ -1,59 +1,92 @@
 
-I reviewed the current setup and the email domain is still stuck in a pending state.
 
-What I found
-- The project is configured to send email from theartofism.com via the delegated sender subdomain `notify.theartofism.com`.
-- The backend still reports the domain as pending, which means the DNS delegation has not been accepted end-to-end yet.
-- The auth email hook is already configured in code to send from `notify.theartofism.com`, so this is not a code issue first — it is a sender-domain verification issue.
+# Karaoke-Style Word Highlighting for Chapter Audio
 
-Most likely cause
-- Since it has been stuck for days, this is likely not ordinary propagation anymore.
-- The screenshots you shared earlier appeared structurally correct, so the next likely issue is one of these:
-  1. the `notify` NS delegation is not actually resolving publicly everywhere yet,
-  2. there is a conflicting record on `notify`,
-  3. the DNS host stored an incomplete TXT value,
-  4. the current sender-domain setup in Cloud is stuck and needs to be removed/re-added.
+## Overview
+Add synchronized word-by-word gold highlighting to chapter text as audio plays, with auto-scroll to keep the active word visible.
 
-Plan
-1. Confirm the exact current sender domain in Cloud
-   - Keep using `theartofism.com` for this project.
-   - Avoid switching to another workspace domain unless you explicitly want that.
+## Architecture
 
-2. Do a final DNS sanity check at the registrar
-   - Confirm `notify` has exactly these two NS records:
-     - `ns3.lovable.cloud`
-     - `ns4.lovable.cloud`
-   - Confirm there are no A, AAAA, or CNAME records for `notify`
-   - Confirm `_lovable-email.notify` has exactly one TXT record with the full verification string and no truncation
+```text
+ElevenLabs API ──► Edge Function ──► Storage (audio bucket)
+  (with-timestamps)     │                ├── chapter_01.mp3
+                         │                ├── chapter_01_timestamps.json
+                         └────────────────├── chapter_02.mp3
+                                          └── chapter_02_timestamps.json
+                                                    │
+                                                    ▼
+                              ChapterReader ──► KaraokeText component
+                                  │                 ├── Fetches timestamps JSON
+                                  │                 ├── Wraps words in <span>
+                                  │                 ├── Highlights current word (gold)
+                                  └─── Audio ───────└── Auto-scrolls to active word
+```
 
-3. If DNS looks correct, reset the stuck email-domain setup
-   - Remove the pending email domain from Cloud email settings
-   - Re-add `theartofism.com`
-   - Recreate the same delegated sender setup so the verification process restarts cleanly
+## Steps
 
-4. Recheck verification status after the reset
-   - Once the domain becomes active, branded auth emails should start working automatically with the existing email hook
+### 1. Store ElevenLabs API key as a secret
+Use the `add_secret` tool to store `ELEVENLABS_API_KEY` with the provided key so edge functions can access it securely.
 
-5. If it still fails after reset
-   - Treat it as a platform-side provisioning issue rather than a project-code issue
-   - At that point the right next step is support escalation with:
-     - the root domain
-     - the delegated sender subdomain
-     - screenshots of the NS and TXT records
-     - note that it has been pending for days despite correct DNS
+### 2. Create `generate-karaoke-audio` edge function
+- Accepts `{ chapterNumber }` in the request body
+- Reads the chapter text from `bookContent.ts` data (hardcoded in the function or fetched)
+- Splits text into chunks at sentence boundaries, respecting the 5,000-character limit
+- For each chunk, calls `POST https://api.elevenlabs.io/v1/text-to-speech/{voiceId}/with-timestamps` with model `eleven_multilingual_v2`
+- Converts character-level timestamps from the `alignment` response into word-level `{ word, start, end }` objects
+- Merges audio (base64 MP3 segments concatenated) and offsets timestamps for each subsequent chunk
+- Uploads the final MP3 to `audio/chapter_XX.mp3` (replacing existing files) and the timestamps JSON to `audio/chapter_XX_timestamps.json` in the `audio` storage bucket
+- Returns success/failure status
 
-User-facing recommendation
-- Because this has been pending for days, the most effective next move is to reset the pending sender-domain setup in Cloud and re-add it cleanly, rather than continuing to wait.
+### 3. Create an admin trigger mechanism
+- Add a simple admin page or button (protected) that calls the edge function for each chapter sequentially
+- Could also be triggered via curl for each chapter number (1–11)
+- Also generate for introduction, dedication, about-mrcap, and acknowledgments sections if desired
 
-Technical details
-- Current code already points auth email sending to:
-  - sender subdomain: `notify.theartofism.com`
-  - visible from domain: `theartofism.com`
-- The blocker is upstream verification status, not the auth page or purchase flow.
-- No product feature work is needed unless the domain is reset and reconfigured.
+### 4. Build `KaraokeText` component
+- Props: `paragraphs: string[]`, `audioRef: HTMLAudioElement | null`, `isPlaying: boolean`, `timestampsUrl: string`
+- On mount, fetches the timestamps JSON from storage
+- Flattens all paragraphs into a single word list, maps each word to its timestamp entry
+- Renders each paragraph with each word wrapped in a `<span>` with a unique index
+- Uses `requestAnimationFrame` loop when playing to:
+  - Check `audio.currentTime` against word timestamps
+  - Apply gold highlight (`background: rgba(200, 168, 78, 0.35)`, `color: #D4AF37`) to the current word
+  - Call `scrollIntoView({ behavior: 'smooth', block: 'center' })` on the active word span
+- Clears all highlights when paused/stopped
+- Only one word highlighted at a time
 
-If approved, I’ll guide the recovery path as:
-1. remove the stuck pending email domain entry,
-2. re-add theartofism.com,
-3. verify the DNS records match the regenerated values exactly,
-4. check status again after the clean restart.
+### 5. Update `ChapterReader` to use karaoke mode
+- When the `SectionAudioButton` is playing for the current chapter, render `KaraokeText` instead of the plain paragraph rendering
+- Pass the audio element reference from `useSectionAudio` (needs to be exposed from the context)
+- The timestamps URL is constructed as `audio/chapter_XX_timestamps.json` from the storage bucket
+
+### 6. Update `useSectionAudio` hook
+- Expose `audioRef` from the context so `KaraokeText` can read `currentTime`
+- Add `currentTime` state updated via `timeupdate` event for reactivity
+
+## Technical Details
+
+**ElevenLabs API call per chunk:**
+```
+POST https://api.elevenlabs.io/v1/text-to-speech/3htg31YmpSA7auH6oqDp/with-timestamps
+Headers: { "xi-api-key": ELEVENLABS_API_KEY, "Content-Type": "application/json" }
+Body: { "text": "...", "model_id": "eleven_multilingual_v2" }
+Response: { "audio_base64": "...", "alignment": { "characters": [...], "character_start_times_seconds": [...], "character_end_times_seconds": [...] } }
+```
+
+**Word timestamp format (JSON):**
+```json
+[
+  { "word": "Some", "start": 0.0, "end": 0.23 },
+  { "word": "things", "start": 0.23, "end": 0.51 },
+  ...
+]
+```
+
+**Highlight styling:**
+- Active word: `background: rgba(200, 168, 78, 0.35); color: #D4AF37; border-radius: 2px; transition: background 0.1s`
+- All other words: default text color
+
+**Audio merging approach:** Since ElevenLabs returns base64 MP3 per chunk, the edge function will decode each to binary, concatenate them, and upload as a single MP3. Timestamps for chunk N are offset by the cumulative duration of chunks 0..N-1.
+
+**Edge function timeout consideration:** Processing all chunks for a long chapter may take time. The function processes one chapter per invocation. The admin page calls each chapter sequentially.
+
