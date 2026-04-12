@@ -4,7 +4,7 @@ import AnimatedSection from './AnimatedSection';
 import { chapters } from '@/data/bookContent';
 
 // Chapters that have audio available in storage
-const audioAvailableChapters = [1, 2, 3, 4];
+const audioAvailableChapters = [1, 2, 3, 4, 5];
 
 const TOCGrid = () => {
   return (
