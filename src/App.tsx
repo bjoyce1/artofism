@@ -17,7 +17,7 @@ import Library from "./pages/Library.tsx";
 import Privacy from "./pages/Privacy.tsx";
 import Terms from "./pages/Terms.tsx";
 import Refund from "./pages/Refund.tsx";
-import AdminKaraoke from "./pages/AdminKaraoke.tsx";
+
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
