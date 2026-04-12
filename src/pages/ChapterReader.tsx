@@ -4,6 +4,7 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 import { chapters } from '@/data/bookContent';
 import { useReadingProgress, useFavorites } from '@/hooks/useReadingProgress';
 import { useSectionAudio } from '@/hooks/useSectionAudio';
+import KaraokeText from '@/components/KaraokeText';
 import AnimatedSection from '@/components/AnimatedSection';
 import FloatingNav from '@/components/FloatingNav';
 import SectionAudioButton from '@/components/SectionAudioButton';
@@ -17,6 +18,7 @@ const ChapterReader = () => {
   const chapter = chapters.find(c => c.number === chapterNum);
   const { saveProgress, readingMode, toggleMode } = useReadingProgress();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { currentSection, isPlaying: audioIsPlaying, currentTime, duration } = useSectionAudio();
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -40,7 +42,7 @@ const ChapterReader = () => {
   const next = chapters.find(c => c.number === chapterNum + 1);
   const isExperience = readingMode === 'experience';
   const chapterSectionId = `chapter-${chapter.number}`;
-
+  const isChapterAudioPlaying = currentSection === chapterSectionId && audioIsPlaying;
   const copyPrinciple = (text: string, idx: number) => {
     navigator.clipboard.writeText(text);
     setCopiedIndex(idx);
@@ -125,29 +127,39 @@ const ChapterReader = () => {
           </AnimatedSection>
 
           {/* Body */}
-          <div className="space-y-5 sm:space-y-6">
-            {chapter.content.map((p, i) => {
-              const isPullQuote = chapter.pullQuotes.some(pq => p.includes(pq));
+          {isChapterAudioPlaying && duration > 0 ? (
+            <KaraokeText
+              paragraphs={chapter.content}
+              currentTime={currentTime}
+              duration={duration}
+              isPlaying={isChapterAudioPlaying}
+              dropCapFirst
+            />
+          ) : (
+            <div className="space-y-5 sm:space-y-6">
+              {chapter.content.map((p, i) => {
+                const isPullQuote = chapter.pullQuotes.some(pq => p.includes(pq));
 
-              if (isPullQuote && isExperience) {
+                if (isPullQuote && isExperience) {
+                  return (
+                    <AnimatedSection key={i} delay={i * 30}>
+                      <blockquote className="border-l-2 border-primary pl-6 sm:pl-8 my-8 sm:my-12">
+                        <p className="font-display text-xl sm:text-2xl italic text-primary leading-relaxed">{p}</p>
+                      </blockquote>
+                    </AnimatedSection>
+                  );
+                }
+
                 return (
-                  <AnimatedSection key={i} delay={i * 30}>
-                    <blockquote className="border-l-2 border-primary pl-6 sm:pl-8 my-8 sm:my-12">
-                      <p className="font-display text-xl sm:text-2xl italic text-primary leading-relaxed">{p}</p>
-                    </blockquote>
+                  <AnimatedSection key={i} delay={i * 20}>
+                    <p className={`text-base sm:text-lg leading-[1.85] sm:leading-[1.9] text-foreground/90 ${i === 0 ? 'drop-cap' : ''}`}>
+                      {p}
+                    </p>
                   </AnimatedSection>
                 );
-              }
-
-              return (
-                <AnimatedSection key={i} delay={i * 20}>
-                  <p className={`text-base sm:text-lg leading-[1.85] sm:leading-[1.9] text-foreground/90 ${i === 0 ? 'drop-cap' : ''}`}>
-                    {p}
-                  </p>
-                </AnimatedSection>
-              );
-            })}
-          </div>
+              })}
+            </div>
+          )}
 
           {/* Code section */}
           <AnimatedSection delay={200}>
