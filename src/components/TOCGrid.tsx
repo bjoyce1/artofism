@@ -31,6 +31,14 @@ const TOCGrid = () => {
                   {String(chapter.number).padStart(2, '0')}
                 </span>
 
+                {/* Audio indicator */}
+                {audioAvailableChapters.includes(chapter.number) && (
+                  <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2 py-1 bg-card/80 backdrop-blur-sm border border-border/60 rounded-full">
+                    <Volume2 size={12} className="text-primary" />
+                    <span className="font-ui text-[10px] uppercase tracking-wider text-muted-foreground">Audio</span>
+                  </div>
+                )}
+
                 <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary mb-2">
                   Chapter {chapter.number}
                 </p>
