@@ -110,6 +110,27 @@ Deno.serve(async (req) => {
       console.error("Entitlement upsert error:", entitlementError);
     }
 
+    // Send purchase confirmation email
+    try {
+      const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Reader';
+      await supabaseAdmin.functions.invoke('send-transactional-email', {
+        body: {
+          templateName: 'purchase-confirmation',
+          recipientEmail: user.email,
+          idempotencyKey: `purchase-confirm-${orderId}`,
+          templateData: {
+            name: userName,
+            amount,
+            currency,
+            orderId,
+          },
+        },
+      });
+    } catch (emailErr) {
+      // Email failure should not break the purchase flow
+      console.error("Purchase confirmation email error:", emailErr);
+    }
+
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
