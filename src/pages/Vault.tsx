@@ -6,7 +6,7 @@ import FloatingNav from '@/components/FloatingNav';
 import Footer from '@/components/Footer';
 import foundersKeyImg from '@/assets/founders-key.png';
 
-const OPENSEA_URL = 'https://opensea.io/mrcap1';
+const OPENSEA_URL = 'https://opensea.io/collection/artofism';
 
 interface CollectionItem {
   id: string;
