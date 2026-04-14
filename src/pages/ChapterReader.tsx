@@ -119,6 +119,7 @@ const ChapterReader = () => {
                 <SectionAudioButton
                   sectionId={chapterSectionId}
                   fileName={`chapter_${String(chapter.number).padStart(2, '0')}.mp3`}
+                  label="Audiobook"
                   className="-mt-2"
                 />
               )}

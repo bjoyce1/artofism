@@ -114,8 +114,8 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
             style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}
           >
             <img src={albumArt} alt="The Art of ISM" className="w-8 h-8 rounded-full object-cover shadow-md shadow-primary/30" />
-            <span className="hidden sm:inline">{song.title}</span>
-            <span className="sm:hidden">Play</span>
+            <Music size={12} className="shrink-0" />
+            <span className="truncate max-w-[120px] sm:max-w-none">{song.title}</span>
           </motion.button>
         )}
       </AnimatePresence>
