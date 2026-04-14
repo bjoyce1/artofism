@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import FloatingNav from '@/components/FloatingNav';
 import Footer from '@/components/Footer';
 import foundersKeyImg from '@/assets/founders-key.png';
+import ChapterRelicsGallery from '@/components/vault/ChapterRelicsGallery';
 
 const OPENSEA_URL = 'https://opensea.io/collection/artofism';
 
@@ -295,6 +296,9 @@ const Vault = () => {
           </div>
         </div>
       </section>
+
+      {/* ── CHAPTER RELICS GALLERY ── */}
+      <ChapterRelicsGallery />
 
       {/* ── LOCKED ACCESS SECTION ── */}
       <section
