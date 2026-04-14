@@ -115,13 +115,12 @@ const ChapterReader = () => {
               <h1 className="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-foreground mb-3 sm:mb-4">
                 {chapter.title}
               </h1>
-              {!isChapterAudioPlaying && (
-                <SectionAudioButton
-                  sectionId={chapterSectionId}
-                  fileName={`chapter_${String(chapter.number).padStart(2, '0')}.mp3`}
-                  className="-mt-2"
-                />
-              )}
+              <SectionAudioButton
+                sectionId={chapterSectionId}
+                fileName={`chapter_${String(chapter.number).padStart(2, '0')}.mp3`}
+                className="-mt-2"
+                label="Audiobook"
+              />
             </div>
             <p className="font-body text-base sm:text-lg italic text-muted-foreground mb-12 sm:mb-16">
               {chapter.summary}
