@@ -18,6 +18,7 @@ import Privacy from "./pages/Privacy.tsx";
 import Terms from "./pages/Terms.tsx";
 import Refund from "./pages/Refund.tsx";
 import Unsubscribe from "./pages/Unsubscribe.tsx";
+import Vault from "./pages/Vault.tsx";
 
 import NotFound from "./pages/NotFound.tsx";
 
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/refund" element={<Refund />} />
             <Route path="/unsubscribe" element={<Unsubscribe />} />
+            <Route path="/vault" element={<Vault />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

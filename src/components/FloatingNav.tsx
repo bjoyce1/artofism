@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, BookOpen, List, Code2, User, Library, LogIn } from 'lucide-react';
+import { Home, BookOpen, List, Code2, User, Library, LogIn, Gem } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import logo from '@/assets/logo.png';
@@ -11,6 +11,7 @@ const navItems = [
   { label: 'Chapters', path: '/#chapters', icon: List },
   { label: 'Codes', path: '/codes', icon: Code2 },
   { label: 'About', path: '/#about', icon: User },
+  { label: 'The Vault', path: '/vault', icon: Gem },
 ];
 
 const FloatingNav = () => {
@@ -38,6 +39,7 @@ const FloatingNav = () => {
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/' && !location.hash;
     if (path === '/codes') return location.pathname === '/codes';
+    if (path === '/vault') return location.pathname === '/vault';
     return false;
   };
 
