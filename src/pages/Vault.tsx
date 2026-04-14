@@ -297,6 +297,9 @@ const Vault = () => {
         </div>
       </section>
 
+      {/* ── CHAPTER RELICS GALLERY ── */}
+      <ChapterRelicsGallery />
+
       {/* ── LOCKED ACCESS SECTION ── */}
       <section
         id="unlock-section"
