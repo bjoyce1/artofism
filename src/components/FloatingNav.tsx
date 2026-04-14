@@ -39,6 +39,7 @@ const FloatingNav = () => {
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/' && !location.hash;
     if (path === '/codes') return location.pathname === '/codes';
+    if (path === '/vault') return location.pathname === '/vault';
     return false;
   };
 
