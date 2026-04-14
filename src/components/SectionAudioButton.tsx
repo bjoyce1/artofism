@@ -7,7 +7,7 @@ interface Props {
   /** Filename inside the "audio" storage bucket, e.g. "00_hero.mp3" */
   fileName: string;
   className?: string;
-  /** Optional text label displayed beside the icon */
+  /** Optional text label displayed beside the icon (e.g. "Audiobook") */
   label?: string;
 }
 
@@ -24,13 +24,17 @@ const SectionAudioButton = ({ sectionId, fileName, className = '', label }: Prop
         label ? 'px-3 py-1.5' : 'w-8 h-8'
       } ${
         active
-          ? 'bg-accent/20 border-accent/50 text-accent'
-          : 'bg-card/60 border-border hover:border-accent/30 text-muted-foreground hover:text-accent'
+          ? 'bg-primary/20 border-primary/50 text-primary'
+          : 'bg-card/60 border-border hover:border-primary/30 text-muted-foreground hover:text-primary'
       } ${className}`}
       aria-label={active ? `Pause ${sectionId} audio` : `Play ${sectionId} audio`}
     >
       {active ? <Pause size={14} /> : <Mic size={14} />}
-      {label && <span className="text-[10px] font-ui uppercase tracking-[0.12em] font-medium">{active ? 'Pause' : label}</span>}
+      {label && (
+        <span className="text-[10px] font-ui uppercase tracking-[0.1em] font-medium">
+          {active ? 'Pause' : label}
+        </span>
+      )}
     </button>
   );
 };
