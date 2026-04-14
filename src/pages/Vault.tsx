@@ -6,6 +6,7 @@ import FloatingNav from '@/components/FloatingNav';
 import Footer from '@/components/Footer';
 import foundersKeyImg from '@/assets/founders-key.png';
 import ChapterRelicsGallery from '@/components/vault/ChapterRelicsGallery';
+import vaultHeroBg from '@/assets/vault-hero-bg.png';
 
 const OPENSEA_URL = 'https://opensea.io/collection/artofism';
 
