@@ -6,6 +6,7 @@ import FloatingNav from '@/components/FloatingNav';
 import Footer from '@/components/Footer';
 import foundersKeyImg from '@/assets/founders-key.png';
 import ChapterRelicsGallery from '@/components/vault/ChapterRelicsGallery';
+import vaultHeroBg from '@/assets/vault-hero-bg.png';
 
 const OPENSEA_URL = 'https://opensea.io/collection/artofism';
 
@@ -77,6 +78,14 @@ const Vault = () => {
 
       {/* ── HERO ── */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Hero background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${vaultHeroBg})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-deep-black/60 via-deep-black/70 to-deep-black" />
+        <div className="absolute inset-0 bg-gradient-to-r from-deep-black/80 via-transparent to-deep-black/80" />
+
         {/* Red smoke overlay */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-secondary/20 via-transparent to-deep-black" />
