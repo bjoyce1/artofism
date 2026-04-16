@@ -2,17 +2,17 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Lock } from 'lucide-react';
 
-import ch01 from '@/assets/nft/chapter-01-evolution.jpg';
-import ch02 from '@/assets/nft/chapter-02-focus.jpg';
-import ch03 from '@/assets/nft/chapter-03-international.jpg';
-import ch04 from '@/assets/nft/chapter-04-perception.jpg';
-import ch05 from '@/assets/nft/chapter-05-words.jpg';
-import ch06 from '@/assets/nft/chapter-06-temptation.jpg';
-import ch07 from '@/assets/nft/chapter-07-space-age.jpg';
-import ch08 from '@/assets/nft/chapter-08-realest.jpg';
-import ch09 from '@/assets/nft/chapter-09-money.jpg';
-import ch10 from '@/assets/nft/chapter-10-nothing-without.jpg';
-import ch11 from '@/assets/nft/chapter-11-capism.jpg';
+import ch01 from '@/assets/nft/chapter-01-evolution.webp';
+import ch02 from '@/assets/nft/chapter-02-focus.webp';
+import ch03 from '@/assets/nft/chapter-03-international.webp';
+import ch04 from '@/assets/nft/chapter-04-perception.webp';
+import ch05 from '@/assets/nft/chapter-05-words.webp';
+import ch06 from '@/assets/nft/chapter-06-temptation.webp';
+import ch07 from '@/assets/nft/chapter-07-space-age.webp';
+import ch08 from '@/assets/nft/chapter-08-realest.webp';
+import ch09 from '@/assets/nft/chapter-09-money.webp';
+import ch10 from '@/assets/nft/chapter-10-nothing-without.webp';
+import ch11 from '@/assets/nft/chapter-11-capism.webp';
 
 interface ChapterRelic {
   chapter: number;
