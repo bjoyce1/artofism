@@ -31,6 +31,8 @@ const HeroSection = () => {
           <img
             src={mobileHeroBg}
             alt=""
+            width={1920}
+            height={1080}
             className="w-full h-[115%] object-cover object-[50%_25%] sm:object-[20%_20%] sm:object-[left_top]"
             fetchPriority="high"
             decoding="async"
