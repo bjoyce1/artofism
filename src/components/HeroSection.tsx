@@ -2,9 +2,9 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useRef } from 'react';
 import SectionAudioButton from '@/components/SectionAudioButton';
-import heroBg from '@/assets/hero-bg.png';
-import mobileHeroBg from '@/assets/mobile-hero-bg.png';
-import ismLogo from '@/assets/ism-logo.png';
+import heroBg from '@/assets/hero-bg.webp';
+import mobileHeroBg from '@/assets/mobile-hero-bg.webp';
+import ismLogo from '@/assets/ism-logo.webp';
 
 const stats = [
   { value: '11', label: 'Chapters' },
