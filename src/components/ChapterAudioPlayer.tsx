@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, Volume2, VolumeX, Music } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import albumArt from '@/assets/album-art.jpg';
+import albumArt from '@/assets/album-art.webp';
 
 const CHAPTER_SONGS: Record<number, { file: string; title: string }> = {
   1:  { file: '1. 16 LETTER.wav',                title: '16 Letter' },

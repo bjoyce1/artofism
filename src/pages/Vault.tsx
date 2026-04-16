@@ -4,9 +4,9 @@ import { ExternalLink, Lock, Gem, BookOpen, Music, Code2, X, Check } from 'lucid
 import { Button } from '@/components/ui/button';
 import FloatingNav from '@/components/FloatingNav';
 import Footer from '@/components/Footer';
-import foundersKeyImg from '@/assets/founders-key.png';
+import foundersKeyImg from '@/assets/founders-key.webp';
 import ChapterRelicsGallery from '@/components/vault/ChapterRelicsGallery';
-import vaultHeroBg from '@/assets/vault-hero-bg.png';
+import vaultHeroBg from '@/assets/vault-hero-bg.webp';
 
 const OPENSEA_URL = 'https://opensea.io/collection/artofism';
 

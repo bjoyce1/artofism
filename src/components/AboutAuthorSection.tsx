@@ -1,7 +1,7 @@
 import AnimatedSection from './AnimatedSection';
 import { aboutAuthor } from '@/data/bookContent';
 import SectionAudioButton from '@/components/SectionAudioButton';
-import coverArt from '@/assets/art_of_ism_book_3.png';
+import coverArt from '@/assets/art_of_ism_book_3.webp';
 
 const AboutAuthorSection = () => {
   return (

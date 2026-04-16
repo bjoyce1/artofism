@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Home, BookOpen, List, Code2, User, Library, LogIn, Gem } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
-import logo from '@/assets/logo.png';
+import logo from '@/assets/logo.webp';
 
 const navItems = [
   { label: 'Home', path: '/', icon: Home },
