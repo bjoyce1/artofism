@@ -24,20 +24,18 @@ const HeroSection = () => {
 
   return (
     <section ref={sectionRef} className="relative min-h-[100dvh] flex items-center overflow-hidden">
-      {/* Background image with parallax */}
+      {/* Background image with parallax — only one source actually downloads per breakpoint */}
       <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
-        <img
-          src={mobileHeroBg}
-          alt=""
-          className="w-full h-[115%] object-cover object-[50%_25%] sm:hidden"
-          loading="eager"
-        />
-        <img
-          src={heroBg}
-          alt=""
-          className="w-full h-[115%] object-cover object-[20%_20%] hidden sm:block sm:object-[left_top]"
-          loading="eager"
-        />
+        <picture>
+          <source media="(min-width: 640px)" srcSet={heroBg} />
+          <img
+            src={mobileHeroBg}
+            alt=""
+            className="w-full h-[115%] object-cover object-[50%_25%] sm:object-[20%_20%] sm:object-[left_top]"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </picture>
         {/* Base vignette */}
         <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--deep-black))] via-transparent to-[hsl(var(--deep-black)/0.35)]" />
         {/* Mobile overlay */}
