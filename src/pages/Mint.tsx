@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Shield, BookOpen, Quote, Sparkles, Layers, Wallet, Key, Unlock, ExternalLink } from 'lucide-react';
 import FloatingNav from '@/components/FloatingNav';
 import Footer from '@/components/Footer';
-import foundersKeyImg from '@/assets/nft/founders-key.jpg';
+import foundersKeyImg from '@/assets/nft/founders-key.webp';
 
 const TOTAL_SUPPLY = 111;
 
