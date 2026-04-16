@@ -10,9 +10,17 @@ const ALLOWED_ORIGINS = [
 ];
 
 const buildCorsHeaders = (origin: string | null) => {
-  const allowOrigin = origin && (ALLOWED_ORIGINS.includes(origin) || /\.lovable\.app$/.test(new URL(origin).hostname))
-    ? origin
-    : ALLOWED_ORIGINS[0];
+  let allowOrigin = ALLOWED_ORIGINS[0];
+  if (origin) {
+    try {
+      const host = new URL(origin).hostname;
+      if (ALLOWED_ORIGINS.includes(origin) || /\.lovable\.app$/.test(host)) {
+        allowOrigin = origin;
+      }
+    } catch {
+      // ignore malformed origin
+    }
+  }
   return {
     "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -23,6 +31,12 @@ const buildCorsHeaders = (origin: string | null) => {
 const EXPECTED_AMOUNT = 9.99;
 const EXPECTED_CURRENCY = "USD";
 const PRODUCT_SLUG = "art-of-ism-full-access";
+
+// PAYPAL_ENV: "sandbox" or "live" (defaults to live for safety in production)
+const PAYPAL_ENV = (Deno.env.get("PAYPAL_ENV") ?? "live").toLowerCase();
+const PAYPAL_API_BASE = PAYPAL_ENV === "sandbox"
+  ? "https://api-m.sandbox.paypal.com"
+  : "https://api-m.paypal.com";
 
 Deno.serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req.headers.get("origin"));
@@ -67,7 +81,8 @@ Deno.serve(async (req) => {
 
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Idempotency: if this order is already recorded, short-circuit success
+    // Idempotency: if this order is already recorded, short-circuit success.
+    // If it belongs to a different user, refuse with 409.
     const { data: existing } = await supabaseAdmin
       .from("purchases")
       .select("id, user_id, status")
@@ -75,23 +90,28 @@ Deno.serve(async (req) => {
       .eq("provider_order_id", orderId)
       .maybeSingle();
 
-    if (existing && existing.status === "completed") {
-      // Make sure the entitlement is in place for this user
-      if (existing.user_id === user.id) {
+    if (existing) {
+      if (existing.user_id !== user.id) {
+        return new Response(JSON.stringify({ error: "Order already claimed by another account" }), {
+          status: 409,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (existing.status === "completed") {
         await supabaseAdmin.from("entitlements").upsert({
           user_id: user.id,
           product_slug: PRODUCT_SLUG,
           active: true,
           granted_at: new Date().toISOString(),
         }, { onConflict: "user_id,product_slug" });
+        return new Response(JSON.stringify({ success: true, alreadyProcessed: true }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
       }
-      return new Response(JSON.stringify({ success: true, alreadyProcessed: true }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
     }
 
     // Get PayPal access token
-    const tokenRes = await fetch("https://api-m.paypal.com/v1/oauth2/token", {
+    const tokenRes = await fetch(`${PAYPAL_API_BASE}/v1/oauth2/token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -107,21 +127,22 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Capture the order
-    const captureRes = await fetch(`https://api-m.paypal.com/v2/checkout/orders/${orderId}/capture`, {
+    // Capture the order with an idempotency key
+    const captureRes = await fetch(`${PAYPAL_API_BASE}/v2/checkout/orders/${orderId}/capture`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${tokenData.access_token}`,
+        "PayPal-Request-Id": `aoi-capture-${orderId}`,
       },
     });
     const captureData = await captureRes.json();
 
-    // PayPal returns ORDER_ALREADY_CAPTURED on retries — treat as a signal to re-fetch order
+    // PayPal returns ORDER_ALREADY_CAPTURED on retries — refetch the order to read the capture
     let finalData = captureData;
     if (captureData?.name === "UNPROCESSABLE_ENTITY" &&
         captureData?.details?.[0]?.issue === "ORDER_ALREADY_CAPTURED") {
-      const getRes = await fetch(`https://api-m.paypal.com/v2/checkout/orders/${orderId}`, {
+      const getRes = await fetch(`${PAYPAL_API_BASE}/v2/checkout/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${tokenData.access_token}` },
       });
       finalData = await getRes.json();
