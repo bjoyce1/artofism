@@ -57,7 +57,7 @@ const Unlock = () => {
     }
     const script = document.createElement('script');
     script.id = 'paypal-sdk';
-    script.src = `https://www.paypal.com/sdk/js?client-id=${paypalClientId}&currency=USD`;
+    script.src = `https://www.paypal.com/sdk/js?client-id=${paypalClientId}&currency=USD&enable-funding=card,venmo&disable-funding=credit`;
     script.onload = () => setPaypalLoaded(true);
     document.body.appendChild(script);
   }, [paypalClientId]);
