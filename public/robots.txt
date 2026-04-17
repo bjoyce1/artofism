@@ -13,4 +13,10 @@ Allow: /
 User-agent: *
 Allow: /
 
+# Block protected/user-only routes from being crawled.
+Disallow: /library
+Disallow: /codes
+Disallow: /quote-vault
+Disallow: /unlock/success
+
 Sitemap: https://theartofism.com/sitemap.xml
