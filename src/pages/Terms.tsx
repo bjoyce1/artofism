@@ -1,8 +1,14 @@
 import FloatingNav from '@/components/FloatingNav';
 import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 
 const Terms = () => (
   <div className="min-h-screen bg-deep-black">
+    <SEO
+      title="Terms of Service"
+      description="Terms governing access to and use of The Art of ISM."
+      path="/terms"
+    />
     <FloatingNav />
     <div className="pt-24 pb-20 px-6">
       <div className="max-w-3xl mx-auto prose-invert">
