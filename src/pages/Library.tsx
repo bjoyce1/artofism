@@ -72,6 +72,7 @@ const Library = () => {
 
   return (
     <div className="min-h-screen bg-deep-black">
+      <SEO title="Your Library" description="Your library of chapters and saved quotes from The Art of ISM." path="/library" noindex />
       <FloatingNav />
 
       <div className="pt-24 pb-32 px-6">
