@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { allCodes } from '@/data/bookContent';
 import { useFavorites } from '@/hooks/useReadingProgress';
 import FloatingNav from '@/components/FloatingNav';
+import SEO from '@/components/SEO';
 import AnimatedSection from '@/components/AnimatedSection';
 import { Heart, Copy, Check, ChevronDown, ChevronUp } from 'lucide-react';
 
