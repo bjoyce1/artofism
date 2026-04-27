@@ -14,6 +14,12 @@ import Footer from '@/components/Footer';
 const Index = () => {
   return (
     <div className="min-h-screen bg-deep-black">
+      <SEO
+        title="The Art of ISM"
+        description="A premium interactive online book by Mr. CAP. 11 immersive chapters, the Codes hub, and the Quote Vault — unlock the art of ISM."
+        path="/"
+        type="book"
+      />
       <FloatingNav />
       <HeroSection />
       <DedicationSection />
