@@ -119,6 +119,11 @@ const Unlock = () => {
 
   return (
     <div className="min-h-screen bg-deep-black">
+      <SEO
+        title="Unlock The Art of ISM"
+        description="Get lifetime access to The Art of ISM — 11 immersive chapters, the Codes hub, and the Quote Vault by Mr. CAP."
+        path="/unlock"
+      />
       <FloatingNav />
 
       <div className="pt-24 pb-32 px-6">
