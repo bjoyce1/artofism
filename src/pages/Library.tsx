@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { trackEvent } from '@/lib/analytics';
 import { chapters } from '@/data/bookContent';
 import FloatingNav from '@/components/FloatingNav';
+import SEO from '@/components/SEO';
 import AnimatedSection from '@/components/AnimatedSection';
 import { BookOpen, Code2, Quote, Download, Heart, ChevronRight } from 'lucide-react';
 
