@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { trackEvent } from '@/lib/analytics';
 import { supabase } from '@/integrations/supabase/client';
 import FloatingNav from '@/components/FloatingNav';
+import SEO from '@/components/SEO';
 import AnimatedSection from '@/components/AnimatedSection';
 import { Button } from '@/components/ui/button';
 import { BookOpen, Code2, Quote, Infinity, Smartphone, Download } from 'lucide-react';
