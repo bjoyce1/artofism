@@ -19,6 +19,7 @@ const CodesHub = () => {
 
   return (
     <div className="min-h-screen bg-deep-black">
+      <SEO title="The Codes" description="The complete Codes hub from The Art of ISM by Mr. CAP." path="/codes" noindex />
       <FloatingNav />
 
       <div className="pt-24 pb-32 px-6">
