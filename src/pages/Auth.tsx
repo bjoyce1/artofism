@@ -42,6 +42,12 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-deep-black">
+      <SEO
+        title="Sign In"
+        description="Sign in to access The Art of ISM — your immersive online book by Mr. CAP."
+        path="/auth"
+        noindex
+      />
       <FloatingNav />
       <div className="flex items-center justify-center min-h-screen px-6">
         <AnimatedSection>
