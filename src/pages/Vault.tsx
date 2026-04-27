@@ -75,6 +75,11 @@ const Vault = () => {
 
   return (
     <div className="min-h-screen bg-deep-black text-foreground">
+      <SEO
+        title="The Vault"
+        description="Explore The Vault — collectible relics, NFTs, and bonus drops tied to The Art of ISM."
+        path="/vault"
+      />
       <FloatingNav />
 
       {/* ── HERO ── */}
