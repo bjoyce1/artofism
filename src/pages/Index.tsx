@@ -1,3 +1,4 @@
+import SEO from '@/components/SEO';
 import FloatingNav from '@/components/FloatingNav';
 import HeroSection from '@/components/HeroSection';
 
