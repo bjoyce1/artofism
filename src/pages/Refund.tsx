@@ -1,8 +1,14 @@
 import FloatingNav from '@/components/FloatingNav';
 import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 
 const Refund = () => (
   <div className="min-h-screen bg-deep-black">
+    <SEO
+      title="Refund Policy"
+      description="Refund policy for The Art of ISM digital purchases."
+      path="/refund"
+    />
     <FloatingNav />
     <div className="pt-24 pb-20 px-6">
       <div className="max-w-3xl mx-auto prose-invert">

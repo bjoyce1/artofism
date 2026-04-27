@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Lock, Gem, BookOpen, Music, Code2, X, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import FloatingNav from '@/components/FloatingNav';
+import SEO from '@/components/SEO';
 import Footer from '@/components/Footer';
 import foundersKeyImg from '@/assets/founders-key.webp';
 import ChapterRelicsGallery from '@/components/vault/ChapterRelicsGallery';
@@ -74,6 +75,11 @@ const Vault = () => {
 
   return (
     <div className="min-h-screen bg-deep-black text-foreground">
+      <SEO
+        title="The Vault"
+        description="Explore The Vault — collectible relics, NFTs, and bonus drops tied to The Art of ISM."
+        path="/vault"
+      />
       <FloatingNav />
 
       {/* ── HERO ── */}

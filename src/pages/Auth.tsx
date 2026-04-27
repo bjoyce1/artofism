@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate } from 'react-router-dom';
 import FloatingNav from '@/components/FloatingNav';
+import SEO from '@/components/SEO';
 import AnimatedSection from '@/components/AnimatedSection';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,6 +43,12 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-deep-black">
+      <SEO
+        title="Sign In"
+        description="Sign in to access The Art of ISM — your immersive online book by Mr. CAP."
+        path="/auth"
+        noindex
+      />
       <FloatingNav />
       <div className="flex items-center justify-center min-h-screen px-6">
         <AnimatedSection>

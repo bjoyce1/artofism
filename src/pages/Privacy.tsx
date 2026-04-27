@@ -1,8 +1,14 @@
 import FloatingNav from '@/components/FloatingNav';
 import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 
 const Privacy = () => (
   <div className="min-h-screen bg-deep-black">
+    <SEO
+      title="Privacy Policy"
+      description="How The Art of ISM collects, uses, and protects your data."
+      path="/privacy"
+    />
     <FloatingNav />
     <div className="pt-24 pb-20 px-6">
       <div className="max-w-3xl mx-auto prose-invert">

@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -45,58 +46,60 @@ const RouteFallback = () => (
 );
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AuthProvider>
-        <SectionAudioProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Suspense fallback={<RouteFallback />}>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/unlock" element={<Unlock />} />
-                <Route path="/unlock/success" element={<UnlockSuccess />} />
-                <Route
-                  path="/library"
-                  element={
-                    <ProtectedRoute>
-                      <Library />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/chapter/:id" element={<GatedChapter />} />
-                <Route
-                  path="/codes"
-                  element={
-                    <ProtectedRoute>
-                      <CodesHub />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/quote-vault"
-                  element={
-                    <ProtectedRoute>
-                      <QuoteVaultPage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/privacy" element={<Privacy />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="/refund" element={<Refund />} />
-                <Route path="/unsubscribe" element={<Unsubscribe />} />
-                <Route path="/vault" element={<Vault />} />
-                <Route path="/mint" element={<Mint />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </BrowserRouter>
-        </SectionAudioProvider>
-      </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <AuthProvider>
+          <SectionAudioProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Suspense fallback={<RouteFallback />}>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/unlock" element={<Unlock />} />
+                  <Route path="/unlock/success" element={<UnlockSuccess />} />
+                  <Route
+                    path="/library"
+                    element={
+                      <ProtectedRoute>
+                        <Library />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="/chapter/:id" element={<GatedChapter />} />
+                  <Route
+                    path="/codes"
+                    element={
+                      <ProtectedRoute>
+                        <CodesHub />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/quote-vault"
+                    element={
+                      <ProtectedRoute>
+                        <QuoteVaultPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="/privacy" element={<Privacy />} />
+                  <Route path="/terms" element={<Terms />} />
+                  <Route path="/refund" element={<Refund />} />
+                  <Route path="/unsubscribe" element={<Unsubscribe />} />
+                  <Route path="/vault" element={<Vault />} />
+                  <Route path="/mint" element={<Mint />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
+            </BrowserRouter>
+          </SectionAudioProvider>
+        </AuthProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </HelmetProvider>
 );
 
 export default App;

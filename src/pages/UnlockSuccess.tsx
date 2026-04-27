@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import FloatingNav from '@/components/FloatingNav';
+import SEO from '@/components/SEO';
 import AnimatedSection from '@/components/AnimatedSection';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
@@ -15,6 +16,12 @@ const UnlockSuccess = () => {
 
   return (
     <div className="min-h-screen bg-deep-black flex items-center justify-center px-6">
+      <SEO
+        title="Access Granted"
+        description="Welcome to The Art of ISM. Your access is now unlocked."
+        path="/unlock/success"
+        noindex
+      />
       <FloatingNav />
       <AnimatedSection>
         <div className="max-w-lg text-center space-y-8">

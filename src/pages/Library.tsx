@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { trackEvent } from '@/lib/analytics';
 import { chapters } from '@/data/bookContent';
 import FloatingNav from '@/components/FloatingNav';
+import SEO from '@/components/SEO';
 import AnimatedSection from '@/components/AnimatedSection';
 import { BookOpen, Code2, Quote, Download, Heart, ChevronRight } from 'lucide-react';
 
@@ -71,6 +72,7 @@ const Library = () => {
 
   return (
     <div className="min-h-screen bg-deep-black">
+      <SEO title="Your Library" description="Your library of chapters and saved quotes from The Art of ISM." path="/library" noindex />
       <FloatingNav />
 
       <div className="pt-24 pb-32 px-6">

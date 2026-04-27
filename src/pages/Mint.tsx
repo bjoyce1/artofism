@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Shield, BookOpen, Quote, Sparkles, Layers, Wallet, Key, Unlock, ExternalLink } from 'lucide-react';
 import FloatingNav from '@/components/FloatingNav';
+import SEO from '@/components/SEO';
 import Footer from '@/components/Footer';
 import foundersKeyImg from '@/assets/nft/founders-key.webp';
 
@@ -33,6 +34,11 @@ const Mint = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEO
+        title="Mint the Founder's Key"
+        description="Mint the Founder's Key — limited 111-edition NFT granting lifetime access to The Art of ISM."
+        path="/mint"
+      />
       <FloatingNav />
 
       {/* ── HERO ── */}

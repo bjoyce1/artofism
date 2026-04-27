@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { allCodes } from '@/data/bookContent';
 import { useFavorites } from '@/hooks/useReadingProgress';
 import FloatingNav from '@/components/FloatingNav';
+import SEO from '@/components/SEO';
 import AnimatedSection from '@/components/AnimatedSection';
 import { Heart, Copy, Check, ChevronDown, ChevronUp } from 'lucide-react';
 
@@ -18,6 +19,7 @@ const CodesHub = () => {
 
   return (
     <div className="min-h-screen bg-deep-black">
+      <SEO title="The Codes" description="The complete Codes hub from The Art of ISM by Mr. CAP." path="/codes" noindex />
       <FloatingNav />
 
       <div className="pt-24 pb-32 px-6">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import SEO from "@/components/SEO";
 
 const Unsubscribe = () => {
   const [searchParams] = useSearchParams();
@@ -43,6 +44,7 @@ const Unsubscribe = () => {
 
   return (
     <div className="min-h-screen bg-[#050505] flex items-center justify-center px-4">
+      <SEO title="Unsubscribe" description="Manage your email subscription for The Art of ISM." path="/unsubscribe" noindex />
       <div className="max-w-md w-full text-center">
         <h1 className="font-playfair text-2xl text-[#D4AF37] mb-6">The Art of ISM</h1>
         {status === "loading" && <p className="text-[#F5E7C6]/60">Loading...</p>}
