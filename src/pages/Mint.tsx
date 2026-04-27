@@ -34,6 +34,11 @@ const Mint = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEO
+        title="Mint the Founder's Key"
+        description="Mint the Founder's Key — limited 111-edition NFT granting lifetime access to The Art of ISM."
+        path="/mint"
+      />
       <FloatingNav />
 
       {/* ── HERO ── */}
