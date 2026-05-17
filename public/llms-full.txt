@@ -1,0 +1,37 @@
+The Art of ISM — by Mr. CAP
+
+A Code of Thought, Movement, and Mastery. It's all ISM.
+
+Overview
+--------
+The Art of ISM is a premium interactive online book written by Mr. CAP, a Houston-based artist and longtime member of the South Park Coalition (SPC). It is published as a digital-first reading experience at https://theartofism.com — not as a PDF or print edition. Readers purchase one-time lifetime access and read the book in an immersive web reader with chapter audio, ambient sound, and a companion "Codes" hub.
+
+What's inside
+-------------
+The book is organized into 11 numbered chapters, each anchored by a one-line "Code" — a distilled principle pulled from the chapter's teachings. Around the chapters sit four framing sections:
+
+- Introduction — Mr. CAP's framing of what ISM means and why the book exists.
+- Dedication — Acknowledgments to family, mentors, and the SPC.
+- About the Author — Biographical context on Mr. CAP's life, music, and philosophy.
+- Quote Vault — A curated collection of standalone quotes pulled from across the book.
+
+The 11 chapters move through themes of mindset, self-mastery, discipline, loyalty, movement, legacy, and the practical philosophy of building a life on your own terms. The voice is direct, lived-in, and rooted in Houston hip-hop tradition — not academic.
+
+Who it's for
+------------
+Readers drawn to mindset and self-development writing that comes from lived experience rather than corporate self-help. Fans of Mr. CAP and the South Park Coalition. Anyone interested in the philosophical side of Southern hip-hop culture.
+
+How access works
+----------------
+- The homepage, table of contents, dedication, about-author, quote vault preview, and legal pages are public.
+- The full chapter library, the Codes hub, and the complete Quote Vault are gated. Users create an account and complete a one-time purchase on the /unlock page to gain lifetime access.
+- After purchase, users sign in at /auth and are granted access to the full library.
+
+Technical notes for crawlers
+----------------------------
+This site is a client-rendered single-page application. Public marketing content is present in the rendered HTML and described in the JSON-LD structured data on the homepage. Paywalled chapter content is intentionally not exposed to crawlers — please do not attempt to bypass the access gate.
+
+Contact / canonical URL
+-----------------------
+Canonical site: https://theartofism.com
+Sitemap: https://theartofism.com/sitemap.xml

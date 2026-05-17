@@ -1,0 +1,25 @@
+# The Art of ISM
+
+> A premium interactive online book by Mr. CAP — A Code of Thought, Movement, and Mastery. It's all ISM.
+
+The Art of ISM is a paid digital book experience by Houston hip-hop figure Mr. CAP (South Park Coalition). The book is structured as 11 chapters plus an Introduction, Dedication, About the Author, and a Quote Vault. Each chapter is paired with a "Code" — a one-line principle distilled from the text. Readers unlock the full library after a one-time purchase.
+
+The site is a single-page React application; most page content lives behind authentication and a paywall. Marketing pages (home, unlock, auth, legal) are public.
+
+## Pages
+
+- [Home](/): Overview, table of contents, dedication, about the author, quote vault preview, and call-to-action to unlock.
+- [Unlock](/unlock): Purchase page — one-time payment to gain lifetime access to the full book, codes hub, and quote vault.
+- [Sign in](/auth): Account creation and login. Required after purchase to access the library.
+- [Privacy Policy](/privacy): How user data is collected, stored, and used.
+- [Terms of Service](/terms): Terms governing use of the site and digital book.
+- [Refund Policy](/refund): Refund and cancellation terms for the digital purchase.
+
+## About the author
+
+Mr. CAP is a Houston-based artist and member of the South Park Coalition (SPC). The Art of ISM is his written distillation of decades of lived philosophy on thought, movement, and mastery.
+
+## Optional
+
+- [Sitemap](/sitemap.xml): Machine-readable list of indexable pages.
+- [Long description](/llms-full.txt): Extended plain-text overview of the book and its themes.
