@@ -34,7 +34,7 @@ const Footer = () => {
           </Link>
         </div>
 
-        <p className="text-muted-foreground/50 text-xs">
+        <p className="text-muted-foreground text-xs">
           © {new Date().getFullYear()} The Art of ISM. All rights reserved.
         </p>
       </div>
