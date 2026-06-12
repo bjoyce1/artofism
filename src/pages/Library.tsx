@@ -7,17 +7,23 @@ import { chapters } from '@/data/bookContent';
 import FloatingNav from '@/components/FloatingNav';
 import SEO from '@/components/SEO';
 import AnimatedSection from '@/components/AnimatedSection';
-import { BookOpen, Code2, Quote, Download, Heart, ChevronRight } from 'lucide-react';
+import { BookOpen, Code2, Quote, Download, Heart, ChevronRight, Check } from 'lucide-react';
+
+interface ProgressRow {
+  chapter_slug: string;
+  progress_percent: number;
+  completed: boolean;
+  last_read_at: string | null;
+  updated_at: string;
+}
 
 const Library = () => {
   const { user, hasAccess, loading, accessLoading, signOut } = useAuth();
-  const [progress, setProgress] = useState<Record<string, number>>({});
-  const [lastReadSlug, setLastReadSlug] = useState<string | null>(null);
+  const [rows, setRows] = useState<ProgressRow[]>([]);
   const [savedQuotes, setSavedQuotes] = useState<{ quote_text: string; chapter_slug: string | null }[]>([]);
   const [bonusPdfUrl, setBonusPdfUrl] = useState('');
   const trackedRef = useRef(false);
 
-  // Track library enter
   useEffect(() => {
     if (!trackedRef.current) {
       trackedRef.current = true;
@@ -36,16 +42,10 @@ const Library = () => {
 
     supabase
       .from('reading_progress')
-      .select('chapter_slug, progress_percent, updated_at')
+      .select('chapter_slug, progress_percent, completed, last_read_at, updated_at')
       .eq('user_id', user.id)
-      .order('updated_at', { ascending: false })
       .then(({ data }) => {
-        if (data) {
-          const map: Record<string, number> = {};
-          data.forEach(r => { map[r.chapter_slug] = r.progress_percent; });
-          setProgress(map);
-          setLastReadSlug(data[0]?.chapter_slug ?? null);
-        }
+        if (data) setRows(data as ProgressRow[]);
       });
 
     supabase
@@ -70,7 +70,31 @@ const Library = () => {
   if (!user) return <Navigate to="/auth" replace />;
   if (!hasAccess) return <Navigate to="/unlock" replace />;
 
-  const lastChapter = chapters.find(c => c.number.toString() === lastReadSlug);
+  // Build progress map keyed by chapter number string
+  const progressMap: Record<string, ProgressRow> = {};
+  rows.forEach(r => { progressMap[r.chapter_slug] = r; });
+
+  const progress: Record<string, number> = {};
+  rows.forEach(r => { progress[r.chapter_slug] = r.progress_percent; });
+
+  const totalChapters = chapters.length + 1; // includes introduction
+  const completedCount = rows.filter(r => r.completed).length;
+  const allChaptersCompleted =
+    completedCount >= totalChapters ||
+    chapters.every(c => progressMap[c.number.toString()]?.completed);
+
+  // Continue card logic
+  const sortedByRecent = [...rows]
+    .filter(r => r.last_read_at)
+    .sort((a, b) => (b.last_read_at! > a.last_read_at! ? 1 : -1));
+  const resumeRow = sortedByRecent.find(r => !r.completed);
+  const resumeChapter = resumeRow ? chapters.find(c => c.number.toString() === resumeRow.chapter_slug) : undefined;
+
+  const upNextChapter = !resumeChapter && rows.length > 0 && !allChaptersCompleted
+    ? chapters.find(c => !progressMap[c.number.toString()]?.completed) ?? chapters[0]
+    : undefined;
+
+  const showContinueCard = rows.length > 0;
 
   return (
     <div className="min-h-screen bg-deep-black">
@@ -94,27 +118,86 @@ const Library = () => {
                 Sign Out
               </button>
             </div>
-            <p className="text-muted-foreground text-lg mb-12">
+            <p className="text-muted-foreground text-lg mb-3">
               Your access is unlocked. Enter the full interactive book experience.
             </p>
+            {completedCount > 0 && (
+              <p className="font-ui text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-12">
+                {completedCount} of {totalChapters} chapters read
+              </p>
+            )}
+            {completedCount === 0 && <div className="mb-12" />}
           </AnimatedSection>
 
-          {lastChapter && (
+          {showContinueCard && (
             <AnimatedSection delay={50}>
-              <Link
-                to={`/chapter/${lastChapter.number}`}
-                className="block bg-card border border-primary/30 rounded-sm p-6 mb-8 hover:border-primary/50 transition-colors group"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary mb-1">Continue Reading</p>
-                    <p className="font-display text-xl text-foreground group-hover:text-primary transition-colors">
-                      Chapter {lastChapter.number}: {lastChapter.title}
-                    </p>
+              {allChaptersCompleted ? (
+                <Link
+                  to="/quote-vault"
+                  className="block p-6 mb-8 rounded-sm transition-colors"
+                  style={{ background: '#0a0a0a', border: '1px solid #c9a227' }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-ui text-[11px] uppercase tracking-[0.3em] mb-2" style={{ color: '#c9a227' }}>
+                        Complete
+                      </p>
+                      <p className="font-display text-xl" style={{ color: '#ece6d9' }}>
+                        You've read the code.
+                      </p>
+                      <p className="font-ui text-[11px] uppercase tracking-[0.3em] mt-2 text-muted-foreground">
+                        Enter the Quote Vault
+                      </p>
+                    </div>
+                    <ChevronRight size={20} style={{ color: '#c9a227' }} />
                   </div>
-                  <ChevronRight className="text-primary" size={20} />
-                </div>
-              </Link>
+                </Link>
+              ) : resumeChapter ? (
+                <Link
+                  to={`/chapter/${resumeChapter.number}?resume=1`}
+                  className="block p-6 mb-8 rounded-sm transition-colors group"
+                  style={{ background: '#0a0a0a', border: '1px solid #c9a227' }}
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-ui text-[11px] uppercase tracking-[0.3em] mb-2" style={{ color: '#c9a227' }}>
+                        Continue Reading
+                      </p>
+                      <p className="font-display text-xl mb-3" style={{ color: '#ece6d9' }}>
+                        Chapter {resumeChapter.number}: {resumeChapter.title}
+                      </p>
+                      <div className="h-[2px] w-full rounded-full overflow-hidden" style={{ background: '#3a352a' }}>
+                        <div
+                          className="h-full"
+                          style={{ width: `${resumeRow!.progress_percent}%`, background: '#c9a227' }}
+                        />
+                      </div>
+                      <p className="font-ui text-[11px] uppercase tracking-[0.3em] mt-2 text-muted-foreground">
+                        {resumeRow!.progress_percent}% through
+                      </p>
+                    </div>
+                    <ChevronRight size={20} style={{ color: '#c9a227' }} />
+                  </div>
+                </Link>
+              ) : upNextChapter ? (
+                <Link
+                  to={`/chapter/${upNextChapter.number}`}
+                  className="block p-6 mb-8 rounded-sm transition-colors"
+                  style={{ background: '#0a0a0a', border: '1px solid #c9a227' }}
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <p className="font-ui text-[11px] uppercase tracking-[0.3em] mb-2" style={{ color: '#c9a227' }}>
+                        Up Next
+                      </p>
+                      <p className="font-display text-xl" style={{ color: '#ece6d9' }}>
+                        Chapter {upNextChapter.number}: {upNextChapter.title}
+                      </p>
+                    </div>
+                    <ChevronRight size={20} style={{ color: '#c9a227' }} />
+                  </div>
+                </Link>
+              ) : null}
             </AnimatedSection>
           )}
 
@@ -144,26 +227,42 @@ const Library = () => {
           <AnimatedSection delay={150}>
             <h2 className="font-display text-2xl font-bold text-foreground mb-6">All Chapters</h2>
             <div className="grid gap-3 mb-12">
-              {chapters.map(ch => (
-                <Link
-                  key={ch.number}
-                  to={`/chapter/${ch.number}`}
-                  className="flex items-center justify-between p-4 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors group"
-                >
-                  <div className="flex items-center gap-4">
-                    <span className="font-ui text-xs text-primary w-6">{String(ch.number).padStart(2, '0')}</span>
-                    <span className="font-display text-foreground group-hover:text-primary transition-colors">{ch.title}</span>
-                  </div>
-                  {progress[ch.number.toString()] !== undefined && (
-                    <div className="flex items-center gap-2">
-                      <div className="w-16 h-1 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full bg-primary rounded-full" style={{ width: `${progress[ch.number.toString()]}%` }} />
+              {chapters.map(ch => {
+                const row = progressMap[ch.number.toString()];
+                const pct = row?.progress_percent;
+                const isComplete = !!row?.completed;
+                const inProgress = !isComplete && typeof pct === 'number' && pct > 0;
+                return (
+                  <Link
+                    key={ch.number}
+                    to={`/chapter/${ch.number}`}
+                    className="flex items-center justify-between p-4 bg-card border border-border rounded-sm hover:border-primary/30 transition-colors group"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-4">
+                        <span className="font-ui text-xs text-primary w-6">{String(ch.number).padStart(2, '0')}</span>
+                        <span
+                          className="font-display group-hover:text-primary transition-colors"
+                          style={isComplete ? { color: '#ece6d9' } : undefined}
+                        >
+                          {ch.title}
+                        </span>
+                        {isComplete && (
+                          <Check size={14} style={{ color: '#c9a227' }} aria-label="Completed" />
+                        )}
                       </div>
-                      <span className="font-ui text-xs text-muted-foreground">{progress[ch.number.toString()]}%</span>
+                      {inProgress && (
+                        <div className="mt-2 ml-10 h-[2px] w-full max-w-xs rounded-full overflow-hidden" style={{ background: '#3a352a' }}>
+                          <div className="h-full" style={{ width: `${pct}%`, background: '#c9a227' }} />
+                        </div>
+                      )}
                     </div>
-                  )}
-                </Link>
-              ))}
+                    {typeof pct === 'number' && !isComplete && (
+                      <span className="font-ui text-xs text-muted-foreground ml-3 shrink-0">{pct}%</span>
+                    )}
+                  </Link>
+                );
+              })}
             </div>
           </AnimatedSection>
 

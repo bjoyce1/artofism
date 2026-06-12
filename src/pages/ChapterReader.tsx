@@ -1,4 +1,4 @@
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { chapters } from '@/data/bookContent';
@@ -42,6 +42,7 @@ interface SelectionState {
 
 const ChapterReader = () => {
   const { id } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const chapterNum = parseInt(id || '1', 10);
   const chapter = chapters.find(c => c.number === chapterNum);
@@ -73,21 +74,52 @@ const ChapterReader = () => {
   useEffect(() => {
     if (chapter) {
       saveProgress(chapter.number);
-      window.scrollTo(0, 0);
+      // When entering normally, start at top. When coming from the Library
+      // continue card (?resume=1), keep current scroll and let the resume
+      // effect below jump instantly to the saved position.
+      if (searchParams.get('resume') !== '1') {
+        window.scrollTo(0, 0);
+      }
     }
-  }, [chapter, saveProgress]);
+  }, [chapter, saveProgress, searchParams]);
 
-  // Offer to jump back to where the reader left off in this chapter.
+  // Offer to jump back to where the reader left off in this chapter, OR
+  // when the Library sends the reader here with ?resume=1, jump instantly
+  // (no pill, no animation) once the content has rendered.
   useEffect(() => {
     if (!chapter) return;
     const savedY = getScrollPosition(chapter.number);
+    if (searchParams.get('resume') === '1') {
+      if (savedY > 0) {
+        // Wait two frames so AnimatedSection content has mounted and the
+        // document has its final height before we restore position.
+        const r1 = requestAnimationFrame(() => {
+          const r2 = requestAnimationFrame(() => {
+            window.scrollTo({ top: savedY, behavior: 'auto' });
+          });
+          (window as any).__resumeRaf2 = r2;
+        });
+        const cleanup = () => {
+          cancelAnimationFrame(r1);
+          if ((window as any).__resumeRaf2) cancelAnimationFrame((window as any).__resumeRaf2);
+        };
+        // Clear the query param so a refresh starts at top.
+        const sp = new URLSearchParams(searchParams);
+        sp.delete('resume');
+        setSearchParams(sp, { replace: true });
+        setResumeY(null);
+        return cleanup;
+      }
+      setResumeY(null);
+      return;
+    }
     if (savedY > 800) {
       setResumeY(savedY);
       const timer = setTimeout(() => setResumeY(null), 12000);
       return () => clearTimeout(timer);
     }
     setResumeY(null);
-  }, [chapter, getScrollPosition]);
+  }, [chapter, getScrollPosition, searchParams, setSearchParams]);
 
   // Track how far down the chapter the reader has scrolled and persist it
   // (locally always, to Supabase when signed in) so the Library and TOC
