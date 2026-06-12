@@ -18,7 +18,7 @@ const ChapterReader = () => {
   const chapter = chapters.find(c => c.number === chapterNum);
   const { saveProgress, readingMode, toggleMode } = useReadingProgress();
   const { toggleFavorite, isFavorite } = useFavorites();
-  const { currentSection, isPlaying: audioIsPlaying, currentTime, duration } = useSectionAudio();
+  const { currentSection, isPlaying: audioIsPlaying } = useSectionAudio();
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
