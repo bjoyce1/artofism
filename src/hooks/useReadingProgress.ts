@@ -28,7 +28,7 @@ function writeJson(key: string, value: unknown) {
 export type ChapterProgressMap = Record<string, number>;
 
 export function useReadingProgress() {
-  const { user } = useAuth();
+  const { user, hasAccess } = useAuth();
   const [lastChapter, setLastChapter] = useState<number>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved ? parseInt(saved, 10) : 0;
@@ -42,6 +42,9 @@ export function useReadingProgress() {
   });
   const syncTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingSync = useRef<ChapterProgressMap>({});
+  // Once a chapter is marked complete it stays complete for the session,
+  // even if cloud rows are slow to refresh.
+  const completedRef = useRef<Set<string>>(new Set());
 
   // Pull cloud progress once per sign-in and merge it with local progress,
   // keeping whichever side has read further in each chapter.
@@ -49,10 +52,13 @@ export function useReadingProgress() {
     if (!user) return;
     supabase
       .from('reading_progress')
-      .select('chapter_slug, progress_percent')
+      .select('chapter_slug, progress_percent, completed')
       .eq('user_id', user.id)
       .then(({ data }) => {
         if (!data?.length) return;
+        data.forEach((r: any) => {
+          if (r.completed) completedRef.current.add(r.chapter_slug);
+        });
         setChapterProgress(prev => {
           const merged = { ...prev };
           data.forEach(r => {
@@ -69,6 +75,8 @@ export function useReadingProgress() {
       const entries = Object.entries(pendingSync.current);
       pendingSync.current = {};
       if (!entries.length) return;
+      const nowIso = new Date().toISOString();
+      // Fire and forget — a failed write must never interrupt reading.
       supabase
         .from('reading_progress')
         .upsert(
@@ -76,8 +84,10 @@ export function useReadingProgress() {
             user_id: userId,
             chapter_slug,
             progress_percent,
-            updated_at: new Date().toISOString(),
-          })),
+            completed: progress_percent >= 90 || completedRef.current.has(chapter_slug),
+            last_read_at: nowIso,
+            updated_at: nowIso,
+          })) as any,
           { onConflict: 'user_id,chapter_slug' }
         )
         .then(() => {});
@@ -91,7 +101,8 @@ export function useReadingProgress() {
   }, []);
 
   // Records how far into a chapter the reader has scrolled. Progress only
-  // moves forward — re-reading from the top never erases it.
+  // moves forward — re-reading from the top never erases it. Cloud writes
+  // are debounced to at most one every 10 seconds.
   const saveChapterProgress = useCallback(
     (chapter: number, percent: number) => {
       const slug = chapter.toString();
@@ -100,26 +111,45 @@ export function useReadingProgress() {
         if (clamped <= (prev[slug] ?? 0)) return prev;
         const next = { ...prev, [slug]: clamped };
         writeJson(CHAPTER_PROGRESS_KEY, next);
-        if (user) {
+        if (clamped >= 90) completedRef.current.add(slug);
+        if (user && hasAccess) {
           pendingSync.current[slug] = clamped;
-          if (syncTimer.current) clearTimeout(syncTimer.current);
-          syncTimer.current = setTimeout(() => flushSync(user.id), 2000);
+          if (!syncTimer.current) {
+            syncTimer.current = setTimeout(() => {
+              syncTimer.current = null;
+              flushSync(user.id);
+            }, 10000);
+          }
         }
         return next;
       });
     },
-    [user, flushSync]
+    [user, hasAccess, flushSync]
   );
 
-  // Flush any pending cloud write when the reader navigates away.
+  // Flush pending cloud writes when the tab is hidden or the hook unmounts
+  // so the final scroll position is never lost on navigation away.
   useEffect(() => {
-    return () => {
-      if (syncTimer.current) {
-        clearTimeout(syncTimer.current);
-        if (user) flushSync(user.id);
+    if (!user || !hasAccess) return;
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') {
+        if (syncTimer.current) {
+          clearTimeout(syncTimer.current);
+          syncTimer.current = null;
+        }
+        flushSync(user.id);
       }
     };
-  }, [user, flushSync]);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility);
+      if (syncTimer.current) {
+        clearTimeout(syncTimer.current);
+        syncTimer.current = null;
+      }
+      flushSync(user.id);
+    };
+  }, [user, hasAccess, flushSync]);
 
   const saveScrollPosition = useCallback((chapter: number, scrollY: number) => {
     const positions = readJson<Record<string, number>>(SCROLL_POS_KEY, {});

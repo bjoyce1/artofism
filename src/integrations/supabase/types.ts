@@ -209,21 +209,27 @@ export type Database = {
       reading_progress: {
         Row: {
           chapter_slug: string
+          completed: boolean
           id: string
+          last_read_at: string
           progress_percent: number
           updated_at: string
           user_id: string
         }
         Insert: {
           chapter_slug: string
+          completed?: boolean
           id?: string
+          last_read_at?: string
           progress_percent?: number
           updated_at?: string
           user_id: string
         }
         Update: {
           chapter_slug?: string
+          completed?: boolean
           id?: string
+          last_read_at?: string
           progress_percent?: number
           updated_at?: string
           user_id?: string
