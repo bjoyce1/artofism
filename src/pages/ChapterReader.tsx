@@ -42,6 +42,7 @@ interface SelectionState {
 
 const ChapterReader = () => {
   const { id } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const chapterNum = parseInt(id || '1', 10);
   const chapter = chapters.find(c => c.number === chapterNum);
