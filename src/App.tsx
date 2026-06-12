@@ -27,7 +27,7 @@ const Privacy = lazy(() => import("./pages/Privacy.tsx"));
 const Terms = lazy(() => import("./pages/Terms.tsx"));
 const Refund = lazy(() => import("./pages/Refund.tsx"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe.tsx"));
-const Vault = lazy(() => import("./pages/Vault.tsx"));
+const Vault = lazy(() => import("./pages/QuoteVault.tsx"));
 const Mint = lazy(() => import("./pages/Mint.tsx"));
 
 const queryClient = new QueryClient();
