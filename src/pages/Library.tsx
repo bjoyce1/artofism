@@ -12,6 +12,7 @@ import { BookOpen, Code2, Quote, Download, Heart, ChevronRight } from 'lucide-re
 const Library = () => {
   const { user, hasAccess, loading, accessLoading, signOut } = useAuth();
   const [progress, setProgress] = useState<Record<string, number>>({});
+  const [lastReadSlug, setLastReadSlug] = useState<string | null>(null);
   const [savedQuotes, setSavedQuotes] = useState<{ quote_text: string; chapter_slug: string | null }[]>([]);
   const [bonusPdfUrl, setBonusPdfUrl] = useState('');
   const trackedRef = useRef(false);
@@ -35,13 +36,15 @@ const Library = () => {
 
     supabase
       .from('reading_progress')
-      .select('chapter_slug, progress_percent')
+      .select('chapter_slug, progress_percent, updated_at')
       .eq('user_id', user.id)
+      .order('updated_at', { ascending: false })
       .then(({ data }) => {
         if (data) {
           const map: Record<string, number> = {};
           data.forEach(r => { map[r.chapter_slug] = r.progress_percent; });
           setProgress(map);
+          setLastReadSlug(data[0]?.chapter_slug ?? null);
         }
       });
 
@@ -67,8 +70,7 @@ const Library = () => {
   if (!user) return <Navigate to="/auth" replace />;
   if (!hasAccess) return <Navigate to="/unlock" replace />;
 
-  const lastChapterSlug = Object.entries(progress).sort(([,a],[,b]) => b - a)[0]?.[0];
-  const lastChapter = chapters.find(c => c.number.toString() === lastChapterSlug);
+  const lastChapter = chapters.find(c => c.number.toString() === lastReadSlug);
 
   return (
     <div className="min-h-screen bg-deep-black">

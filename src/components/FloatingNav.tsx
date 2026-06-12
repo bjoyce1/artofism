@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Home, BookOpen, List, Code2, User, Library, LogIn, Gem } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Home, BookOpen, List, Code2, User, Gem, Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
+import BookSearch from '@/components/BookSearch';
 import logo from '@/assets/logo.webp';
 
 const navItems = [
@@ -17,12 +18,26 @@ const navItems = [
 const FloatingNav = () => {
   const { user, hasAccess } = useAuth();
   const [scrolled, setScrolled] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Ctrl+K / Cmd+K opens book-wide search from any page.
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setSearchOpen(open => !open);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
   }, []);
 
   const handleNavClick = (path: string) => {
@@ -31,7 +46,8 @@ const FloatingNav = () => {
       if (location.pathname === '/') {
         document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
       } else {
-        window.location.href = path;
+        // Client-side navigation — ScrollToHash handles the scroll on arrival.
+        navigate({ pathname: '/', hash: `#${id}` });
       }
     }
   };
@@ -59,6 +75,15 @@ const FloatingNav = () => {
             <img src={logo} alt="The Art of ISM" className="h-7 sm:h-8 w-auto" />
           </Link>
 
+          {/* Mobile search button (desktop has its own in the nav row) */}
+          <button
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search the book"
+            className="md:hidden p-2 -m-1 text-muted-foreground hover:text-primary active:scale-95 transition-all"
+          >
+            <Search size={20} strokeWidth={1.5} />
+          </button>
+
           {/* Desktop nav links */}
           <div className="hidden md:flex items-center gap-8">
             {navItems.map(item => (
@@ -80,6 +105,17 @@ const FloatingNav = () => {
                 </Link>
               )
             ))}
+            <button
+              onClick={() => setSearchOpen(true)}
+              aria-label="Search the book (Ctrl+K)"
+              title="Search the book (Ctrl+K)"
+              className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors duration-300"
+            >
+              <Search size={16} strokeWidth={1.5} />
+              <kbd className="hidden lg:inline font-ui text-[10px] tracking-widest border border-border rounded px-1.5 py-0.5">
+                ⌘K
+              </kbd>
+            </button>
             {user && hasAccess ? (
               <Link to="/library" className="text-sm uppercase tracking-[0.2em] text-primary hover:text-primary/80 transition-colors duration-300">
                 Library
@@ -144,6 +180,8 @@ const FloatingNav = () => {
           })}
         </div>
       </div>
+
+      <BookSearch open={searchOpen} onOpenChange={setSearchOpen} />
     </>
   );
 };

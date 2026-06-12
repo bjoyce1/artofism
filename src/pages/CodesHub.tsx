@@ -73,7 +73,7 @@ const CodesHub = () => {
                           >
                             <p className="text-base text-foreground/90 leading-relaxed">{principle}</p>
                             <div className="flex items-center gap-2 shrink-0">
-                              <button onClick={() => toggleFavorite(principle)} className="p-1">
+                              <button onClick={() => toggleFavorite(principle, code.chapterNumber.toString())} className="p-1" aria-label="Save quote">
                                 <Heart
                                   size={14}
                                   className={isFavorite(principle) ? 'fill-primary text-primary' : 'text-muted-foreground hover:text-primary transition-colors'}

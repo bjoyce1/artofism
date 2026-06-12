@@ -34,7 +34,7 @@ const HeroSection = () => {
             width={1920}
             height={1080}
             className="w-full h-[115%] object-cover object-[50%_25%] sm:object-[calc(0%_-_40px)_top]"
-            fetchPriority="high"
+            {...{ fetchpriority: 'high' } /* React 18 only forwards the lowercase form to the DOM */}
             decoding="async"
           />
         </picture>

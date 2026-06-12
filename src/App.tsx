@@ -9,6 +9,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { SectionAudioProvider } from "@/hooks/useSectionAudio";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import GatedChapter from "@/components/GatedChapter";
+import ScrollToHash from "@/components/ScrollToHash";
 
 // Landing page stays eager — it's what 100% of first-time visitors see.
 import Index from "./pages/Index.tsx";
@@ -54,6 +55,7 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <ScrollToHash />
               <Suspense fallback={<RouteFallback />}>
                 <Routes>
                   <Route path="/" element={<Index />} />
