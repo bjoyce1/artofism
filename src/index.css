@@ -236,10 +236,3 @@
   display: none;
 }
 
-/* Karaoke word highlighting */
-.karaoke-active {
-  background: rgba(200, 168, 78, 0.35);
-  color: #D4AF37;
-  border-radius: 2px;
-  padding: 0 2px;
-}

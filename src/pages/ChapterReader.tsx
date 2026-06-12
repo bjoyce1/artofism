@@ -4,7 +4,7 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 import { chapters } from '@/data/bookContent';
 import { useReadingProgress, useFavorites } from '@/hooks/useReadingProgress';
 import { useSectionAudio } from '@/hooks/useSectionAudio';
-import KaraokeText from '@/components/KaraokeText';
+
 import AnimatedSection from '@/components/AnimatedSection';
 import FloatingNav from '@/components/FloatingNav';
 import SectionAudioButton from '@/components/SectionAudioButton';
@@ -133,40 +133,29 @@ const ChapterReader = () => {
 
 
           {/* Body */}
-          {isChapterAudioPlaying && duration > 0 ? (
-            <KaraokeText
-              paragraphs={chapter.content}
-              currentTime={currentTime}
-              duration={duration}
-              isPlaying={isChapterAudioPlaying}
-              dropCapFirst
-              titleWordsOffset={`Chapter ${chapter.number} ${chapter.title}`.split(/\s+/).length}
-            />
-          ) : (
-            <div className="space-y-5 sm:space-y-6">
-              {chapter.content.map((p, i) => {
-                const isPullQuote = chapter.pullQuotes.some(pq => p.includes(pq));
+          <div className="space-y-5 sm:space-y-6">
+            {chapter.content.map((p, i) => {
+              const isPullQuote = chapter.pullQuotes.some(pq => p.includes(pq));
 
-                if (isPullQuote && isExperience) {
-                  return (
-                    <AnimatedSection key={i} delay={i * 30}>
-                      <blockquote className="border-l-2 border-primary pl-6 sm:pl-8 my-8 sm:my-12">
-                        <p className="font-display text-xl sm:text-2xl italic text-primary leading-relaxed">{p}</p>
-                      </blockquote>
-                    </AnimatedSection>
-                  );
-                }
-
+              if (isPullQuote && isExperience) {
                 return (
-                  <AnimatedSection key={i} delay={i * 20}>
-                    <p className={`text-base sm:text-lg leading-[1.85] sm:leading-[1.9] text-foreground/90 ${i === 0 ? 'drop-cap' : ''}`}>
-                      {p}
-                    </p>
+                  <AnimatedSection key={i} delay={i * 30}>
+                    <blockquote className="border-l-2 border-primary pl-6 sm:pl-8 my-8 sm:my-12">
+                      <p className="font-display text-xl sm:text-2xl italic text-primary leading-relaxed">{p}</p>
+                    </blockquote>
                   </AnimatedSection>
                 );
-              })}
-            </div>
-          )}
+              }
+
+              return (
+                <AnimatedSection key={i} delay={i * 20}>
+                  <p className={`text-base sm:text-lg leading-[1.85] sm:leading-[1.9] text-foreground/90 ${i === 0 ? 'drop-cap' : ''}`}>
+                    {p}
+                  </p>
+                </AnimatedSection>
+              );
+            })}
+          </div>
 
           {/* Code section */}
           <AnimatedSection delay={200}>
