@@ -278,6 +278,65 @@ export type Database = {
         }
         Relationships: []
       }
+      vault_favorites: {
+        Row: {
+          created_at: string
+          id: string
+          quote_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          quote_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          quote_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vault_favorites_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "vault_quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vault_quotes: {
+        Row: {
+          chapter_slug: string
+          chapter_title: string
+          code_number: number
+          created_at: string
+          id: string
+          is_free: boolean
+          quote_text: string
+        }
+        Insert: {
+          chapter_slug: string
+          chapter_title: string
+          code_number: number
+          created_at?: string
+          id?: string
+          is_free?: boolean
+          quote_text: string
+        }
+        Update: {
+          chapter_slug?: string
+          chapter_title?: string
+          code_number?: number
+          created_at?: string
+          id?: string
+          is_free?: boolean
+          quote_text?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
