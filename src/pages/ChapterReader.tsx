@@ -8,7 +8,7 @@ import { useSectionAudio } from '@/hooks/useSectionAudio';
 
 import AnimatedSection from '@/components/AnimatedSection';
 import FloatingNav from '@/components/FloatingNav';
-import SectionAudioButton from '@/components/SectionAudioButton';
+
 import {
   Heart,
   ChevronLeft,
