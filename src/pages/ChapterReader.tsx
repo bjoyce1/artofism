@@ -4,7 +4,7 @@ import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { chapters } from '@/data/bookContent';
 import { chapterReadingMinutes } from '@/lib/bookStats';
 import { useReadingProgress, useFavorites } from '@/hooks/useReadingProgress';
-import { useSectionAudio } from '@/hooks/useSectionAudio';
+
 
 import AnimatedSection from '@/components/AnimatedSection';
 import FloatingNav from '@/components/FloatingNav';
