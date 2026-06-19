@@ -1,6 +1,7 @@
 import AnimatedSection from './AnimatedSection';
 import { introduction } from '@/data/bookContent';
 import SectionAudioButton from '@/components/SectionAudioButton';
+import ChapterNarrationBar from '@/components/ChapterNarrationBar';
 
 const IntroductionLayout = () => {
   const pullQuoteText = "If you don't define your mindset, the world will define it for you.";
