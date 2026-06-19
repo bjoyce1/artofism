@@ -228,7 +228,7 @@ const ChapterReader = () => {
   }
 
   const isExperience = readingMode === 'experience';
-  const chapterSectionId = `chapter-${chapter.number}`;
+  
   const readingMinutes = chapterReadingMinutes(chapter);
   const bodyFont = FONT_SIZES[fontSize];
 
