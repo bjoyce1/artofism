@@ -56,7 +56,7 @@ const ChapterReader = () => {
     toggleMode,
   } = useReadingProgress();
   const { toggleFavorite, isFavorite } = useFavorites();
-  const { currentSection, isPlaying: audioIsPlaying } = useSectionAudio();
+  
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [fontSize, setFontSize] = useState(() => {
     const saved = parseInt(localStorage.getItem(FONT_SIZE_KEY) || '1', 10);
