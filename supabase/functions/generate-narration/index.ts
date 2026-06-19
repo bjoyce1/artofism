@@ -93,8 +93,9 @@ async function processNarrationJob(params: {
   const { admin, jobId, sectionId, text, voiceId, elevenKey } = params;
 
   try {
-    const chunks = chunkText(text);
-    console.log(`job ${jobId}: generating ${chunks.length} chunks, total chars=${text.length}`);
+    const normalized = normalizeText(text);
+    const chunks = chunkText(normalized);
+    console.log(`job ${jobId}: generating ${chunks.length} chunks, total chars=${normalized.length}`);
     await admin
       .from("narration_generation_jobs")
       .update({ status: "generating", total_chunks: chunks.length, completed_chunks: 0, error_message: null })
@@ -105,8 +106,8 @@ async function processNarrationJob(params: {
 
     for (let i = 0; i < chunks.length; i++) {
       console.log(`job ${jobId}: requesting chunk ${i + 1}/${chunks.length}, chars=${chunks[i].length}`);
-      const prev = i > 0 ? chunks[i - 1].slice(-400) : undefined;
-      const next = i < chunks.length - 1 ? chunks[i + 1].slice(0, 400) : undefined;
+      const prev = i > 0 ? chunks[i - 1].slice(-600) : undefined;
+      const next = i < chunks.length - 1 ? chunks[i + 1].slice(0, 600) : undefined;
       const ttsRes = await fetch(
         `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`,
         {
@@ -117,18 +118,20 @@ async function processNarrationJob(params: {
           },
           body: JSON.stringify({
             text: chunks[i],
-            model_id: "eleven_multilingual_v2",
+            model_id: "eleven_turbo_v2_5",
             previous_text: prev,
             next_text: next,
             voice_settings: {
-              stability: 0.55,
-              similarity_boost: 0.8,
-              style: 0.35,
+              stability: 0.45,
+              similarity_boost: 0.85,
+              style: 0.15,
               use_speaker_boost: true,
+              speed: 0.95,
             },
           }),
         }
       );
+
 
       if (!ttsRes.ok) {
         const errTxt = await ttsRes.text().catch(() => "");
