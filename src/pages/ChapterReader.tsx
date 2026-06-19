@@ -24,6 +24,7 @@ import {
   AArrowUp,
 } from 'lucide-react';
 import ChapterAudioPlayer from '@/components/ChapterAudioPlayer';
+import ChapterNarrationBar from '@/components/ChapterNarrationBar';
 
 const FONT_SIZE_KEY = 'ism-font-size';
 // Body text sizes from compact to extra large; index 1 is the original default.
