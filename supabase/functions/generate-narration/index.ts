@@ -227,7 +227,7 @@ Deno.serve(async (req) => {
       return json({ error: "Invalid text length" }, 400);
     }
 
-    const chunks = chunkText(body.text);
+    const chunks = chunkText(normalizeText(body.text));
     const { data: job, error: jobErr } = await admin
       .from("narration_generation_jobs")
       .insert({
