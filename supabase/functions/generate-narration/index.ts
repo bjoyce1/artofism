@@ -57,20 +57,21 @@ Deno.serve(async (req) => {
       });
     }
 
-    const userClient = createClient(supabaseUrl, anonKey, {
-      global: { headers: { Authorization: authHeader } },
-    });
+    const admin = createClient(supabaseUrl, serviceKey);
     const token = authHeader.replace("Bearer ", "");
-    const { data: claims, error: claimsErr } = await userClient.auth.getClaims(token);
-    if (claimsErr || !claims?.claims) {
+    const { data: userData, error: userErr } = await admin.auth.getUser(token);
+    if (userErr || !userData?.user) {
+      console.error("auth.getUser failed", userErr);
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const userId = claims.claims.sub as string;
+    const userId = userData.user.id;
+    console.log("authed user", userId);
 
-    const admin = createClient(supabaseUrl, serviceKey);
-    const { data: isAdmin } = await admin.rpc("has_role", { _user_id: userId, _role: "admin" });
+    const { data: isAdmin, error: roleErr } = await admin.rpc("has_role", { _user_id: userId, _role: "admin" });
+    if (roleErr) console.error("has_role err", roleErr);
+    console.log("isAdmin", isAdmin);
     if (!isAdmin) {
       return new Response(JSON.stringify({ error: "Forbidden" }), {
         status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -90,6 +91,7 @@ Deno.serve(async (req) => {
     }
 
     const chunks = chunkText(body.text);
+    console.log(`generating ${chunks.length} chunks, total chars=${body.text.length}`);
     const parts: Uint8Array[] = [];
     let totalLen = 0;
 
