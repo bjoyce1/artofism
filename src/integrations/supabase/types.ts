@@ -179,6 +179,48 @@ export type Database = {
         }
         Relationships: []
       }
+      narration_generation_jobs: {
+        Row: {
+          completed_at: string | null
+          completed_chunks: number
+          created_at: string
+          error_message: string | null
+          file_path: string | null
+          id: string
+          requested_by: string
+          section_id: string
+          status: string
+          total_chunks: number
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          completed_chunks?: number
+          created_at?: string
+          error_message?: string | null
+          file_path?: string | null
+          id?: string
+          requested_by: string
+          section_id: string
+          status?: string
+          total_chunks?: number
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          completed_chunks?: number
+          created_at?: string
+          error_message?: string | null
+          file_path?: string | null
+          id?: string
+          requested_by?: string
+          section_id?: string
+          status?: string
+          total_chunks?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
