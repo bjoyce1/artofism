@@ -91,6 +91,7 @@ Deno.serve(async (req) => {
     }
 
     const chunks = chunkText(body.text);
+    console.log(`generating ${chunks.length} chunks, total chars=${body.text.length}`);
     const parts: Uint8Array[] = [];
     let totalLen = 0;
 
