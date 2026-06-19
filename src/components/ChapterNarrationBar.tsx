@@ -38,6 +38,19 @@ function fmt(s: number) {
   return `${m}:${sec.toString().padStart(2, '0')}`;
 }
 
+async function getFunctionErrorMessage(error: any) {
+  const context = error?.context;
+  if (context && typeof context.json === 'function') {
+    try {
+      const body = await context.json();
+      if (body?.error) return body.error;
+    } catch {
+      // Fall back to the generic message below.
+    }
+  }
+  return error?.message ?? 'Unknown error';
+}
+
 const ChapterNarrationBar = ({ sectionId, text, label = 'Mr. CAP narrates' }: Props) => {
   const { isAdmin } = useIsAdmin();
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -155,7 +168,7 @@ const ChapterNarrationBar = ({ sectionId, text, label = 'Mr. CAP narrates' }: Pr
       setJob(queuedJob);
       toast({ title: 'Narration queued', description: 'Generation will continue in the background.' });
     } catch (e: any) {
-      toast({ title: 'Generation failed', description: e?.message ?? 'Unknown error', variant: 'destructive' });
+      toast({ title: 'Generation failed', description: await getFunctionErrorMessage(e), variant: 'destructive' });
     } finally {
       setGenerating(false);
     }
@@ -168,7 +181,9 @@ const ChapterNarrationBar = ({ sectionId, text, label = 'Mr. CAP narrates' }: Pr
       : `Generating ${job.completed_chunks}/${job.total_chunks || '…'}`
     : job?.status === 'failed'
       ? 'Failed'
-      : null;
+      : job?.status === 'completed'
+        ? 'Complete'
+        : null;
 
   if (loading) return null;
 
