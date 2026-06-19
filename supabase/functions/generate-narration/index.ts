@@ -13,16 +13,54 @@ interface Body {
   text: string;
 }
 
-function chunkText(text: string, maxChars = 2200): string[] {
-  const sentences = text.match(/[^.!?\n]+[.!?\n]+|\S+$/g) ?? [text];
+function normalizeText(text: string): string {
+  return text
+    // Curly quotes → straight
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    // Em/en dashes → comma pause
+    .replace(/\s*[—–]\s*/g, ", ")
+    // Triple dots → ellipsis with trailing space for natural pause
+    .replace(/\.{3,}/g, "… ")
+    // Common abbreviations
+    .replace(/\bMr\.\s*CAP\b/g, "Mister Cap")
+    .replace(/\bMr\./g, "Mister")
+    .replace(/\bMrs\./g, "Missus")
+    .replace(/\bMs\./g, "Miss")
+    .replace(/\bDr\./g, "Doctor")
+    .replace(/\bSt\./g, "Saint")
+    // Collapse 3+ blank lines to a single paragraph break
+    .replace(/\n{3,}/g, "\n\n")
+    // Collapse runs of spaces
+    .replace(/[ \t]+/g, " ")
+    .trim();
+}
+
+function chunkText(text: string, maxChars = 1400): string[] {
+  const paragraphs = text.split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
   const chunks: string[] = [];
   let cur = "";
-  for (const s of sentences) {
-    if ((cur + s).length > maxChars && cur) {
+
+  const pushSentencesOf = (para: string) => {
+    const sentences = para.match(/[^.!?]+[.!?]+|\S[^.!?]*$/g) ?? [para];
+    for (const s of sentences) {
+      if ((cur + " " + s).trim().length > maxChars && cur) {
+        chunks.push(cur.trim());
+        cur = s;
+      } else {
+        cur = cur ? `${cur} ${s}` : s;
+      }
+    }
+  };
+
+  for (const para of paragraphs) {
+    if (para.length > maxChars) {
+      pushSentencesOf(para);
+    } else if ((cur + "\n\n" + para).length > maxChars && cur) {
       chunks.push(cur.trim());
-      cur = s;
+      cur = para;
     } else {
-      cur += s;
+      cur = cur ? `${cur}\n\n${para}` : para;
     }
   }
   if (cur.trim()) chunks.push(cur.trim());
@@ -55,8 +93,9 @@ async function processNarrationJob(params: {
   const { admin, jobId, sectionId, text, voiceId, elevenKey } = params;
 
   try {
-    const chunks = chunkText(text);
-    console.log(`job ${jobId}: generating ${chunks.length} chunks, total chars=${text.length}`);
+    const normalized = normalizeText(text);
+    const chunks = chunkText(normalized);
+    console.log(`job ${jobId}: generating ${chunks.length} chunks, total chars=${normalized.length}`);
     await admin
       .from("narration_generation_jobs")
       .update({ status: "generating", total_chunks: chunks.length, completed_chunks: 0, error_message: null })
@@ -67,8 +106,8 @@ async function processNarrationJob(params: {
 
     for (let i = 0; i < chunks.length; i++) {
       console.log(`job ${jobId}: requesting chunk ${i + 1}/${chunks.length}, chars=${chunks[i].length}`);
-      const prev = i > 0 ? chunks[i - 1].slice(-400) : undefined;
-      const next = i < chunks.length - 1 ? chunks[i + 1].slice(0, 400) : undefined;
+      const prev = i > 0 ? chunks[i - 1].slice(-600) : undefined;
+      const next = i < chunks.length - 1 ? chunks[i + 1].slice(0, 600) : undefined;
       const ttsRes = await fetch(
         `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`,
         {
@@ -79,18 +118,20 @@ async function processNarrationJob(params: {
           },
           body: JSON.stringify({
             text: chunks[i],
-            model_id: "eleven_multilingual_v2",
+            model_id: "eleven_turbo_v2_5",
             previous_text: prev,
             next_text: next,
             voice_settings: {
-              stability: 0.55,
-              similarity_boost: 0.8,
-              style: 0.35,
+              stability: 0.45,
+              similarity_boost: 0.85,
+              style: 0.15,
               use_speaker_boost: true,
+              speed: 0.95,
             },
           }),
         }
       );
+
 
       if (!ttsRes.ok) {
         const errTxt = await ttsRes.text().catch(() => "");
@@ -186,7 +227,7 @@ Deno.serve(async (req) => {
       return json({ error: "Invalid text length" }, 400);
     }
 
-    const chunks = chunkText(body.text);
+    const chunks = chunkText(normalizeText(body.text));
     const { data: job, error: jobErr } = await admin
       .from("narration_generation_jobs")
       .insert({

@@ -1,25 +1,29 @@
-The admin check is working now. The failure is happening after the function logs `generating 5 chunks` and before anything is saved, which strongly points to the narration request timing out or being killed while waiting on the long ElevenLabs audio generation calls.
+Improve narration audio quality by upgrading the TTS model and tuning voice settings for better pacing and pronunciation. No UI changes.
 
-Plan:
+## Changes to `supabase/functions/generate-narration/index.ts`
 
-1. **Stop making the browser wait for the full audiobook generation**
-   - Change `generate-narration` so clicking **Generate** immediately creates a generation job and returns `queued` instead of holding the request open until all MP3 chunks finish.
+1. **Switch model** from `eleven_multilingual_v2` to `eleven_turbo_v2_5` (higher fidelity on long-form, better pacing, supports request stitching). If pronunciation issues persist, we can later switch to `eleven_multilingual_v2` per-voice — but turbo v2.5 is the recommended narration model.
+2. **Retune voice settings** for natural narration:
+   - `stability: 0.45` (was 0.55) — slightly more expressive, less monotone
+   - `similarity_boost: 0.85` (was 0.8)
+   - `style: 0.15` (was 0.35) — lower style avoids over-acting and mispronunciations
+   - `use_speaker_boost: true`
+   - add `speed: 0.95` for a calmer, audiobook-like cadence
+3. **Smaller chunks for better prosody**: reduce `maxChars` from 2200 → 1400 and split on paragraph breaks first, then sentences. This gives ElevenLabs cleaner prosodic units and smoother stitched seams.
+4. **Better text preprocessing** before TTS:
+   - Normalize curly quotes/em-dashes
+   - Expand common abbreviations (Mr. → Mister, ISM stays as-is, etc.)
+   - Convert "..." to a real ellipsis "…" and ensure a space after for natural pause
+   - Collapse multiple blank lines to a single paragraph break
+5. **Keep request stitching** (`previous_text` / `next_text`) which is already in place — but pass full adjacent chunks (capped at 600 chars) instead of 400 for stronger context.
 
-2. **Add a narration job table**
-   - Store `section_id`, requesting admin, status, progress, error message, output path, and timestamps.
-   - Add safe access rules so admins can create/read generation jobs, while the backend can update them.
+## Deploy & test
 
-3. **Process narration in the background**
-   - Use the Edge Function background task pattern to generate the chunks, upload the MP3, and update `chapter_narration` after the request has already returned to the app.
-   - Add detailed progress/error logging around each audio chunk so the next failure shows the exact ElevenLabs response instead of a generic non-2xx message.
+- Redeploy `generate-narration`.
+- On the live chapter, click **Regenerate** as admin and listen to the new output.
 
-4. **Update the admin UI**
-   - After clicking **Generate**, show `Queued` / `Generating` / `Complete` / `Failed` states.
-   - Poll the job status every few seconds.
-   - Refresh the narration player automatically when the job completes.
-   - If generation fails, show the real backend error message instead of only “Edge Function returned a non-2xx status code.”
+## Notes
 
-Technical notes:
-- This keeps reader playback unchanged.
-- Existing generated narration will still use `chapter_narration` and the `audio` bucket.
-- This is the standard fix for long-running media generation because a single browser-triggered function call can time out before audio creation finishes.
+- No frontend changes; the player, polling, and storage path stay the same.
+- Old MP3 in `narration/chapter-1.mp3` will be overwritten by the regenerate action.
+- If you'd later like a different narrator voice, we'd only need to update the `ELEVENLABS_NARRATOR_VOICE_ID` secret — no code change required.
