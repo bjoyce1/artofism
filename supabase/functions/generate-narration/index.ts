@@ -13,16 +13,54 @@ interface Body {
   text: string;
 }
 
-function chunkText(text: string, maxChars = 2200): string[] {
-  const sentences = text.match(/[^.!?\n]+[.!?\n]+|\S+$/g) ?? [text];
+function normalizeText(text: string): string {
+  return text
+    // Curly quotes → straight
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    // Em/en dashes → comma pause
+    .replace(/\s*[—–]\s*/g, ", ")
+    // Triple dots → ellipsis with trailing space for natural pause
+    .replace(/\.{3,}/g, "… ")
+    // Common abbreviations
+    .replace(/\bMr\.\s*CAP\b/g, "Mister Cap")
+    .replace(/\bMr\./g, "Mister")
+    .replace(/\bMrs\./g, "Missus")
+    .replace(/\bMs\./g, "Miss")
+    .replace(/\bDr\./g, "Doctor")
+    .replace(/\bSt\./g, "Saint")
+    // Collapse 3+ blank lines to a single paragraph break
+    .replace(/\n{3,}/g, "\n\n")
+    // Collapse runs of spaces
+    .replace(/[ \t]+/g, " ")
+    .trim();
+}
+
+function chunkText(text: string, maxChars = 1400): string[] {
+  const paragraphs = text.split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
   const chunks: string[] = [];
   let cur = "";
-  for (const s of sentences) {
-    if ((cur + s).length > maxChars && cur) {
+
+  const pushSentencesOf = (para: string) => {
+    const sentences = para.match(/[^.!?]+[.!?]+|\S[^.!?]*$/g) ?? [para];
+    for (const s of sentences) {
+      if ((cur + " " + s).trim().length > maxChars && cur) {
+        chunks.push(cur.trim());
+        cur = s;
+      } else {
+        cur = cur ? `${cur} ${s}` : s;
+      }
+    }
+  };
+
+  for (const para of paragraphs) {
+    if (para.length > maxChars) {
+      pushSentencesOf(para);
+    } else if ((cur + "\n\n" + para).length > maxChars && cur) {
       chunks.push(cur.trim());
-      cur = s;
+      cur = para;
     } else {
-      cur += s;
+      cur = cur ? `${cur}\n\n${para}` : para;
     }
   }
   if (cur.trim()) chunks.push(cur.trim());
