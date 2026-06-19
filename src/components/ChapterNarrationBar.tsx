@@ -42,6 +42,7 @@ const ChapterNarrationBar = ({ sectionId, text, label = 'Mr. CAP narrates' }: Pr
   const { isAdmin } = useIsAdmin();
   const audioRef = useRef<HTMLAudioElement>(null);
   const notifiedJobRef = useRef<string | null>(null);
+  const trackedJobRef = useRef<string | null>(null);
   const [row, setRow] = useState<NarrationRow | null>(null);
   const [job, setJob] = useState<NarrationJob | null>(null);
   const [loading, setLoading] = useState(true);
@@ -94,12 +95,16 @@ const ChapterNarrationBar = ({ sectionId, text, label = 'Mr. CAP narrates' }: Pr
     if (!job || notifiedJobRef.current === job.id) return;
     if (job.status === 'completed') {
       notifiedJobRef.current = job.id;
-      toast({ title: 'Narration ready', description: `Generated ${job.total_chunks} segments.` });
+      if (trackedJobRef.current === job.id) {
+        toast({ title: 'Narration ready', description: `Generated ${job.total_chunks} segments.` });
+      }
       load();
     }
     if (job.status === 'failed') {
       notifiedJobRef.current = job.id;
-      toast({ title: 'Generation failed', description: job.error_message ?? 'Unknown error', variant: 'destructive' });
+      if (trackedJobRef.current === job.id) {
+        toast({ title: 'Generation failed', description: job.error_message ?? 'Unknown error', variant: 'destructive' });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [job?.id, job?.status]);
@@ -146,6 +151,7 @@ const ChapterNarrationBar = ({ sectionId, text, label = 'Mr. CAP narrates' }: Pr
         completed_at: null,
       };
       notifiedJobRef.current = null;
+      trackedJobRef.current = data.jobId;
       setJob(queuedJob);
       toast({ title: 'Narration queued', description: 'Generation will continue in the background.' });
     } catch (e: any) {
