@@ -18,6 +18,17 @@ interface NarrationRow {
   updated_at: string;
 }
 
+interface NarrationJob {
+  id: string;
+  status: 'queued' | 'generating' | 'completed' | 'failed';
+  total_chunks: number;
+  completed_chunks: number;
+  error_message: string | null;
+  file_path: string | null;
+  updated_at: string;
+  completed_at: string | null;
+}
+
 const SPEEDS = [0.85, 1, 1.25, 1.5] as const;
 
 function fmt(s: number) {
@@ -27,10 +38,26 @@ function fmt(s: number) {
   return `${m}:${sec.toString().padStart(2, '0')}`;
 }
 
+async function getFunctionErrorMessage(error: any) {
+  const context = error?.context;
+  if (context && typeof context.json === 'function') {
+    try {
+      const body = await context.json();
+      if (body?.error) return body.error;
+    } catch {
+      // Fall back to the generic message below.
+    }
+  }
+  return error?.message ?? 'Unknown error';
+}
+
 const ChapterNarrationBar = ({ sectionId, text, label = 'Mr. CAP narrates' }: Props) => {
   const { isAdmin } = useIsAdmin();
   const audioRef = useRef<HTMLAudioElement>(null);
+  const notifiedJobRef = useRef<string | null>(null);
+  const trackedJobRef = useRef<string | null>(null);
   const [row, setRow] = useState<NarrationRow | null>(null);
+  const [job, setJob] = useState<NarrationJob | null>(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -51,6 +78,49 @@ const ChapterNarrationBar = ({ sectionId, text, label = 'Mr. CAP narrates' }: Pr
   };
 
   useEffect(() => { load(); /* eslint-disable-next-line */ }, [sectionId]);
+
+  const loadJob = async () => {
+    if (!isAdmin) return;
+    const { data } = await supabase
+      .from('narration_generation_jobs')
+      .select('id,status,total_chunks,completed_chunks,error_message,file_path,updated_at,completed_at')
+      .eq('section_id', sectionId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    setJob((data as NarrationJob | null) ?? null);
+  };
+
+  useEffect(() => {
+    if (!isAdmin) { setJob(null); return; }
+    loadJob();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAdmin, sectionId]);
+
+  useEffect(() => {
+    if (!job || (job.status !== 'queued' && job.status !== 'generating')) return;
+    const timer = window.setInterval(loadJob, 4000);
+    return () => window.clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [job?.id, job?.status, isAdmin, sectionId]);
+
+  useEffect(() => {
+    if (!job || notifiedJobRef.current === job.id) return;
+    if (job.status === 'completed') {
+      notifiedJobRef.current = job.id;
+      if (trackedJobRef.current === job.id) {
+        toast({ title: 'Narration ready', description: `Generated ${job.total_chunks} segments.` });
+      }
+      load();
+    }
+    if (job.status === 'failed') {
+      notifiedJobRef.current = job.id;
+      if (trackedJobRef.current === job.id) {
+        toast({ title: 'Generation failed', description: job.error_message ?? 'Unknown error', variant: 'destructive' });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [job?.id, job?.status]);
 
   const publicUrl = row
     ? supabase.storage.from('audio').getPublicUrl(row.file_path).data.publicUrl + `?v=${encodeURIComponent(row.updated_at)}`
@@ -83,14 +153,37 @@ const ChapterNarrationBar = ({ sectionId, text, label = 'Mr. CAP narrates' }: Pr
         body: { sectionId, text },
       });
       if (error) throw error;
-      toast({ title: 'Narration ready', description: `Generated ${data?.chunks ?? ''} segments.` });
-      await load();
+      const queuedJob: NarrationJob = {
+        id: data.jobId,
+        status: 'queued',
+        total_chunks: data?.chunks ?? 0,
+        completed_chunks: 0,
+        error_message: null,
+        file_path: null,
+        updated_at: new Date().toISOString(),
+        completed_at: null,
+      };
+      notifiedJobRef.current = null;
+      trackedJobRef.current = data.jobId;
+      setJob(queuedJob);
+      toast({ title: 'Narration queued', description: 'Generation will continue in the background.' });
     } catch (e: any) {
-      toast({ title: 'Generation failed', description: e?.message ?? 'Unknown error', variant: 'destructive' });
+      toast({ title: 'Generation failed', description: await getFunctionErrorMessage(e), variant: 'destructive' });
     } finally {
       setGenerating(false);
     }
   };
+
+  const activeJob = job && (job.status === 'queued' || job.status === 'generating');
+  const jobLabel = activeJob
+    ? job.status === 'queued'
+      ? 'Queued'
+      : `Generating ${job.completed_chunks}/${job.total_chunks || '…'}`
+    : job?.status === 'failed'
+      ? 'Failed'
+      : job?.status === 'completed'
+        ? 'Complete'
+        : null;
 
   if (loading) return null;
 
@@ -151,16 +244,23 @@ const ChapterNarrationBar = ({ sectionId, text, label = 'Mr. CAP narrates' }: Pr
         )}
 
         {isAdmin && (
-          <button
-            onClick={generate}
-            disabled={generating}
-            className="ml-auto flex items-center gap-1.5 font-ui text-[10px] uppercase tracking-[0.18em] px-2.5 py-1 rounded border disabled:opacity-60"
-            style={{ color: '#c9a227', borderColor: '#c9a227' }}
-            title={row ? 'Regenerate from current text' : 'Generate narration MP3'}
-          >
-            {generating ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
-            {generating ? 'Generating…' : row ? 'Regenerate' : 'Generate'}
-          </button>
+          <div className="ml-auto flex items-center gap-2">
+            {jobLabel && (
+              <span className="hidden sm:inline font-ui text-[10px] uppercase tracking-[0.14em]" style={{ color: job?.status === 'failed' ? '#ef4444' : '#9a8443' }}>
+                {jobLabel}
+              </span>
+            )}
+            <button
+              onClick={generate}
+              disabled={generating || !!activeJob}
+              className="flex items-center gap-1.5 font-ui text-[10px] uppercase tracking-[0.18em] px-2.5 py-1 rounded border disabled:opacity-60"
+              style={{ color: '#c9a227', borderColor: '#c9a227' }}
+              title={row ? 'Regenerate from current text' : 'Generate narration MP3'}
+            >
+              {generating || activeJob ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+              {generating ? 'Queueing…' : activeJob ? 'Working…' : row ? 'Regenerate' : job?.status === 'failed' ? 'Retry' : 'Generate'}
+            </button>
+          </div>
         )}
       </div>
     </div>
