@@ -1,7 +1,6 @@
 import AnimatedSection from './AnimatedSection';
 import { introduction } from '@/data/bookContent';
 import SectionAudioButton from '@/components/SectionAudioButton';
-import ChapterNarrationBar from '@/components/ChapterNarrationBar';
 
 const IntroductionLayout = () => {
   const pullQuoteText = "If you don't define your mindset, the world will define it for you.";
@@ -12,10 +11,6 @@ const IntroductionLayout = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-deep-black via-smoke/50 to-deep-black pointer-events-none" />
 
       <div className="relative max-w-3xl mx-auto">
-        <ChapterNarrationBar
-          sectionId="introduction"
-          text={introduction.paragraphs.join('\n\n')}
-        />
         <AnimatedSection>
           <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4">Introduction</p>
           <div className="flex items-center gap-3">
