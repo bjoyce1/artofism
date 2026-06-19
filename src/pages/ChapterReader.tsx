@@ -4,11 +4,11 @@ import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { chapters } from '@/data/bookContent';
 import { chapterReadingMinutes } from '@/lib/bookStats';
 import { useReadingProgress, useFavorites } from '@/hooks/useReadingProgress';
-import { useSectionAudio } from '@/hooks/useSectionAudio';
+
 
 import AnimatedSection from '@/components/AnimatedSection';
 import FloatingNav from '@/components/FloatingNav';
-import SectionAudioButton from '@/components/SectionAudioButton';
+
 import {
   Heart,
   ChevronLeft,
@@ -24,6 +24,7 @@ import {
   AArrowUp,
 } from 'lucide-react';
 import ChapterAudioPlayer from '@/components/ChapterAudioPlayer';
+import ChapterNarrationBar from '@/components/ChapterNarrationBar';
 
 const FONT_SIZE_KEY = 'ism-font-size';
 // Body text sizes from compact to extra large; index 1 is the original default.
@@ -55,7 +56,7 @@ const ChapterReader = () => {
     toggleMode,
   } = useReadingProgress();
   const { toggleFavorite, isFavorite } = useFavorites();
-  const { currentSection, isPlaying: audioIsPlaying } = useSectionAudio();
+  
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [fontSize, setFontSize] = useState(() => {
     const saved = parseInt(localStorage.getItem(FONT_SIZE_KEY) || '1', 10);
@@ -227,8 +228,7 @@ const ChapterReader = () => {
   }
 
   const isExperience = readingMode === 'experience';
-  const chapterSectionId = `chapter-${chapter.number}`;
-  const isChapterAudioPlaying = currentSection === chapterSectionId && audioIsPlaying;
+  
   const readingMinutes = chapterReadingMinutes(chapter);
   const bodyFont = FONT_SIZES[fontSize];
 
@@ -276,6 +276,11 @@ const ChapterReader = () => {
         style={{ scaleX, top: 'env(safe-area-inset-top, 0px)' }}
       />
       <FloatingNav />
+
+      {/* Sticky narration playback bar */}
+      <div className="sticky top-14 sm:top-16 z-30">
+        <ChapterNarrationBar chapterNumber={chapter.number} />
+      </div>
 
       {/* Smoke overlay for experience mode */}
       {isExperience && (
@@ -419,14 +424,6 @@ const ChapterReader = () => {
               <h1 className="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-foreground mb-3 sm:mb-4">
                 {chapter.title}
               </h1>
-              {!isChapterAudioPlaying && (
-                <SectionAudioButton
-                  sectionId={chapterSectionId}
-                  fileName={`chapter_${String(chapter.number).padStart(2, '0')}.mp3`}
-                  label="Audiobook"
-                  className="-mt-2"
-                />
-              )}
             </div>
             <p className="font-body text-base sm:text-lg italic text-muted-foreground mb-12 sm:mb-16">
               {chapter.summary}
@@ -541,19 +538,6 @@ const ChapterReader = () => {
         </div>
       </article>
 
-      {/* Floating narration play/pause — fixed to viewport during playback */}
-      {isChapterAudioPlaying && (
-        <div
-          className="fixed z-50 right-4 sm:right-6 top-14 sm:top-6"
-          style={{ marginTop: 'env(safe-area-inset-top, 0px)' }}
-        >
-          <SectionAudioButton
-            sectionId={chapterSectionId}
-            fileName={`chapter_${String(chapter.number).padStart(2, '0')}.mp3`}
-            className="w-10 h-10 shadow-lg shadow-primary/20"
-          />
-        </div>
-      )}
 
       {/* Chapter Audio Player */}
       <ChapterAudioPlayer chapterNumber={chapterNum} />
