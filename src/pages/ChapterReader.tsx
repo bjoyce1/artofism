@@ -278,6 +278,11 @@ const ChapterReader = () => {
       />
       <FloatingNav />
 
+      {/* Sticky narration playback bar */}
+      <div className="sticky top-14 sm:top-16 z-30">
+        <ChapterNarrationBar chapterNumber={chapter.number} />
+      </div>
+
       {/* Smoke overlay for experience mode */}
       {isExperience && (
         <>
