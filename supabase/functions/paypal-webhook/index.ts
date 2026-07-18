@@ -40,7 +40,7 @@ function jsonRes(status: number, body: Record<string, unknown>) {
 // Fetch the underlying PayPal Order so we can read purchase_units[].custom_id
 // (which carries our user id) and re-validate amount/currency server-side.
 // The capture webhook payload does NOT include custom_id, only the order does.
-async function fetchPaypalOrder(orderId: string): Promise<any | null> {
+async function fetchPaypalOrder(orderId: string): Promise<Record<string, unknown> | null> {
   try {
     const token = await paypalAccessToken();
     const res = await fetch(`${PAYPAL_API_BASE}/v2/checkout/orders/${orderId}`, {
