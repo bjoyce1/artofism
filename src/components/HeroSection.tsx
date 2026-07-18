@@ -123,7 +123,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.85 }}
-            className="font-body text-[11px] sm:text-sm text-muted-foreground max-w-xs sm:max-w-sm mb-3 sm:mb-4 leading-relaxed"
+            className="font-body text-[13px] sm:text-base text-foreground/75 max-w-xs sm:max-w-sm mb-3 sm:mb-4 leading-relaxed"
           >
             Learn how to think sharper, move smarter, and operate beyond limits.
           </motion.p>
