@@ -1,53 +1,71 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { nsGet, nsSet, nsGetJson, nsSetJson, getStorageNamespace } from '@/lib/userStorage';
 
-const STORAGE_KEY = 'ism-reading-progress';
-const FAVORITES_KEY = 'ism-favorites';
-const MODE_KEY = 'ism-reading-mode';
-const CHAPTER_PROGRESS_KEY = 'ism-chapter-progress';
-const SCROLL_POS_KEY = 'ism-scroll-positions';
+const LEGACY_KEYS = {
+  last: 'ism-reading-progress',
+  favorites: 'ism-favorites',
+  mode: 'ism-reading-mode',
+  chapters: 'ism-chapter-progress',
+  scroll: 'ism-scroll-positions',
+};
+const K = {
+  last: 'reading-progress',
+  favorites: 'favorites',
+  mode: 'reading-mode',
+  chapters: 'chapter-progress',
+  scroll: 'scroll-positions',
+};
 
-function readJson<T>(key: string, fallback: T): T {
+// One-time migration from legacy shared keys into the guest namespace, so
+// existing readers don't lose progress on this deploy. Runs before any hook
+// reads local state.
+let migrated = false;
+function migrateLegacy() {
+  if (migrated) return;
+  migrated = true;
   try {
-    const raw = localStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T) : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-function writeJson(key: string, value: unknown) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch {
-    // storage full or unavailable — reading still works without persistence
-  }
+    for (const [nsKey, legacy] of Object.entries(LEGACY_KEYS)) {
+      const val = localStorage.getItem(legacy);
+      if (val != null) {
+        const dest = `ism:guest:${(K as any)[nsKey]}`;
+        if (localStorage.getItem(dest) == null) localStorage.setItem(dest, val);
+        localStorage.removeItem(legacy);
+      }
+    }
+  } catch { /* ignore */ }
 }
 
 export type ChapterProgressMap = Record<string, number>;
 
 export function useReadingProgress() {
+  migrateLegacy();
   const { user, hasAccess } = useAuth();
   const [lastChapter, setLastChapter] = useState<number>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved = nsGet(K.last);
     return saved ? parseInt(saved, 10) : 0;
   });
   const [chapterProgress, setChapterProgress] = useState<ChapterProgressMap>(() =>
-    readJson<ChapterProgressMap>(CHAPTER_PROGRESS_KEY, {})
+    nsGetJson<ChapterProgressMap>(K.chapters, {})
   );
   const [readingMode, setReadingMode] = useState<'read' | 'experience'>(() => {
-    const saved = localStorage.getItem(MODE_KEY);
+    const saved = nsGet(K.mode);
     return (saved as 'read' | 'experience') || 'experience';
   });
   const syncTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingSync = useRef<ChapterProgressMap>({});
-  // Once a chapter is marked complete it stays complete for the session,
-  // even if cloud rows are slow to refresh.
   const completedRef = useRef<Set<string>>(new Set());
 
-  // Pull cloud progress once per sign-in and merge it with local progress,
-  // keeping whichever side has read further in each chapter.
+  // Re-read from the active namespace whenever it changes (sign-in/out).
+  useEffect(() => {
+    const saved = nsGet(K.last);
+    setLastChapter(saved ? parseInt(saved, 10) : 0);
+    setChapterProgress(nsGetJson<ChapterProgressMap>(K.chapters, {}));
+    const mode = nsGet(K.mode);
+    if (mode) setReadingMode(mode as 'read' | 'experience');
+  }, [user?.id]);
+
   useEffect(() => {
     if (!user) return;
     supabase
@@ -56,53 +74,44 @@ export function useReadingProgress() {
       .eq('user_id', user.id)
       .then(({ data }) => {
         if (!data?.length) return;
-        data.forEach((r: any) => {
-          if (r.completed) completedRef.current.add(r.chapter_slug);
-        });
+        data.forEach((r: any) => { if (r.completed) completedRef.current.add(r.chapter_slug); });
         setChapterProgress(prev => {
           const merged = { ...prev };
           data.forEach(r => {
             merged[r.chapter_slug] = Math.max(merged[r.chapter_slug] ?? 0, r.progress_percent);
           });
-          writeJson(CHAPTER_PROGRESS_KEY, merged);
+          nsSetJson(K.chapters, merged);
           return merged;
         });
       });
   }, [user]);
 
-  const flushSync = useCallback(
-    (userId: string) => {
-      const entries = Object.entries(pendingSync.current);
-      pendingSync.current = {};
-      if (!entries.length) return;
-      const nowIso = new Date().toISOString();
-      // Fire and forget — a failed write must never interrupt reading.
-      supabase
-        .from('reading_progress')
-        .upsert(
-          entries.map(([chapter_slug, progress_percent]) => ({
-            user_id: userId,
-            chapter_slug,
-            progress_percent,
-            completed: progress_percent >= 90 || completedRef.current.has(chapter_slug),
-            last_read_at: nowIso,
-            updated_at: nowIso,
-          })) as any,
-          { onConflict: 'user_id,chapter_slug' }
-        )
-        .then(() => {});
-    },
-    []
-  );
+  const flushSync = useCallback((userId: string) => {
+    const entries = Object.entries(pendingSync.current);
+    pendingSync.current = {};
+    if (!entries.length) return;
+    const nowIso = new Date().toISOString();
+    supabase
+      .from('reading_progress')
+      .upsert(
+        entries.map(([chapter_slug, progress_percent]) => ({
+          user_id: userId,
+          chapter_slug,
+          progress_percent,
+          completed: progress_percent >= 90 || completedRef.current.has(chapter_slug),
+          last_read_at: nowIso,
+          updated_at: nowIso,
+        })) as any,
+        { onConflict: 'user_id,chapter_slug' }
+      )
+      .then(() => {});
+  }, []);
 
   const saveProgress = useCallback((chapter: number) => {
     setLastChapter(chapter);
-    localStorage.setItem(STORAGE_KEY, chapter.toString());
+    nsSet(K.last, chapter.toString());
   }, []);
 
-  // Records how far into a chapter the reader has scrolled. Progress only
-  // moves forward — re-reading from the top never erases it. Cloud writes
-  // are debounced to at most one every 10 seconds.
   const saveChapterProgress = useCallback(
     (chapter: number, percent: number) => {
       const slug = chapter.toString();
@@ -110,7 +119,7 @@ export function useReadingProgress() {
       setChapterProgress(prev => {
         if (clamped <= (prev[slug] ?? 0)) return prev;
         const next = { ...prev, [slug]: clamped };
-        writeJson(CHAPTER_PROGRESS_KEY, next);
+        nsSetJson(K.chapters, next);
         if (clamped >= 90) completedRef.current.add(slug);
         if (user && hasAccess) {
           pendingSync.current[slug] = clamped;
@@ -127,47 +136,42 @@ export function useReadingProgress() {
     [user, hasAccess, flushSync]
   );
 
-  // Flush pending cloud writes when the tab is hidden or the hook unmounts
-  // so the final scroll position is never lost on navigation away.
   useEffect(() => {
     if (!user || !hasAccess) return;
     const onVisibility = () => {
       if (document.visibilityState === 'hidden') {
-        if (syncTimer.current) {
-          clearTimeout(syncTimer.current);
-          syncTimer.current = null;
-        }
+        if (syncTimer.current) { clearTimeout(syncTimer.current); syncTimer.current = null; }
         flushSync(user.id);
       }
     };
     document.addEventListener('visibilitychange', onVisibility);
     return () => {
       document.removeEventListener('visibilitychange', onVisibility);
-      if (syncTimer.current) {
-        clearTimeout(syncTimer.current);
-        syncTimer.current = null;
-      }
+      if (syncTimer.current) { clearTimeout(syncTimer.current); syncTimer.current = null; }
       flushSync(user.id);
     };
   }, [user, hasAccess, flushSync]);
 
   const saveScrollPosition = useCallback((chapter: number, scrollY: number) => {
-    const positions = readJson<Record<string, number>>(SCROLL_POS_KEY, {});
+    const positions = nsGetJson<Record<string, number>>(K.scroll, {});
     positions[chapter.toString()] = Math.round(scrollY);
-    writeJson(SCROLL_POS_KEY, positions);
+    nsSetJson(K.scroll, positions);
   }, []);
 
   const getScrollPosition = useCallback((chapter: number): number => {
-    return readJson<Record<string, number>>(SCROLL_POS_KEY, {})[chapter.toString()] ?? 0;
+    return nsGetJson<Record<string, number>>(K.scroll, {})[chapter.toString()] ?? 0;
   }, []);
 
   const toggleMode = useCallback(() => {
     setReadingMode(prev => {
       const next = prev === 'read' ? 'experience' : 'read';
-      localStorage.setItem(MODE_KEY, next);
+      nsSet(K.mode, next);
       return next;
     });
   }, []);
+
+  // Force reads to depend on the namespace so switching accounts re-renders.
+  void getStorageNamespace();
 
   return {
     lastChapter,
@@ -182,13 +186,16 @@ export function useReadingProgress() {
 }
 
 export function useFavorites() {
+  migrateLegacy();
   const { user } = useAuth();
   const [favorites, setFavorites] = useState<string[]>(() =>
-    readJson<string[]>(FAVORITES_KEY, [])
+    nsGetJson<string[]>(K.favorites, [])
   );
 
-  // Merge cloud-saved quotes into local favorites on sign-in so they
-  // follow the reader across devices.
+  useEffect(() => {
+    setFavorites(nsGetJson<string[]>(K.favorites, []));
+  }, [user?.id]);
+
   useEffect(() => {
     if (!user) return;
     supabase
@@ -199,10 +206,8 @@ export function useFavorites() {
         if (!data?.length) return;
         setFavorites(prev => {
           const merged = [...prev];
-          data.forEach(r => {
-            if (!merged.includes(r.quote_text)) merged.push(r.quote_text);
-          });
-          writeJson(FAVORITES_KEY, merged);
+          data.forEach(r => { if (!merged.includes(r.quote_text)) merged.push(r.quote_text); });
+          nsSetJson(K.favorites, merged);
           return merged;
         });
       });
@@ -213,20 +218,15 @@ export function useFavorites() {
       setFavorites(prev => {
         const removing = prev.includes(quote);
         const next = removing ? prev.filter(q => q !== quote) : [...prev, quote];
-        writeJson(FAVORITES_KEY, next);
+        nsSetJson(K.favorites, next);
         if (user) {
           if (removing) {
-            supabase
-              .from('saved_quotes')
-              .delete()
-              .eq('user_id', user.id)
-              .eq('quote_text', quote)
-              .then(() => {});
+            supabase.from('saved_quotes').delete()
+              .eq('user_id', user.id).eq('quote_text', quote).then(() => {});
           } else {
-            supabase
-              .from('saved_quotes')
-              .insert({ user_id: user.id, quote_text: quote, chapter_slug: chapterSlug ?? null })
-              .then(() => {});
+            supabase.from('saved_quotes').insert({
+              user_id: user.id, quote_text: quote, chapter_slug: chapterSlug ?? null,
+            }).then(() => {});
           }
         }
         return next;
