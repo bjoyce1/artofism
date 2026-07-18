@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, ReactNode, useCallback 
 import { supabase } from '@/integrations/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
 import { setStorageNamespace, mergeGuestIntoUser, NAMESPACED_KEYS } from '@/lib/userStorage';
+import { safeNext } from '@/lib/safeNext';
 
 export type AccessStatus = 'loading' | 'granted' | 'denied' | 'error';
 
