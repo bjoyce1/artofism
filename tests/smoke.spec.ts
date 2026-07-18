@@ -106,6 +106,26 @@ test.describe('accessibility', () => {
     expect(bodyOverflow === '' || bodyOverflow === 'auto' || bodyOverflow === 'visible').toBe(true);
   });
 
+  test('vault Founder\'s Key card opens Dialog, Escape closes it, focus returns to card', async ({ page }) => {
+    await page.goto('/vault');
+    const trigger = page.getByRole('button', { name: /founder'?s key/i }).first();
+    await trigger.scrollIntoViewIfNeeded();
+    await expect(trigger).toBeVisible();
+    await trigger.focus();
+    await trigger.click();
+
+    const dialog = page.getByRole('dialog').first();
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole('heading', { name: /founder'?s key/i })).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+
+    // Radix Dialog restores focus to the invoking trigger.
+    const focusedName = await page.evaluate(() => document.activeElement?.textContent || '');
+    expect(focusedName.toLowerCase()).toContain("founder");
+  });
+
   test('audio/narration slider is keyboard operable', async ({ page }) => {
     await page.goto('/chapter/1');
     // Wait briefly for lazy-loaded audio bar; skip if none appears.

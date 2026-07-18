@@ -158,7 +158,7 @@ const HeroSection = () => {
             <a
               href="#introduction"
               onClick={() => trackEvent('landing_cta_click', { cta: 'begin_free_chapter' })}
-              className="gold-dust inline-flex items-center justify-center gap-2 min-h-11 px-6 py-3.5 sm:px-7 sm:py-3 border border-primary/40 text-primary text-xs uppercase tracking-[0.2em] rounded-full hover:bg-primary/10 hover:border-primary/60 transition-all duration-500 backdrop-blur-sm active:scale-[0.97]"
+              className="gold-dust inline-flex items-center justify-center gap-2 min-h-11 px-6 py-3.5 sm:px-7 sm:py-3 bg-primary text-primary-foreground text-xs uppercase tracking-[0.2em] font-medium rounded-full hover:shadow-[0_0_30px_hsl(43_76%_52%/0.4)] hover:brightness-110 transition-all duration-500 active:scale-[0.97]"
             >
               Begin Free Chapter
               <span className="text-sm">→</span>
@@ -166,7 +166,7 @@ const HeroSection = () => {
             <Link
               to="/unlock"
               onClick={() => trackEvent('landing_cta_click', { cta: 'unlock_full_book' })}
-              className="gold-dust inline-flex items-center justify-center gap-2 min-h-11 px-6 py-3.5 sm:px-7 sm:py-3 bg-primary text-primary-foreground text-xs uppercase tracking-[0.2em] font-medium rounded-full hover:shadow-[0_0_30px_hsl(43_76%_52%/0.4)] hover:brightness-110 transition-all duration-500 active:scale-[0.97]"
+              className="gold-dust inline-flex items-center justify-center gap-2 min-h-11 px-6 py-3.5 sm:px-7 sm:py-3 border border-primary/50 text-primary text-xs uppercase tracking-[0.2em] rounded-full hover:bg-primary/10 hover:border-primary/70 transition-all duration-500 backdrop-blur-sm active:scale-[0.97]"
             >
               Unlock Full Book — $9.99
               <span className="text-sm">→</span>
