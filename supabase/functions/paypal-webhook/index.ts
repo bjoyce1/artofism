@@ -173,7 +173,7 @@ Deno.serve(async (req) => {
       const order = await fetchPaypalOrder(orderId);
       const pu = order?.purchase_units?.[0];
       const userId: string | undefined = pu?.custom_id;
-      const captureNode = pu?.payments?.captures?.find((c: any) => c.id === resource?.id) ?? pu?.payments?.captures?.[0];
+      const captureNode = pu?.payments?.captures?.find((c) => c.id === resource?.id) ?? pu?.payments?.captures?.[0];
       const amount = captureNode?.amount?.value ?? resource?.amount?.value;
       const currency = captureNode?.amount?.currency_code ?? resource?.amount?.currency_code;
       const captureId = captureNode?.id ?? resource?.id;
