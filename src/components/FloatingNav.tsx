@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, BookOpen, List, Code2, User, Gem, Search } from 'lucide-react';
+import { Home, BookOpen, List, Code2, User, Gem, Search, MoreHorizontal, Library as LibraryIcon, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { useAuth } from '@/hooks/useAuth';
 import BookSearch from '@/components/BookSearch';
 import logo from '@/assets/logo.webp';
