@@ -413,6 +413,8 @@ const GridPlate = ({
 
       {locked && (
         <div
+          role="note"
+          aria-label="Locked quote — unlock the book to reveal"
           style={{
             position: 'absolute',
             inset: 0,
@@ -424,7 +426,7 @@ const GridPlate = ({
             pointerEvents: 'none',
           }}
         >
-          <Lock size={22} color="#c9a227" />
+          <Lock size={22} color="#c9a227" aria-hidden="true" />
           <span style={{ fontSize: 10, letterSpacing: 2, color: '#9a8443', textTransform: 'uppercase' }}>
             Behind the door
           </span>
@@ -496,11 +498,15 @@ const FilterPill = ({
 const iconBtn: React.CSSProperties = {
   background: 'transparent',
   border: 'none',
-  padding: 0,
+  padding: 6,
+  minWidth: 32,
+  minHeight: 32,
   cursor: 'pointer',
   color: 'inherit',
   display: 'inline-flex',
   alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: 4,
 };
 
 export default QuoteVaultPage;
