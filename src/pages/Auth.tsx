@@ -43,6 +43,7 @@ const Auth = () => {
     if (error) {
       setError(error.message);
     } else {
+      trackEvent('magic_link_sent');
       setSent(true);
     }
   };
