@@ -7,13 +7,29 @@ verify_jwt = true
 verify_jwt = false
 
 [functions.send-transactional-email]
-verify_jwt = true
+verify_jwt = false
 
 [functions.preview-transactional-email]
 verify_jwt = false
 
 [functions.handle-email-unsubscribe]
 verify_jwt = false
+
+[functions.handle-email-suppression]
+verify_jwt = false
+
+[functions.create-paypal-order]
+verify_jwt = false
+
+[functions.verify-paypal]
+verify_jwt = false
+
+[functions.paypal-webhook]
+verify_jwt = false
+
+[functions.log-analytics]
+verify_jwt = false
+
 
 [functions.handle-email-suppression]
 verify_jwt = false
