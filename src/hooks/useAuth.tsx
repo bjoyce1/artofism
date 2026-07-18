@@ -1,6 +1,9 @@
 import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
+import { setStorageNamespace, mergeGuestIntoUser, NAMESPACED_KEYS } from '@/lib/userStorage';
+
+export type AccessStatus = 'loading' | 'granted' | 'denied' | 'error';
 
 interface AuthContextType {
   user: User | null;
@@ -8,7 +11,9 @@ interface AuthContextType {
   loading: boolean;
   hasAccess: boolean;
   accessLoading: boolean;
-  signInWithMagicLink: (email: string) => Promise<{ error: any }>;
+  accessStatus: AccessStatus;
+  accessError: string | null;
+  signInWithMagicLink: (email: string, redirectPath?: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   refreshAccess: () => Promise<void>;
 }
@@ -19,8 +24,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [hasAccess, setHasAccess] = useState(false);
-  const [accessLoading, setAccessLoading] = useState(true);
+  const [accessStatus, setAccessStatus] = useState<AccessStatus>('loading');
+  const [accessError, setAccessError] = useState<string | null>(null);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -38,48 +43,68 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Keep local-storage namespace in sync with signed-in identity. On first
+  // sign-in we merge any guest-namespace state into the user's namespace so
+  // reading progress made pre-login isn't lost.
+  useEffect(() => {
+    setStorageNamespace(user?.id ?? null);
+    if (user?.id) mergeGuestIntoUser(user.id, NAMESPACED_KEYS);
+  }, [user?.id]);
+
   const checkAccess = useCallback(async (userId: string) => {
-    setAccessLoading(true);
-    const { data } = await supabase
+    setAccessStatus('loading');
+    setAccessError(null);
+    const { data, error } = await supabase
       .from('entitlements')
       .select('active')
       .eq('user_id', userId)
       .eq('product_slug', 'art-of-ism-full-access')
       .eq('active', true)
       .maybeSingle();
-    setHasAccess(!!data);
-    setAccessLoading(false);
+    if (error) {
+      setAccessStatus('error');
+      setAccessError(error.message ?? 'Unable to verify access');
+      return;
+    }
+    setAccessStatus(data ? 'granted' : 'denied');
   }, []);
 
   useEffect(() => {
-    if (!user) {
-      setHasAccess(false);
-      setAccessLoading(false);
-      return;
-    }
+    if (loading) return;
+    if (!user) { setAccessStatus('denied'); setAccessError(null); return; }
     checkAccess(user.id);
-  }, [user, checkAccess]);
+  }, [user, loading, checkAccess]);
 
   const refreshAccess = useCallback(async () => {
     if (!user) return;
     await checkAccess(user.id);
   }, [user, checkAccess]);
 
-  const signInWithMagicLink = async (email: string) => {
+  const signInWithMagicLink = async (email: string, redirectPath = '/library') => {
+    // redirectPath is expected to already be validated by the caller via safeNext.
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: window.location.origin + '/library' },
+      options: { emailRedirectTo: window.location.origin + redirectPath },
     });
     return { error };
   };
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    setHasAccess(false);
+    setAccessStatus('denied');
+    setAccessError(null);
+    setStorageNamespace(null);
   };
 
+  const hasAccess = accessStatus === 'granted';
+  const accessLoading = accessStatus === 'loading';
+
   return (
-    <AuthContext.Provider value={{ user, session, loading, hasAccess, accessLoading, signInWithMagicLink, signOut, refreshAccess }}>
+    <AuthContext.Provider value={{
+      user, session, loading, hasAccess, accessLoading,
+      accessStatus, accessError,
+      signInWithMagicLink, signOut, refreshAccess,
+    }}>
       {children}
     </AuthContext.Provider>
   );

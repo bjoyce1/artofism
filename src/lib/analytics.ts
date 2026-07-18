@@ -1,7 +1,10 @@
 import { supabase } from '@/integrations/supabase/client';
 
-// Simple per-event throttle so a single tab can't spam the analytics table.
-// Different events still send freely; same event won't repeat within 2s.
+// Client-side analytics. Public events route through the log-analytics Edge
+// Function which enforces an allow-list, rate limits per IP, and holds the
+// only INSERT privilege on analytics_events. The browser never writes to the
+// table directly. PII (emails, order IDs) is never included client-side.
+
 const lastSentAt = new Map<string, number>();
 const MIN_INTERVAL_MS = 2000;
 
@@ -15,13 +18,18 @@ export const trackEvent = async (
     if (now - last < MIN_INTERVAL_MS) return;
     lastSentAt.set(eventName, now);
 
-    const { data: { user } } = await supabase.auth.getUser();
-    await supabase.from('analytics_events' as any).insert({
-      event_name: eventName,
-      user_id: user?.id ?? null,
-      properties,
+    // Strip anything that even looks like PII before it leaves the browser.
+    const safeProps: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(properties)) {
+      const lower = k.toLowerCase();
+      if (lower.includes('email') || lower.includes('order')) continue;
+      safeProps[k] = v;
+    }
+
+    await supabase.functions.invoke('log-analytics', {
+      body: { eventName, properties: safeProps },
     });
   } catch {
-    // Silent fail — analytics should never break UX
+    // Silent fail — analytics must never break UX.
   }
 };
