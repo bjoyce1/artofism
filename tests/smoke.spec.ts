@@ -100,8 +100,10 @@ test.describe('accessibility', () => {
   test('audio/narration slider is keyboard operable', async ({ page }) => {
     await page.goto('/chapter/1');
     const slider = page.getByRole('slider').first();
-    if (!(await slider.count())) test.skip(true, 'no slider on this route');
-    await slider.focus();
+    if ((await slider.count()) === 0) {
+      test.skip(true, 'no slider on this route');
+      return;
+    }
     const before = await slider.getAttribute('aria-valuenow');
     await page.keyboard.press('ArrowRight');
     const after = await slider.getAttribute('aria-valuenow');
