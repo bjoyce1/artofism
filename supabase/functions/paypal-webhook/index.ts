@@ -216,7 +216,7 @@ Deno.serve(async (req) => {
       const outcome: string = resource?.dispute_outcome?.outcome_code ?? resource?.status ?? "";
       const orderId = await resolveOrderId(supabaseAdmin, resource);
       if (!orderId) {
-        console.error("dispute.resolved without resolvable order id", { outcome, disputeId: resource?.dispute_id });
+        console.error("dispute.resolved without resolvable order id", { outcome, resourceId: resource?.id });
         return jsonRes(500, { error: "unresolved order id" });
       }
 
