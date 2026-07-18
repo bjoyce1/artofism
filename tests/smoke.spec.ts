@@ -104,6 +104,7 @@ test.describe('accessibility', () => {
       test.skip(true, 'no slider on this route');
       return;
     }
+    await slider.focus();
     const before = await slider.getAttribute('aria-valuenow');
     await page.keyboard.press('ArrowRight');
     const after = await slider.getAttribute('aria-valuenow');
