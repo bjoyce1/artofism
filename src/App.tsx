@@ -103,6 +103,7 @@ const App = () => (
         </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
+    </MotionConfig>
   </HelmetProvider>
 );
 
