@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ExternalLink, Lock, Gem, BookOpen, Music, Code2, X, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import FloatingNav from '@/components/FloatingNav';
