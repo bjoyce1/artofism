@@ -207,7 +207,7 @@ Deno.serve(async (req) => {
   }
 });
 
-async function logServerEvent(supabase: any, name: string, userId: string | null, props: Record<string, unknown>) {
+async function logServerEvent(supabase: ReturnType<typeof createClient>, name: string, userId: string | null, props: Record<string, unknown>) {
   try {
     await supabase.from("analytics_events").insert({
       event_name: name, user_id: userId, properties: props,
