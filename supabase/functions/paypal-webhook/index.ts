@@ -139,17 +139,28 @@ Deno.serve(async (req) => {
 
   try {
     if (eventType === "PAYMENT.CAPTURE.COMPLETED") {
+      // The capture webhook payload does NOT reliably carry custom_id — that
+      // lives on the parent Order's purchase_units. Resolve the order id,
+      // then fetch the order to read our user id and re-verify amount/currency.
       const orderId = await resolveOrderId(supabaseAdmin, resource);
-      const userId = resource?.custom_id;
-      const amount = resource?.amount?.value;
-      const currency = resource?.amount?.currency_code;
-      if (!userId || amount !== PRODUCT_AMOUNT || currency !== PRODUCT_CURRENCY || !orderId) {
-        console.warn("capture.completed ignored (missing/invalid fields)", { orderId, userId, amount, currency });
-        return jsonRes(200, { ok: true, ignored: true });
+      if (!orderId) {
+        console.error("capture.completed without resolvable order id", { captureId: resource?.id });
+        return jsonRes(500, { error: "unresolved order id" });
+      }
+      const order = await fetchPaypalOrder(orderId);
+      const pu = order?.purchase_units?.[0];
+      const userId: string | undefined = pu?.custom_id;
+      const captureNode = pu?.payments?.captures?.find((c: any) => c.id === resource?.id) ?? pu?.payments?.captures?.[0];
+      const amount = captureNode?.amount?.value ?? resource?.amount?.value;
+      const currency = captureNode?.amount?.currency_code ?? resource?.amount?.currency_code;
+      const captureId = captureNode?.id ?? resource?.id;
+      if (!userId || amount !== PRODUCT_AMOUNT || currency !== PRODUCT_CURRENCY || !captureId) {
+        console.error("capture.completed rejected (invalid order/amount/currency/capture)", { orderId, userId: !!userId, amount, currency, captureId });
+        return jsonRes(500, { error: "capture validation failed" });
       }
       const { error: rpcErr } = await supabaseAdmin.rpc("finalize_paypal_purchase", {
         _user_id: userId, _order_id: orderId, _amount: Number(amount), _currency: currency,
-        _payer_email: null, _capture_id: resource.id, _raw: event,
+        _payer_email: null, _capture_id: captureId, _raw: event,
       });
       if (rpcErr) { console.error("finalize rpc failed", rpcErr); return jsonRes(500, { error: "finalize failed" }); }
       const { error: aErr } = await supabaseAdmin.from("analytics_events").insert({
@@ -161,7 +172,12 @@ Deno.serve(async (req) => {
 
     if (REVOKE_EVENTS.has(eventType)) {
       const orderId = await resolveOrderId(supabaseAdmin, resource);
-      if (!orderId) { console.warn("revoke event without resolvable order id", eventType); return jsonRes(200, { ok: true, ignored: true }); }
+      if (!orderId) {
+        // Relevant reconciliation event we can't route — force a PayPal retry
+        // rather than silently drop it.
+        console.error("revoke event without resolvable order id", eventType, { resourceId: resource?.id });
+        return jsonRes(500, { error: "unresolved order id" });
+      }
       const { error: rErr } = await supabaseAdmin.rpc("revoke_entitlement_by_order", {
         _order_id: orderId, _reason: eventType.toLowerCase(),
       });
@@ -176,7 +192,10 @@ Deno.serve(async (req) => {
     if (eventType === "CUSTOMER.DISPUTE.RESOLVED") {
       const outcome: string = resource?.dispute_outcome?.outcome_code ?? resource?.status ?? "";
       const orderId = await resolveOrderId(supabaseAdmin, resource);
-      if (!orderId) { console.warn("dispute.resolved without resolvable order id"); return jsonRes(200, { ok: true, ignored: true }); }
+      if (!orderId) {
+        console.error("dispute.resolved without resolvable order id", { outcome, disputeId: resource?.dispute_id });
+        return jsonRes(500, { error: "unresolved order id" });
+      }
 
       if (DISPUTE_MERCHANT_WIN.has(outcome)) {
         const { error: rErr } = await supabaseAdmin.rpc("reactivate_entitlement_by_order", { _order_id: orderId });
