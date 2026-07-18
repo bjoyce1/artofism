@@ -102,12 +102,17 @@ const Unlock = () => {
           setProcessing(false);
         }
       },
-      onCancel: () => setError('Payment was canceled. You can try again anytime.'),
+      onCancel: () => {
+        trackEvent('checkout_cancel');
+        setError('Payment was canceled. You can try again anytime.');
+      },
       onError: (err: any) => {
+        trackEvent('checkout_error');
         console.error('PayPal error:', err);
         setError('Payment error. Please try again.');
       },
     }).render('#paypal-button-container');
+    trackEvent('checkout_rendered');
   }, [paypalLoaded, user, navigate, refreshAccess]);
 
   return (
