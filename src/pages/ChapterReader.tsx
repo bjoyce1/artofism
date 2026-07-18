@@ -8,6 +8,8 @@ import { useReadingProgress, useFavorites } from '@/hooks/useReadingProgress';
 
 import AnimatedSection from '@/components/AnimatedSection';
 import FloatingNav from '@/components/FloatingNav';
+import SEO from '@/components/SEO';
+import { Helmet } from 'react-helmet-async';
 
 import {
   Heart,
@@ -268,8 +270,32 @@ const ChapterReader = () => {
     dismissSelection();
   };
 
+  const isFreeChapter = chapter.number === 1;
+  const chapterDescription = `Chapter ${chapter.number} of The Art of ISM by Mr. CAP — ${chapter.title}.`.slice(0, 160);
+
   return (
     <div className="min-h-[100dvh] bg-deep-black">
+      <SEO
+        title={`${chapter.title} — Chapter ${chapter.number}`}
+        description={chapterDescription}
+        path={`/chapter/${chapter.number}`}
+        type="article"
+        noindex={!isFreeChapter}
+      />
+      {isFreeChapter && (
+        <Helmet>
+          <script type="application/ld+json">{JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: `${chapter.title} — Chapter ${chapter.number}`,
+            author: { '@type': 'Person', name: 'Mr. CAP' },
+            isPartOf: { '@type': 'Book', name: 'The Art of ISM', url: 'https://theartofism.com' },
+            url: `https://theartofism.com/chapter/${chapter.number}`,
+            inLanguage: 'en',
+            description: chapterDescription,
+          })}</script>
+        </Helmet>
+      )}
       {/* Scroll progress bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-[2px] bg-primary origin-left z-[100]"

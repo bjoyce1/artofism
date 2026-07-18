@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Lock, Gem, BookOpen, Music, Code2, X, Check } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { ExternalLink, Lock, Gem, BookOpen, Music, Code2, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import FloatingNav from '@/components/FloatingNav';
 import SEO from '@/components/SEO';
@@ -375,68 +376,40 @@ const Vault = () => {
         </motion.p>
       </section>
 
-      {/* ── MODAL ── */}
-      <AnimatePresence>
-        {selectedItem && (
-          <motion.div
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <div
-              className="absolute inset-0 bg-deep-black/80 backdrop-blur-sm"
-              onClick={() => setSelectedItem(null)}
-            />
-            <motion.div
-              className="relative w-full max-w-md bg-card border border-primary/20 rounded-2xl p-8 shadow-[0_0_60px_hsl(43,76%,52%,0.1)]"
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-            >
-              <button
-                onClick={() => setSelectedItem(null)}
-                className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <X size={20} />
-              </button>
 
-              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
-                <selectedItem.icon size={28} className="text-primary" />
-              </div>
+      {/* ── DIALOG (Radix-backed shadcn Dialog: focus trap, Escape, restore) ── */}
+      <Dialog open={selectedItem !== null} onOpenChange={(o) => !o && setSelectedItem(null)}>
+        <DialogContent className="max-w-md bg-card border-primary/20">
+          {selectedItem && (
+            <>
+              <DialogHeader>
+                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                  <selectedItem.icon size={28} className="text-primary" aria-hidden="true" />
+                </div>
+                <DialogTitle className="font-display text-2xl font-bold text-foreground">
+                  {selectedItem.title}
+                </DialogTitle>
+                <DialogDescription className="font-body text-sm text-muted-foreground leading-relaxed">
+                  {selectedItem.description}
+                </DialogDescription>
+              </DialogHeader>
 
-              <h3 className="font-display text-2xl font-bold text-foreground mb-2">
-                {selectedItem.title}
-              </h3>
-              <p className="font-body text-sm text-muted-foreground mb-6 leading-relaxed">
-                {selectedItem.description}
-              </p>
-
-              <div className="mb-6">
-                <p className="font-ui text-xs uppercase tracking-widest text-muted-foreground mb-3">
-                  Utility
-                </p>
+              <div className="mt-4">
+                <p className="font-ui text-xs uppercase tracking-widest text-muted-foreground mb-3">Utility</p>
                 <ul className="space-y-2">
                   {selectedItem.utility.map((u) => (
-                    <li
-                      key={u}
-                      className="flex items-center gap-2 font-ui text-sm text-foreground"
-                    >
-                      <Check size={14} className="text-primary flex-shrink-0" />
+                    <li key={u} className="flex items-center gap-2 font-ui text-sm text-foreground">
+                      <Check size={14} className="text-primary flex-shrink-0" aria-hidden="true" />
                       {u}
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between mt-6 mb-2">
                 <div>
-                  <p className="font-ui text-xs uppercase tracking-widest text-muted-foreground">
-                    Supply
-                  </p>
-                  <p className="font-display text-xl font-bold text-primary">
-                    {selectedItem.supply}
-                  </p>
+                  <p className="font-ui text-xs uppercase tracking-widest text-muted-foreground">Supply</p>
+                  <p className="font-display text-xl font-bold text-primary">{selectedItem.supply}</p>
                 </div>
                 {selectedItem.status === 'coming-soon' && (
                   <span className="font-ui text-xs uppercase tracking-widest text-muted-foreground bg-muted px-3 py-1 rounded">
@@ -446,26 +419,20 @@ const Vault = () => {
               </div>
 
               {selectedItem.status === 'live' ? (
-                <Button
-                  className="w-full font-ui uppercase tracking-widest text-sm bg-primary text-primary-foreground hover:bg-primary/90"
-                  asChild
-                >
+                <Button className="w-full mt-4 font-ui uppercase tracking-widest text-sm bg-primary text-primary-foreground hover:bg-primary/90" asChild>
                   <a href={OPENSEA_URL} target="_blank" rel="noopener noreferrer">
-                    View on OpenSea <ExternalLink size={16} className="ml-2" />
+                    View on OpenSea <ExternalLink size={16} className="ml-2" aria-hidden="true" />
                   </a>
                 </Button>
               ) : (
-                <Button
-                  className="w-full font-ui uppercase tracking-widest text-sm"
-                  disabled
-                >
+                <Button className="w-full mt-4 font-ui uppercase tracking-widest text-sm" disabled>
                   Coming Soon
                 </Button>
               )}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>

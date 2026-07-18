@@ -161,6 +161,7 @@ export type Database = {
           granted_at: string
           id: string
           product_slug: string
+          source: string
           user_id: string
         }
         Insert: {
@@ -168,6 +169,7 @@ export type Database = {
           granted_at?: string
           id?: string
           product_slug: string
+          source?: string
           user_id: string
         }
         Update: {
@@ -175,6 +177,7 @@ export type Database = {
           granted_at?: string
           id?: string
           product_slug?: string
+          source?: string
           user_id?: string
         }
         Relationships: []
@@ -245,6 +248,7 @@ export type Database = {
       purchases: {
         Row: {
           amount: number
+          capture_id: string | null
           created_at: string
           currency: string
           id: string
@@ -256,6 +260,7 @@ export type Database = {
         }
         Insert: {
           amount: number
+          capture_id?: string | null
           created_at?: string
           currency?: string
           id?: string
@@ -267,6 +272,7 @@ export type Database = {
         }
         Update: {
           amount?: number
+          capture_id?: string | null
           created_at?: string
           currency?: string
           id?: string
@@ -480,6 +486,11 @@ export type Database = {
           source_queue: string
         }
         Returns: number
+      }
+      order_id_for_capture: { Args: { _capture_id: string }; Returns: string }
+      reactivate_entitlement_by_order: {
+        Args: { _order_id: string }
+        Returns: boolean
       }
       read_email_batch: {
         Args: { batch_size: number; queue_name: string; vt: number }

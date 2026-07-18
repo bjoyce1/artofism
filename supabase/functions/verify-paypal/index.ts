@@ -177,21 +177,23 @@ Deno.serve(async (req) => {
       });
     }
 
-    // 6. Fire-and-forget confirmation email + server-authored analytics.
-    (async () => {
-      try {
-        if (userEmail) {
-          await supabaseAdmin.functions.invoke("send-transactional-email", {
-            body: {
-              templateName: "purchase-confirmation",
-              recipientEmail: userEmail,
-              idempotencyKey: `purchase-confirm-${orderId}`,
-              templateData: { name: userEmail.split("@")[0], amount: PRODUCT_AMOUNT, currency: PRODUCT_CURRENCY, orderId },
-            },
-          });
-        }
-      } catch (e) { console.error("purchase email error", e); }
-    })();
+    // 6. Awaited confirmation email + analytics. Email failure must NOT undo
+    //    the purchase — we log and continue but stay awaited so the runtime
+    //    doesn't kill the outbound request when the response is returned.
+    try {
+      if (userEmail) {
+        await supabaseAdmin.functions.invoke("send-transactional-email", {
+          body: {
+            templateName: "purchase-confirmation",
+            recipientEmail: userEmail,
+            idempotencyKey: `purchase-confirm-${orderId}`,
+            templateData: { name: userEmail.split("@")[0], amount: PRODUCT_AMOUNT, currency: PRODUCT_CURRENCY, orderId },
+          },
+        });
+      }
+    } catch (e) {
+      console.error("purchase email error (non-fatal)", e);
+    }
     await logServerEvent(supabaseAdmin, "purchase_confirmed", userId, {});
 
     return new Response(JSON.stringify({ success: true }), {

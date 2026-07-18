@@ -63,13 +63,34 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
     setMuted(!muted);
   }, [muted]);
 
-  const handleSeek = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+  const seekTo = useCallback((pct: number) => {
     const audio = audioRef.current;
+    if (!audio) return;
+    const clamped = Math.max(0, Math.min(1, pct));
+    audio.currentTime = clamped * duration;
+  }, [duration]);
+
+  const handleSeek = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const bar = progressRef.current;
-    if (!audio || !bar) return;
+    if (!bar) return;
     const rect = bar.getBoundingClientRect();
-    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    audio.currentTime = pct * duration;
+    seekTo((e.clientX - rect.left) / rect.width);
+  }, [seekTo]);
+
+  const handleSliderKey = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    const audio = audioRef.current;
+    if (!audio || !duration) return;
+    let handled = true;
+    switch (e.key) {
+      case 'ArrowLeft':  audio.currentTime = Math.max(0, audio.currentTime - 5); break;
+      case 'ArrowRight': audio.currentTime = Math.min(duration, audio.currentTime + 5); break;
+      case 'Home':       audio.currentTime = 0; break;
+      case 'End':        audio.currentTime = duration; break;
+      case 'PageUp':     audio.currentTime = Math.min(duration, audio.currentTime + 30); break;
+      case 'PageDown':   audio.currentTime = Math.max(0, audio.currentTime - 30); break;
+      default: handled = false;
+    }
+    if (handled) e.preventDefault();
   }, [duration]);
 
   useEffect(() => {
@@ -134,6 +155,7 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
             {/* Close */}
             <button
               onClick={() => setExpanded(false)}
+              aria-label="Close audio player"
               className="absolute top-2 right-3 text-muted-foreground hover:text-foreground text-xs uppercase tracking-widest transition-colors z-10"
             >
               ✕
@@ -143,7 +165,7 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
             <div className="flex items-center gap-4 mb-4">
               <div className="relative shrink-0">
                 <div className="absolute -inset-1 bg-primary/20 rounded-xl blur-md" />
-                <img src={albumArt} alt="The Art of ISM" className="relative w-16 h-16 rounded-xl object-cover shadow-lg shadow-primary/25" />
+                <img src={albumArt} alt="" aria-hidden="true" className="relative w-16 h-16 rounded-xl object-cover shadow-lg shadow-primary/25" />
               </div>
               <div className="min-w-0">
                 <p className="text-base font-display text-foreground truncate">{song.title}</p>
@@ -151,11 +173,19 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
               </div>
             </div>
 
-            {/* Progress bar */}
+            {/* Progress bar — keyboard-accessible slider */}
             <div
               ref={progressRef}
               onClick={handleSeek}
-              className="relative w-full h-1.5 bg-border rounded-full cursor-pointer group mb-2"
+              onKeyDown={handleSliderKey}
+              role="slider"
+              tabIndex={0}
+              aria-label="Audio progress"
+              aria-valuemin={0}
+              aria-valuemax={Math.round(duration) || 0}
+              aria-valuenow={Math.round(currentTime)}
+              aria-valuetext={`${formatTime(currentTime)} of ${formatTime(duration)}`}
+              className="relative w-full h-1.5 bg-border rounded-full cursor-pointer group mb-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <div
                 className="absolute inset-y-0 left-0 bg-primary rounded-full transition-[width] duration-100"
@@ -174,17 +204,20 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
               <div className="flex items-center gap-3">
                 <button
                   onClick={toggleMute}
+                  aria-label={muted ? 'Unmute' : 'Mute'}
+                  aria-pressed={muted}
                   className="p-1.5 text-muted-foreground hover:text-foreground transition-colors active:scale-90"
                 >
-                  {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+                  {muted ? <VolumeX size={16} aria-hidden="true" /> : <Volume2 size={16} aria-hidden="true" />}
                 </button>
 
                 <button
                   onClick={togglePlay}
                   disabled={loading}
+                  aria-label={playing ? 'Pause' : 'Play'}
                   className="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:brightness-110 active:scale-95 transition-all disabled:opacity-50 shadow-lg shadow-primary/30"
                 >
-                  {playing ? <Pause size={18} /> : <Play size={18} className="ml-0.5" />}
+                  {playing ? <Pause size={18} aria-hidden="true" /> : <Play size={18} className="ml-0.5" aria-hidden="true" />}
                 </button>
               </div>
 
