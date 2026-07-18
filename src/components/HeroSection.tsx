@@ -24,6 +24,8 @@ const HeroSection = () => {
 
   return (
     <section ref={sectionRef} className="relative min-h-[100dvh] flex items-center overflow-hidden">
+      {/* Real H1 for SEO/a11y — visually hidden but paired with the logo image below. */}
+      <h1 className="sr-only">The Art of ISM — A Code of Thought, Movement, and Mastery by Mr. CAP</h1>
       {/* Background image with parallax — only one source actually downloads per breakpoint */}
       <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
         <picture>
