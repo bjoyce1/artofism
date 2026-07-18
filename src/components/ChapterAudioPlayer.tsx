@@ -63,13 +63,34 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
     setMuted(!muted);
   }, [muted]);
 
-  const handleSeek = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+  const seekTo = useCallback((pct: number) => {
     const audio = audioRef.current;
+    if (!audio) return;
+    const clamped = Math.max(0, Math.min(1, pct));
+    audio.currentTime = clamped * duration;
+  }, [duration]);
+
+  const handleSeek = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const bar = progressRef.current;
-    if (!audio || !bar) return;
+    if (!bar) return;
     const rect = bar.getBoundingClientRect();
-    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    audio.currentTime = pct * duration;
+    seekTo((e.clientX - rect.left) / rect.width);
+  }, [seekTo]);
+
+  const handleSliderKey = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    const audio = audioRef.current;
+    if (!audio || !duration) return;
+    let handled = true;
+    switch (e.key) {
+      case 'ArrowLeft':  audio.currentTime = Math.max(0, audio.currentTime - 5); break;
+      case 'ArrowRight': audio.currentTime = Math.min(duration, audio.currentTime + 5); break;
+      case 'Home':       audio.currentTime = 0; break;
+      case 'End':        audio.currentTime = duration; break;
+      case 'PageUp':     audio.currentTime = Math.min(duration, audio.currentTime + 30); break;
+      case 'PageDown':   audio.currentTime = Math.max(0, audio.currentTime - 30); break;
+      default: handled = false;
+    }
+    if (handled) e.preventDefault();
   }, [duration]);
 
   useEffect(() => {
