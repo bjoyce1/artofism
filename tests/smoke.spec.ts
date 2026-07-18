@@ -84,17 +84,26 @@ test.describe('mobile responsiveness (320px)', () => {
 test.describe('accessibility', () => {
   test('vault dialog closes on Escape and restores focus', async ({ page }) => {
     await page.goto('/vault');
-    const trigger = page.getByRole('button').first();
-    const triggerHandle = await trigger.elementHandle();
-    if (!triggerHandle) test.skip(true, 'no vault trigger available');
+    // Scroll the collection grid into view so lazy in-view animations render.
+    await page.locator('#collection').scrollIntoViewIfNeeded();
+    // Target the real collection-card trigger by its accessible name.
+    const trigger = page.getByRole('button', { name: /founder'?s key/i }).first();
+    await trigger.waitFor({ state: 'visible', timeout: 5000 });
+    await trigger.focus();
     await trigger.click();
+
     const dialog = page.getByRole('dialog').first();
-    // Some routes may not have a dialog; skip cleanly if not present.
-    if (!(await dialog.isVisible().catch(() => false))) test.skip(true, 'no dialog surfaced');
+    await expect(dialog).toBeVisible();
+
     await page.keyboard.press('Escape');
     await expect(dialog).toBeHidden();
-    const focused = await page.evaluate(() => document.activeElement?.tagName);
-    expect(focused).toBeTruthy();
+
+    // Radix Dialog restores focus to the invoking trigger on close.
+    const restored = await page.evaluate(
+      (name) => (document.activeElement?.textContent || '').toLowerCase().includes(name),
+      "founder",
+    );
+    expect(restored).toBe(true);
   });
 
   test('audio/narration slider is keyboard operable', async ({ page }) => {
