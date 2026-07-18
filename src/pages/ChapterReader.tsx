@@ -8,6 +8,8 @@ import { useReadingProgress, useFavorites } from '@/hooks/useReadingProgress';
 
 import AnimatedSection from '@/components/AnimatedSection';
 import FloatingNav from '@/components/FloatingNav';
+import SEO from '@/components/SEO';
+import { Helmet } from 'react-helmet-async';
 
 import {
   Heart,
