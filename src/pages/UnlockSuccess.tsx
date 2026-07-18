@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import FloatingNav from '@/components/FloatingNav';
@@ -6,12 +6,18 @@ import SEO from '@/components/SEO';
 import AnimatedSection from '@/components/AnimatedSection';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
+import { trackEvent } from '@/lib/analytics';
 
 const UnlockSuccess = () => {
   const { refreshAccess } = useAuth();
+  const trackedRef = useRef(false);
 
   useEffect(() => {
     refreshAccess();
+    if (!trackedRef.current) {
+      trackedRef.current = true;
+      trackEvent('checkout_success_view');
+    }
   }, [refreshAccess]);
 
   return (

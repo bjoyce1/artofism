@@ -9,6 +9,7 @@ import SEO from '@/components/SEO';
 import AnimatedSection from '@/components/AnimatedSection';
 import { Button } from '@/components/ui/button';
 import { BookOpen, Code2, Quote, Infinity, Smartphone } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 const features = [
   { icon: BookOpen, text: 'Full online access' },
@@ -116,7 +117,29 @@ const Unlock = () => {
         description="Get lifetime access to The Art of ISM — 11 immersive chapters, the Codes hub, and the Quote Vault by Mr. CAP."
         path="/unlock"
       />
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Product',
+          name: 'The Art of ISM — Lifetime Access',
+          description: 'Lifetime access to The Art of ISM by Mr. CAP: 11 chapters, the Codes hub, and the Quote Vault.',
+          brand: { '@type': 'Brand', name: 'The Art of ISM' },
+          category: 'DigitalBook',
+          url: 'https://theartofism.com/unlock',
+          image: 'https://theartofism.com/og-image.jpg',
+          offers: {
+            '@type': 'Offer',
+            price: '9.99',
+            priceCurrency: 'USD',
+            availability: 'https://schema.org/InStock',
+            url: 'https://theartofism.com/unlock',
+            priceValidUntil: '2099-12-31',
+          },
+        })}</script>
+      </Helmet>
       <FloatingNav />
+
+
 
       <div className="pt-24 pb-32 px-6">
         <div className="max-w-3xl mx-auto">
