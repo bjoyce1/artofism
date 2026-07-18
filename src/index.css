@@ -236,3 +236,33 @@
   display: none;
 }
 
+/* Honor OS-level reduced-motion. Kills long-running ambient loops and
+   drops transitions to a single frame while keeping layout intact. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .smoke-drift,
+  .smoke-drift-reverse,
+  .gold-shimmer,
+  .gold-dust::after {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+  html { scroll-behavior: auto !important; }
+}
+
+/* Universal focus-visible ring — meets WCAG 2.4.7 on interactive controls
+   whose Tailwind classes don't set one. */
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+
