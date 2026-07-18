@@ -82,12 +82,11 @@ test.describe('mobile responsiveness (320px)', () => {
 });
 
 test.describe('accessibility', () => {
-  test('vault dialog closes on Escape and restores focus', async ({ page }) => {
-    await page.goto('/vault');
-    // Scroll the collection grid into view so lazy in-view animations render.
-    await page.locator('#collection').scrollIntoViewIfNeeded();
-    // Target the real collection-card trigger by its accessible name.
-    const trigger = page.getByRole('button', { name: /founder'?s key/i }).first();
+  test('search dialog opens, closes on Escape and restores focus to trigger', async ({ page }) => {
+    await page.goto('/');
+    // The FloatingNav mobile search button is the accessible trigger visible at 1280px too via
+    // aria-label "Search the book (Ctrl+K)" on desktop or "Search the book" on mobile.
+    const trigger = page.getByRole('button', { name: /search the book/i }).first();
     await trigger.waitFor({ state: 'visible', timeout: 5000 });
     await trigger.focus();
     await trigger.click();
@@ -98,12 +97,11 @@ test.describe('accessibility', () => {
     await page.keyboard.press('Escape');
     await expect(dialog).toBeHidden();
 
-    // Radix Dialog restores focus to the invoking trigger on close.
-    const restored = await page.evaluate(
-      (name) => (document.activeElement?.textContent || '').toLowerCase().includes(name),
-      "founder",
+    // Radix Dialog restores focus to the trigger element on close.
+    const restoredLabel = await page.evaluate(
+      () => document.activeElement?.getAttribute('aria-label') || '',
     );
-    expect(restored).toBe(true);
+    expect(restoredLabel.toLowerCase()).toContain('search the book');
   });
 
   test('audio/narration slider is keyboard operable', async ({ page }) => {
