@@ -271,10 +271,7 @@ const ChapterReader = () => {
   };
 
   const isFreeChapter = chapter.number === 1;
-  const chapterDescription =
-    (chapter.excerpt ?? `Chapter ${chapter.number} of The Art of ISM by Mr. CAP — ${chapter.title}.`)
-      .toString()
-      .slice(0, 160);
+  const chapterDescription = `Chapter ${chapter.number} of The Art of ISM by Mr. CAP — ${chapter.title}.`.slice(0, 160);
 
   return (
     <div className="min-h-[100dvh] bg-deep-black">
