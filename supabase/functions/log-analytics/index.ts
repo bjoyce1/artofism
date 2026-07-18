@@ -98,7 +98,7 @@ Deno.serve(async (req) => {
       status: 413, headers: { ...cors, "Content-Type": "application/json" },
     });
   }
-  let body: any;
+  let body: { eventName?: unknown; properties?: unknown };
   try { body = JSON.parse(raw); } catch {
     return new Response(JSON.stringify({ error: "bad json" }), { status: 400, headers: cors });
   }
