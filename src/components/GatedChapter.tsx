@@ -14,18 +14,19 @@ const GatedChapter = () => {
   }
 
   return (
-    <ProtectedRoute
-      fallback={
-        <SEO
-          title={`Chapter ${chapterNum} — The Art of ISM`}
-          description={`Chapter ${chapterNum} of The Art of ISM by Mr. CAP. Unlock full access to read.`}
-          path={`/chapter/${chapterNum}`}
-          noindex
-        />
-      }
-    >
-      <ChapterReader />
-    </ProtectedRoute>
+    <>
+      {/* Always emit noindex for paid chapters so locked/loading states are
+          not indexed even before ChapterReader mounts. */}
+      <SEO
+        title={`Chapter ${chapterNum} — The Art of ISM`}
+        description={`Chapter ${chapterNum} of The Art of ISM by Mr. CAP.`}
+        path={`/chapter/${chapterNum}`}
+        noindex
+      />
+      <ProtectedRoute>
+        <ChapterReader />
+      </ProtectedRoute>
+    </>
   );
 };
 
