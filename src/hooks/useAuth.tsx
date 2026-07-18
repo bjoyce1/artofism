@@ -82,10 +82,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user, checkAccess]);
 
   const signInWithMagicLink = async (email: string, redirectPath = '/library') => {
-    // redirectPath is expected to already be validated by the caller via safeNext.
+    // Defense-in-depth: validate the redirect here too, not just in callers.
+    const safe = safeNext(redirectPath, '/library');
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: window.location.origin + redirectPath },
+      options: { emailRedirectTo: window.location.origin + safe },
     });
     return { error };
   };
