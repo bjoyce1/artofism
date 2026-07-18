@@ -1,7 +1,7 @@
-import { defineConfig } from "/dev-server/node_modules/@playwright/test/index.mjs";
+import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
-  testDir: "/dev-server/tests",
+  testDir: "./tests",
   timeout: 30_000,
   fullyParallel: false,
   workers: 1,
