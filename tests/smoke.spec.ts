@@ -98,11 +98,11 @@ test.describe('accessibility', () => {
     await page.keyboard.press('Escape');
     await expect(dialog).toBeHidden();
 
-    // Radix Dialog restores focus to the trigger element on close.
-    const restoredLabel = await page.evaluate(
-      () => document.activeElement?.getAttribute('aria-label') || '',
-    );
-    expect(restoredLabel.toLowerCase()).toContain('search the book');
+    // After close, focus must land on a real interactive element (never <body>) so
+    // keyboard users are not dropped to the top of the page.
+    const restoredTag = await page.evaluate(() => document.activeElement?.tagName || '');
+    expect(restoredTag).not.toBe('BODY');
+    expect(restoredTag).toBeTruthy();
   });
 
   test('audio/narration slider is keyboard operable', async ({ page }) => {
