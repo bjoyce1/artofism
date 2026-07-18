@@ -37,11 +37,33 @@ function jsonRes(status: number, body: Record<string, unknown>) {
   });
 }
 
+// Loose PayPal type aliases — the REST payload shape is untyped in @supabase/supabase-js
+// and we only touch a small, documented subset. Prefer `unknown` + narrow access.
+type PaypalOrder = {
+  purchase_units?: Array<{
+    custom_id?: string;
+    payments?: { captures?: Array<PaypalCapture> };
+  }>;
+};
+type PaypalCapture = {
+  id?: string;
+  amount?: { value?: string; currency_code?: string };
+};
+type PaypalResource = {
+  id?: string;
+  status?: string;
+  amount?: { value?: string; currency_code?: string };
+  seller_receivable_breakdown?: unknown;
+  supplementary_data?: { related_ids?: { order_id?: string } };
+  disputed_transactions?: Array<{ seller_transaction_id?: string; capture_id?: string }>;
+  dispute_outcome?: { outcome_code?: string };
+};
+type SupabaseAdmin = ReturnType<typeof createClient>;
+
 // Fetch the underlying PayPal Order so we can read purchase_units[].custom_id
 // (which carries our user id) and re-validate amount/currency server-side.
 // The capture webhook payload does NOT include custom_id, only the order does.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function fetchPaypalOrder(orderId: string): Promise<any | null> {
+async function fetchPaypalOrder(orderId: string): Promise<PaypalOrder | null> {
   try {
     const token = await paypalAccessToken();
     const res = await fetch(`${PAYPAL_API_BASE}/v2/checkout/orders/${orderId}`, {
@@ -51,14 +73,14 @@ async function fetchPaypalOrder(orderId: string): Promise<any | null> {
       console.error("paypal order fetch failed", orderId, res.status);
       return null;
     }
-    return await res.json();
+    return await res.json() as PaypalOrder;
   } catch (e) {
     console.error("paypal order fetch error", e);
     return null;
   }
 }
 
-async function resolveOrderId(admin: any, resource: any): Promise<string | undefined> {
+async function resolveOrderId(admin: SupabaseAdmin, resource: PaypalResource): Promise<string | undefined> {
   // Preferred: documented related_ids path for payment resources.
   const related = resource?.supplementary_data?.related_ids?.order_id;
   if (related) return related;
@@ -74,7 +96,7 @@ async function resolveOrderId(admin: any, resource: any): Promise<string | undef
 
   // Dispute resources: pull the disputed capture id from documented paths, then
   // resolve to an order id via the purchases we recorded at capture time.
-  const disputedTxns: any[] = resource?.disputed_transactions ?? [];
+  const disputedTxns = resource?.disputed_transactions ?? [];
   for (const t of disputedTxns) {
     const cid = t?.seller_transaction_id ?? t?.capture_id;
     if (cid) {
@@ -96,7 +118,7 @@ Deno.serve(async (req) => {
   }
 
   const raw = await req.text();
-  let event: any;
+  let event: { event_type?: string; resource?: PaypalResource };
   try { event = JSON.parse(raw); } catch { return new Response("bad json", { status: 400 }); }
 
   const h = req.headers;
