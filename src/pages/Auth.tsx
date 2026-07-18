@@ -19,6 +19,9 @@ const Auth = () => {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  useEffect(() => { trackEvent('auth_start'); }, []);
+
+
   if (loading) {
     return (
       <div className="min-h-screen bg-deep-black flex items-center justify-center">
