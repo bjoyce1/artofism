@@ -78,6 +78,8 @@ const ChapterReader = () => {
   useEffect(() => {
     if (chapter) {
       saveProgress(chapter.number);
+      // Free preview / paid chapter open event for funnel analytics.
+      trackEvent(chapter.number === 1 ? 'free_preview_start' : 'chapter_open', { chapter: chapter.number });
       // When entering normally, start at top. When coming from the Library
       // continue card (?resume=1), keep current scroll and let the resume
       // effect below jump instantly to the saved position.
