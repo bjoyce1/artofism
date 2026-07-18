@@ -445,9 +445,25 @@ export type Database = {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
       }
+      email_queue_dispatch: { Args: never; Returns: undefined }
       enqueue_email: {
         Args: { payload: Json; queue_name: string }
         Returns: number
+      }
+      finalize_paypal_purchase: {
+        Args: {
+          _amount: number
+          _capture_id: string
+          _currency: string
+          _order_id: string
+          _payer_email: string
+          _raw: Json
+          _user_id: string
+        }
+        Returns: {
+          entitlement_active: boolean
+          purchase_id: string
+        }[]
       }
       has_role: {
         Args: {
@@ -472,6 +488,10 @@ export type Database = {
           msg_id: number
           read_ct: number
         }[]
+      }
+      revoke_entitlement_by_order: {
+        Args: { _order_id: string; _reason: string }
+        Returns: boolean
       }
     }
     Enums: {

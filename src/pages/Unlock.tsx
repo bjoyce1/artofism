@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { trackEvent } from '@/lib/analytics';
+import { safeNextFromLocation } from '@/lib/safeNext';
 import { supabase } from '@/integrations/supabase/client';
 import FloatingNav from '@/components/FloatingNav';
 import SEO from '@/components/SEO';
 import AnimatedSection from '@/components/AnimatedSection';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Code2, Quote, Infinity, Smartphone, Download } from 'lucide-react';
+import { BookOpen, Code2, Quote, Infinity, Smartphone } from 'lucide-react';
 
 const features = [
   { icon: BookOpen, text: 'Full online access' },
@@ -18,52 +19,49 @@ const features = [
   { icon: Infinity, text: 'Lifetime access' },
 ];
 
+declare global {
+  interface Window { paypal?: any }
+}
+
 const Unlock = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, hasAccess, loading, refreshAccess } = useAuth();
   const [paypalClientId, setPaypalClientId] = useState('');
   const [paypalLoaded, setPaypalLoaded] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
   const trackedRef = useRef(false);
+  const next = safeNextFromLocation(location.search, '/library');
 
-  // Track unlock page view
   useEffect(() => {
     if (!trackedRef.current) {
       trackedRef.current = true;
       trackEvent('unlock_page_view');
     }
   }, []);
-  useEffect(() => {
-    if (!loading && hasAccess) {
-      navigate('/library', { replace: true });
-    }
-  }, [loading, hasAccess, navigate]);
 
-  // Fetch config
+  useEffect(() => {
+    if (!loading && hasAccess) navigate(next, { replace: true });
+  }, [loading, hasAccess, navigate, next]);
+
   useEffect(() => {
     supabase.functions.invoke('get-config').then(({ data }) => {
-      if (data?.paypalClientId) {
-        setPaypalClientId(data.paypalClientId);
-      }
+      if (data?.paypalClientId) setPaypalClientId(data.paypalClientId);
     });
   }, []);
 
-  // Load PayPal SDK
   useEffect(() => {
     if (!paypalClientId) return;
-    if (document.getElementById('paypal-sdk')) {
-      setPaypalLoaded(true);
-      return;
-    }
+    if (document.getElementById('paypal-sdk')) { setPaypalLoaded(true); return; }
     const script = document.createElement('script');
     script.id = 'paypal-sdk';
-    script.src = `https://www.paypal.com/sdk/js?client-id=${paypalClientId}&currency=USD&enable-funding=card,venmo&disable-funding=credit`;
+    script.src = `https://www.paypal.com/sdk/js?client-id=${paypalClientId}&currency=USD&intent=capture&enable-funding=card,venmo&disable-funding=credit`;
     script.onload = () => setPaypalLoaded(true);
+    script.onerror = () => setError('Could not load the payment provider. Please refresh and try again.');
     document.body.appendChild(script);
   }, [paypalClientId]);
 
-  // Render PayPal buttons
   useEffect(() => {
     if (!paypalLoaded || !window.paypal || !user) return;
     const container = document.getElementById('paypal-button-container');
@@ -71,20 +69,16 @@ const Unlock = () => {
     container.innerHTML = '';
 
     window.paypal.Buttons({
-      style: {
-        layout: 'vertical',
-        color: 'gold',
-        shape: 'rect',
-        label: 'pay',
-      },
-      createOrder: (_data: any, actions: any) => {
+      style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay' },
+      // Order creation is delegated to a server-side Edge Function so the
+      // amount/currency/product cannot be tampered with by the browser.
+      createOrder: async () => {
         trackEvent('checkout_start');
-        return actions.order.create({
-          purchase_units: [{
-            amount: { value: '9.99', currency_code: 'USD' },
-            description: 'The Art of ISM — Full Access',
-          }],
-        });
+        const { data, error: fnError } = await supabase.functions.invoke('create-paypal-order');
+        if (fnError || !data?.orderId) {
+          throw new Error(fnError?.message || 'Could not start checkout');
+        }
+        return data.orderId as string;
       },
       onApprove: async (data: any) => {
         setProcessing(true);
@@ -95,11 +89,11 @@ const Unlock = () => {
           });
           if (fnError) throw fnError;
           if (result?.success) {
-            trackEvent('checkout_success', { orderId: data.orderID });
+            trackEvent('checkout_success');
             await refreshAccess();
             navigate('/unlock/success');
           } else {
-            setError('Payment verification failed. Please contact support.');
+            setError(result?.error || 'Payment verification failed. Please contact support.');
           }
         } catch (err: any) {
           setError(err.message || 'Something went wrong.');
@@ -107,15 +101,13 @@ const Unlock = () => {
           setProcessing(false);
         }
       },
-      onCancel: () => {
-        setError('Payment was canceled. You can try again anytime.');
-      },
+      onCancel: () => setError('Payment was canceled. You can try again anytime.'),
       onError: (err: any) => {
         console.error('PayPal error:', err);
         setError('Payment error. Please try again.');
       },
     }).render('#paypal-button-container');
-  }, [paypalLoaded, user, navigate]);
+  }, [paypalLoaded, user, navigate, refreshAccess]);
 
   return (
     <div className="min-h-screen bg-deep-black">
@@ -137,12 +129,10 @@ const Unlock = () => {
               <p className="font-body text-lg text-muted-foreground max-w-lg mx-auto">
                 A Code of Thought, Movement, and Mastery
               </p>
-
               <div className="pt-4 space-y-2">
                 <p className="font-display text-xl text-foreground italic">This is not motivation.</p>
                 <p className="font-display text-xl text-primary italic">This is a system.</p>
               </div>
-
               <p className="text-muted-foreground leading-relaxed max-w-md mx-auto pt-4">
                 You're not buying a book. You're unlocking a way of thinking, moving, and operating.
               </p>
@@ -172,19 +162,19 @@ const Unlock = () => {
                 <div className="space-y-4">
                   <p className="text-muted-foreground text-sm">Sign in first to complete your purchase.</p>
                   <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 font-display text-base">
-                    <Link to="/auth">Sign In to Purchase</Link>
+                    <Link to={`/auth?next=${encodeURIComponent('/unlock')}`}>Sign In to Purchase</Link>
                   </Button>
                 </div>
               ) : (
                 <div className="space-y-4">
                   {processing && (
-                    <div className="flex items-center justify-center gap-3 text-primary">
+                    <div className="flex items-center justify-center gap-3 text-primary" role="status" aria-live="polite">
                       <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                       <span className="text-sm">Verifying payment...</span>
                     </div>
                   )}
                   <div id="paypal-button-container" className="max-w-sm mx-auto" />
-                  {error && <p className="text-destructive text-sm">{error}</p>}
+                  {error && <p className="text-destructive text-sm" role="alert">{error}</p>}
                 </div>
               )}
             </div>

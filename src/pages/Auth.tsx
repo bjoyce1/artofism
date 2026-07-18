@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import FloatingNav from '@/components/FloatingNav';
 import SEO from '@/components/SEO';
 import AnimatedSection from '@/components/AnimatedSection';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Mail, ArrowRight, Check } from 'lucide-react';
+import { safeNextFromLocation } from '@/lib/safeNext';
 
 const Auth = () => {
-  const { user, loading } = useAuth();
-  const { signInWithMagicLink } = useAuth();
+  const { user, loading, signInWithMagicLink } = useAuth();
+  const location = useLocation();
+  const next = safeNextFromLocation(location.search, '/library');
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [error, setError] = useState('');
@@ -25,14 +27,14 @@ const Auth = () => {
   }
 
   if (user) {
-    return <Navigate to="/library" replace />;
+    return <Navigate to={next} replace />;
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSubmitting(true);
-    const { error } = await signInWithMagicLink(email);
+    const { error } = await signInWithMagicLink(email, next);
     setSubmitting(false);
     if (error) {
       setError(error.message);
