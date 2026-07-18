@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate, useLocation } from 'react-router-dom';
 import FloatingNav from '@/components/FloatingNav';
@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Mail, ArrowRight, Check } from 'lucide-react';
 import { safeNextFromLocation } from '@/lib/safeNext';
+import { trackEvent } from '@/lib/analytics';
 
 const Auth = () => {
   const { user, loading, signInWithMagicLink } = useAuth();
@@ -17,6 +18,9 @@ const Auth = () => {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => { trackEvent('auth_start'); }, []);
+
 
   if (loading) {
     return (
@@ -39,6 +43,7 @@ const Auth = () => {
     if (error) {
       setError(error.message);
     } else {
+      trackEvent('magic_link_sent');
       setSent(true);
     }
   };

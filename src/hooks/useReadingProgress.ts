@@ -120,7 +120,13 @@ export function useReadingProgress() {
         if (clamped <= (prev[slug] ?? 0)) return prev;
         const next = { ...prev, [slug]: clamped };
         nsSetJson(K.chapters, next);
-        if (clamped >= 90) completedRef.current.add(slug);
+        if (clamped >= 90 && !completedRef.current.has(slug)) {
+          completedRef.current.add(slug);
+          // Fire once per chapter per session; import lazily to avoid a cycle.
+          import('@/lib/analytics').then(({ trackEvent }) =>
+            trackEvent('chapter_completed', { chapter })
+          ).catch(() => {});
+        }
         if (user && hasAccess) {
           pendingSync.current[slug] = clamped;
           if (!syncTimer.current) {

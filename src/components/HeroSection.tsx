@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useRef } from 'react';
+import { trackEvent } from '@/lib/analytics';
 import SectionAudioButton from '@/components/SectionAudioButton';
 import heroBg from '@/assets/hero-bg.webp';
 import mobileHeroBg from '@/assets/mobile-hero-bg.webp';
@@ -156,6 +157,7 @@ const HeroSection = () => {
           >
             <a
               href="#introduction"
+              onClick={() => trackEvent('landing_cta_click', { cta: 'begin_the_book' })}
               className="gold-dust inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:px-7 sm:py-3 bg-primary text-primary-foreground text-xs uppercase tracking-[0.2em] font-medium rounded-full hover:shadow-[0_0_30px_hsl(43_76%_52%/0.4)] hover:brightness-110 transition-all duration-500 active:scale-[0.97]"
             >
               Begin the Book

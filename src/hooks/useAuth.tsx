@@ -29,10 +29,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [accessError, setAccessError] = useState<string | null>(null);
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
+      if (event === 'SIGNED_IN') {
+        // Deferred to keep this listener callback synchronous per Supabase guidance.
+        setTimeout(() => {
+          import('@/lib/analytics').then(({ trackEvent }) => trackEvent('auth_complete')).catch(() => {});
+        }, 0);
+      }
     });
 
     supabase.auth.getSession().then(({ data: { session } }) => {

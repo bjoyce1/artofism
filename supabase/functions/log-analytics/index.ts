@@ -16,6 +16,7 @@ const ALLOWED_EVENTS = new Set([
   "checkout_cancel",
   "checkout_error",
   "chapter_completed",
+  "chapter_open",
   // in-use events already shipped
   "library_enter",
   "pdf_download",
