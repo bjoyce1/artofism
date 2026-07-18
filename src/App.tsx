@@ -49,6 +49,7 @@ const RouteFallback = () => (
 
 const App = () => (
   <HelmetProvider>
+    <MotionConfig reducedMotion="user">
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <AuthProvider>
