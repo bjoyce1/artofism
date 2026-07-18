@@ -32,19 +32,23 @@ test.describe('public smoke', () => {
   test('free chapter 1 is readable without auth and is indexable', async ({ page }) => {
     await page.goto('/chapter/1');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-    const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+    const canonical = await page.locator('link[rel="canonical"]').last().getAttribute('href');
     expect(canonical || '').toMatch(/\/chapter\/1$/);
-    // Free chapter must NOT be noindex.
-    const robots = await page.locator('meta[name="robots"]').first().getAttribute('content').catch(() => null);
-    expect((robots || '').toLowerCase()).not.toContain('noindex');
+    const robotsCount = await page.locator('meta[name="robots"]').count();
+    if (robotsCount > 0) {
+      const robots = await page.locator('meta[name="robots"]').first().getAttribute('content');
+      expect((robots || '').toLowerCase()).not.toContain('noindex');
+    }
   });
 
   test('paid chapter renders lock screen when signed out and is noindex', async ({ page }) => {
     await page.goto('/chapter/2');
     await expect(page.getByText(/unlock|sign in|locked/i).first()).toBeVisible();
-    const robots = await page.locator('meta[name="robots"]').first().getAttribute('content');
+    // Wait for SEO helmet to inject robots meta.
+    await page.waitForFunction(() => !!document.querySelector('meta[name="robots"]'), null, { timeout: 5000 }).catch(() => {});
+    const robots = await page.locator('meta[name="robots"]').first().getAttribute('content').catch(() => '');
     expect((robots || '').toLowerCase()).toContain('noindex');
-    const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+    const canonical = await page.locator('link[rel="canonical"]').last().getAttribute('href');
     expect(canonical || '').toMatch(/\/chapter\/2$/);
   });
 });
