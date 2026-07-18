@@ -13,7 +13,7 @@ test.describe('public smoke', () => {
   test('landing has unique title and description meta', async ({ page }) => {
     await page.goto('/');
     await expect(page).toHaveTitle(/art of ism/i);
-    const desc = await page.locator('meta[name="description"]').getAttribute('content');
+    const desc = await page.locator('meta[name="description"]').first().getAttribute('content');
     expect(desc && desc.length).toBeGreaterThan(40);
   });
 
