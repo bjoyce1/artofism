@@ -30,9 +30,16 @@ function generateToken(): string {
     .join('')
 }
 
-// Auth note: this function uses verify_jwt = true in config.toml, so Supabase's
-// gateway validates the caller's JWT (anon or service_role) before the request
-// reaches this code. No in-function auth check is needed.
+// SECURITY: This function must only be callable by trusted server-side code
+// (edge functions running with the service role key). A public anon or
+// authenticated browser token must NOT be able to use it as an email relay.
+// We enforce this by requiring `Authorization: Bearer <SERVICE_ROLE_KEY>`.
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let out = 0;
+  for (let i = 0; i < a.length; i++) out |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return out === 0;
+}
 
 Deno.serve(async (req) => {
   // Handle CORS preflight
@@ -53,6 +60,20 @@ Deno.serve(async (req) => {
       }
     )
   }
+
+  // Enforce service-role-only invocation.
+  const authHeader = req.headers.get('authorization') ?? ''
+  const provided = authHeader.toLowerCase().startsWith('bearer ')
+    ? authHeader.slice(7).trim()
+    : ''
+  if (!provided || !timingSafeEqual(provided, supabaseServiceKey)) {
+    console.warn('send-transactional-email: rejected non-service-role caller')
+    return new Response(
+      JSON.stringify({ error: 'Forbidden' }),
+      { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    )
+  }
+
 
   // Parse request body
   let templateName: string
