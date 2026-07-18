@@ -87,7 +87,8 @@ test.describe('accessibility', () => {
     await page.goto('/');
     // The FloatingNav mobile search button is the accessible trigger visible at 1280px too via
     // aria-label "Search the book (Ctrl+K)" on desktop or "Search the book" on mobile.
-    const trigger = page.getByRole('button', { name: /search the book/i }).first();
+    // Only the visible (desktop) search trigger — the mobile-only button is `display:none` at 1280px.
+    const trigger = page.getByRole('button', { name: /search the book/i }).and(page.locator(':visible')).first();
     await trigger.waitFor({ state: 'visible', timeout: 5000 });
     await trigger.focus();
     await trigger.click();
