@@ -4,10 +4,11 @@ import { test, expect } from '@playwright/test';
 // in CI without a Supabase session.
 
 test.describe('public smoke', () => {
-  test('landing renders hero H1 and primary CTA', async ({ page }) => {
+  test('landing renders hero H1 and primary CTAs', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('h1')).toHaveCount(1);
-    await expect(page.getByRole('link', { name: /begin the book/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /begin free chapter/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /unlock full book/i })).toBeVisible();
   });
 
   test('landing has unique title and description meta', async ({ page }) => {
