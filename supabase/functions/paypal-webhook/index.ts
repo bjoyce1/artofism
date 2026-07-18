@@ -17,9 +17,11 @@ const REVOKE_EVENTS = new Set([
 ]);
 
 // Dispute resolution outcomes that mean the buyer got their money back → stay revoked.
+// PayPal returns `ACCEPTED` when the merchant accepts the claim (buyer wins).
 const DISPUTE_BUYER_WIN = new Set([
   "RESOLVED_BUYER_FAVOUR",
   "RESOLVED_WITH_REFUND",
+  "ACCEPTED",
 ]);
 // Dispute resolution outcomes where the merchant kept the money → reinstate.
 const DISPUTE_MERCHANT_WIN = new Set([
@@ -35,10 +37,39 @@ function jsonRes(status: number, body: Record<string, unknown>) {
   });
 }
 
+// Fetch the underlying PayPal Order so we can read purchase_units[].custom_id
+// (which carries our user id) and re-validate amount/currency server-side.
+// The capture webhook payload does NOT include custom_id, only the order does.
+async function fetchPaypalOrder(orderId: string): Promise<any | null> {
+  try {
+    const token = await paypalAccessToken();
+    const res = await fetch(`${PAYPAL_API_BASE}/v2/checkout/orders/${orderId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) {
+      console.error("paypal order fetch failed", orderId, res.status);
+      return null;
+    }
+    return await res.json();
+  } catch (e) {
+    console.error("paypal order fetch error", e);
+    return null;
+  }
+}
+
 async function resolveOrderId(admin: any, resource: any): Promise<string | undefined> {
   // Preferred: documented related_ids path for payment resources.
   const related = resource?.supplementary_data?.related_ids?.order_id;
   if (related) return related;
+
+  // Capture resources sometimes only carry the capture id — resolve via the
+  // purchases we recorded at capture time.
+  const captureId = resource?.id;
+  if (captureId && (resource?.status || resource?.amount || resource?.seller_receivable_breakdown)) {
+    const { data, error } = await admin.rpc("order_id_for_capture", { _capture_id: captureId });
+    if (error) throw new Error(`order_id_for_capture rpc failed: ${error.message}`);
+    if (data) return data as string;
+  }
 
   // Dispute resources: pull the disputed capture id from documented paths, then
   // resolve to an order id via the purchases we recorded at capture time.
@@ -46,7 +77,8 @@ async function resolveOrderId(admin: any, resource: any): Promise<string | undef
   for (const t of disputedTxns) {
     const cid = t?.seller_transaction_id ?? t?.capture_id;
     if (cid) {
-      const { data } = await admin.rpc("order_id_for_capture", { _capture_id: cid });
+      const { data, error } = await admin.rpc("order_id_for_capture", { _capture_id: cid });
+      if (error) throw new Error(`order_id_for_capture rpc failed: ${error.message}`);
       if (data) return data as string;
     }
   }
