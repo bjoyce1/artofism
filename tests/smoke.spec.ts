@@ -66,6 +66,22 @@ test.describe('mobile responsiveness (320px)', () => {
     expect(overflow.scrollW).toBeLessThanOrEqual(overflow.clientW + 1);
   });
 
+  test('acknowledgments "Mentors, Influence, and Foundation" heading fits within 320px viewport', async ({ page }) => {
+    await page.goto('/');
+    await page.evaluate(() => document.getElementById('acknowledgments')?.scrollIntoView());
+    const heading = page.getByRole('heading', { name: /mentors,\s*influence,\s*and\s*foundation/i });
+    await expect(heading).toBeVisible();
+    const box = await heading.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.x).toBeGreaterThanOrEqual(0);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(320);
+    const dims = await page.evaluate(() => ({
+      s: document.documentElement.scrollWidth,
+      c: document.documentElement.clientWidth,
+    }));
+    expect(dims.s).toBeLessThanOrEqual(dims.c);
+  });
+
   test('bottom mobile nav has exactly four primary actions', async ({ page }) => {
     await page.goto('/');
     // The mobile bottom bar is only visible on small screens; it is nav aria-label="Mobile".
