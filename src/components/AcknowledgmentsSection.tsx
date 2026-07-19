@@ -279,10 +279,10 @@ const GroupSection = ({ title, children, columns = 'grid-cols-1 sm:grid-cols-2' 
       transition={{ duration: 0.8, ease: 'easeOut' }}
       className="mb-16 sm:mb-20"
     >
-      <div className="flex items-center gap-4 mb-8">
-        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-        <h3 className="text-sm uppercase tracking-[0.2em] font-ui text-primary/80 whitespace-nowrap">{title}</h3>
-        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <div className="flex items-center gap-2 sm:gap-4 mb-8">
+        <div className="h-px flex-1 min-w-4 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+        <h3 className="text-xs sm:text-sm uppercase tracking-[0.15em] sm:tracking-[0.2em] font-ui text-primary/80 text-center whitespace-normal sm:whitespace-nowrap max-w-[75%] sm:max-w-none">{title}</h3>
+        <div className="h-px flex-1 min-w-4 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       </div>
       <div className={`grid ${columns} gap-3 sm:gap-4`}>{children}</div>
     </motion.div>
