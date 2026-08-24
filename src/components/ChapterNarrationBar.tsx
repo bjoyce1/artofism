@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Play, Pause, Mic, Volume2, VolumeX, Check, Gauge } from 'lucide-react';
+import { Play, Pause, Mic, Volume2, VolumeX, Check, Gauge, Highlighter } from 'lucide-react';
 import { useSectionAudio, NARRATION_SPEEDS } from '@/hooks/useSectionAudio';
 import {
   DropdownMenu,
@@ -26,7 +26,7 @@ const ChapterNarrationBar = ({ chapterNumber }: Props) => {
   const fileName = `chapter_${String(chapterNumber).padStart(2, '0')}.mp3`;
   const audioSrc = supabase.storage.from('audio').getPublicUrl(fileName).data.publicUrl;
 
-  const { currentSection, isPlaying, audioRef, currentTime, duration, playbackRate, setPlaybackRate, toggle } = useSectionAudio();
+  const { currentSection, isPlaying, audioRef, currentTime, duration, playbackRate, setPlaybackRate, followAlong, setFollowAlong, toggle } = useSectionAudio();
   const isActive = currentSection === sectionId;
   const playing = isActive && isPlaying;
 
