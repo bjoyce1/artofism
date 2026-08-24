@@ -72,4 +72,5 @@ export const NAMESPACED_KEYS = [
   'scroll-positions',
   'font-size',
   'narration-speed',
+  'narration-follow',
 ];
