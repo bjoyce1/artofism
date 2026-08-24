@@ -98,9 +98,11 @@ export const SectionAudioProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const audio = new Audio(src);
+    audio.playbackRate = playbackRate;
     audio.addEventListener('ended', handleEnded);
     audio.addEventListener('loadedmetadata', () => {
       setDuration(audio.duration);
+      audio.playbackRate = playbackRate;
     });
     audioRef.current = audio;
     setCurrentSection(sectionId);
@@ -108,14 +110,14 @@ export const SectionAudioProvider = ({ children }: { children: ReactNode }) => {
     audio.play();
     setIsPlaying(true);
     startRaf();
-  }, [currentSection, isPlaying, handleEnded, stopRaf, startRaf]);
+  }, [currentSection, isPlaying, handleEnded, stopRaf, startRaf, playbackRate]);
 
   useEffect(() => {
     return () => stopRaf();
   }, [stopRaf]);
 
   return (
-    <SectionAudioContext.Provider value={{ currentSection, isPlaying, audioRef, currentTime, duration, toggle }}>
+    <SectionAudioContext.Provider value={{ currentSection, isPlaying, audioRef, currentTime, duration, playbackRate, setPlaybackRate, toggle }}>
       {children}
     </SectionAudioContext.Provider>
   );
