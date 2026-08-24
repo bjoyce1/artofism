@@ -163,6 +163,20 @@ const ChapterNarrationBar = ({ chapterNumber }: Props) => {
         </DropdownMenu>
 
         <button
+          onClick={() => setFollowAlong(!followAlong)}
+          aria-label={followAlong ? 'Turn off follow-along highlighting' : 'Turn on follow-along highlighting'}
+          aria-pressed={followAlong}
+          title="Highlight the sentence being narrated"
+          className={`shrink-0 min-h-11 min-w-11 p-1.5 border rounded transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+            followAlong
+              ? 'border-primary text-primary bg-primary/10'
+              : 'border-border text-muted-foreground hover:text-primary hover:border-primary/50'
+          }`}
+        >
+          <Highlighter size={14} aria-hidden="true" />
+        </button>
+
+        <button
           onClick={() => setMuted((m) => !m)}
           aria-label={muted ? 'Unmute narration' : 'Mute narration'}
           aria-pressed={muted}
