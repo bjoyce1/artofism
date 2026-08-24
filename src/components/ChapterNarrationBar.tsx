@@ -1,13 +1,18 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Play, Pause, Mic, Volume2, VolumeX } from 'lucide-react';
-import { useSectionAudio } from '@/hooks/useSectionAudio';
+import { Play, Pause, Mic, Volume2, VolumeX, Check, Gauge } from 'lucide-react';
+import { useSectionAudio, NARRATION_SPEEDS } from '@/hooks/useSectionAudio';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Props {
   chapterNumber: number;
 }
-
-const SPEEDS = [1, 1.25, 1.5, 0.75];
 
 function formatTime(s: number) {
   if (!isFinite(s) || s < 0) return '0:00';
