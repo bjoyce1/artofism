@@ -1,4 +1,16 @@
 import { createContext, useContext, useRef, useState, useCallback, useEffect, ReactNode } from 'react';
+import { nsGet, nsSet } from '@/lib/userStorage';
+
+export const NARRATION_SPEEDS = [0.75, 1, 1.25, 1.5, 1.75, 2] as const;
+const DEFAULT_SPEED = 1;
+
+function readStoredSpeed(): number {
+  const raw = nsGet('narration-speed');
+  const parsed = raw ? Number(raw) : NaN;
+  return NARRATION_SPEEDS.includes(parsed as (typeof NARRATION_SPEEDS)[number])
+    ? parsed
+    : DEFAULT_SPEED;
+}
 
 interface SectionAudioContextType {
   currentSection: string | null;
@@ -6,6 +18,8 @@ interface SectionAudioContextType {
   audioRef: React.MutableRefObject<HTMLAudioElement | null>;
   currentTime: number;
   duration: number;
+  playbackRate: number;
+  setPlaybackRate: (rate: number) => void;
   toggle: (sectionId: string, src: string) => void;
 }
 
@@ -15,6 +29,8 @@ const SectionAudioContext = createContext<SectionAudioContextType>({
   audioRef: { current: null },
   currentTime: 0,
   duration: 0,
+  playbackRate: DEFAULT_SPEED,
+  setPlaybackRate: () => {},
   toggle: () => {},
 });
 
