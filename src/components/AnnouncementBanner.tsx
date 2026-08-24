@@ -68,11 +68,12 @@ const AnnouncementBanner = () => {
 
   return (
     <>
+      {/* Anchored to the bottom so it never collides with the fixed top nav. */}
       <div
         role="region"
         aria-label="Site announcement"
-        className="relative z-40 w-full border-b border-primary/30 bg-gradient-to-r from-deep-black via-[#12060a] to-deep-black"
-        style={{ paddingTop: 'env(safe-area-inset-top)' }}
+        className="fixed bottom-0 left-0 right-0 z-50 w-full border-t border-primary/30 bg-deep-black/95 backdrop-blur-md"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
         <div className="mx-auto flex max-w-5xl items-center gap-2 px-3 sm:px-6">
           <button
