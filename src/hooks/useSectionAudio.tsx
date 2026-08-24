@@ -40,7 +40,14 @@ export const SectionAudioProvider = ({ children }: { children: ReactNode }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [playbackRate, setRate] = useState<number>(() => readStoredSpeed());
   const rafRef = useRef<number | null>(null);
+
+  const setPlaybackRate = useCallback((rate: number) => {
+    setRate(rate);
+    nsSet('narration-speed', String(rate));
+    if (audioRef.current) audioRef.current.playbackRate = rate;
+  }, []);
 
   const stopRaf = useCallback(() => {
     if (rafRef.current !== null) {
