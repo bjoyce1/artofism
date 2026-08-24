@@ -24,6 +24,7 @@ const AnnouncementBanner = () => {
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const viewedRef = useRef<string | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     if (announcement && viewedRef.current !== announcement.id) {
@@ -78,6 +79,7 @@ const AnnouncementBanner = () => {
         <div className="mx-auto flex max-w-5xl items-center gap-2 px-3 sm:px-6">
           <button
             type="button"
+            ref={triggerRef}
             onClick={handleOpen}
             aria-label={`What's new: ${announcement.title}. Open details.`}
             className="flex min-h-[44px] flex-1 items-center gap-2 py-2 text-left text-primary transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
@@ -101,7 +103,15 @@ const AnnouncementBanner = () => {
         </div>
       </div>
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={open}
+        onOpenChange={(next) => {
+          setOpen(next);
+          // Focus is restored manually because the trigger lives outside the
+          // Dialog (the banner is fixed, the dialog is controlled).
+          if (!next) requestAnimationFrame(() => triggerRef.current?.focus());
+        }}
+      >
         <DialogContent className="max-w-lg border-primary/30 bg-card">
           <DialogHeader>
             <DialogTitle className="font-display text-2xl text-primary">
