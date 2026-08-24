@@ -71,4 +71,5 @@ export const NAMESPACED_KEYS = [
   'chapter-progress',
   'scroll-positions',
   'font-size',
+  'narration-speed',
 ];

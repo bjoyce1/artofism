@@ -1,13 +1,18 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Play, Pause, Mic, Volume2, VolumeX } from 'lucide-react';
-import { useSectionAudio } from '@/hooks/useSectionAudio';
+import { Play, Pause, Mic, Volume2, VolumeX, Check, Gauge } from 'lucide-react';
+import { useSectionAudio, NARRATION_SPEEDS } from '@/hooks/useSectionAudio';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Props {
   chapterNumber: number;
 }
-
-const SPEEDS = [1, 1.25, 1.5, 0.75];
 
 function formatTime(s: number) {
   if (!isFinite(s) || s < 0) return '0:00';
@@ -21,13 +26,12 @@ const ChapterNarrationBar = ({ chapterNumber }: Props) => {
   const fileName = `chapter_${String(chapterNumber).padStart(2, '0')}.mp3`;
   const audioSrc = supabase.storage.from('audio').getPublicUrl(fileName).data.publicUrl;
 
-  const { currentSection, isPlaying, audioRef, currentTime, duration, toggle } = useSectionAudio();
+  const { currentSection, isPlaying, audioRef, currentTime, duration, playbackRate, setPlaybackRate, toggle } = useSectionAudio();
   const isActive = currentSection === sectionId;
   const playing = isActive && isPlaying;
 
   const trackRef = useRef<HTMLDivElement>(null);
   const [missing, setMissing] = useState(false);
-  const [speedIdx, setSpeedIdx] = useState(0);
   const [muted, setMuted] = useState(false);
 
   useEffect(() => {
@@ -40,10 +44,10 @@ const ChapterNarrationBar = ({ chapterNumber }: Props) => {
 
   useEffect(() => {
     if (isActive && audioRef.current) {
-      audioRef.current.playbackRate = SPEEDS[speedIdx];
+      audioRef.current.playbackRate = playbackRate;
       audioRef.current.muted = muted;
     }
-  }, [isActive, speedIdx, muted, audioRef, playing]);
+  }, [isActive, playbackRate, muted, audioRef, playing]);
 
   const handleToggle = () => toggle(sectionId, audioSrc);
 
@@ -76,14 +80,12 @@ const ChapterNarrationBar = ({ chapterNumber }: Props) => {
     }
   }, [seekBy, seekToPct, duration]);
 
-  const cycleSpeed = () => setSpeedIdx((i) => (i + 1) % SPEEDS.length);
-
   if (missing) return null;
 
   const shownTime = isActive ? currentTime : 0;
   const shownDuration = isActive && duration ? duration : 0;
   const progress = shownDuration > 0 ? (shownTime / shownDuration) * 100 : 0;
-  const currentSpeed = SPEEDS[speedIdx];
+  const currentSpeed = playbackRate;
 
   return (
     <div className="w-full bg-card/80 backdrop-blur-md border-y border-border" role="region" aria-label="Chapter narration">
@@ -135,13 +137,30 @@ const ChapterNarrationBar = ({ chapterNumber }: Props) => {
           {formatTime(shownDuration)}
         </span>
 
-        <button
-          onClick={cycleSpeed}
-          aria-label={`Playback speed, currently ${currentSpeed} times. Activate to cycle.`}
-          className="shrink-0 min-h-11 px-2 py-1 border border-border rounded font-ui text-[11px] uppercase tracking-wider text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-        >
-          {currentSpeed}x
-        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            aria-label={`Narration speed, currently ${currentSpeed} times normal. Open speed menu.`}
+            className="shrink-0 min-h-11 min-w-11 px-2 py-1 flex items-center gap-1.5 border border-border rounded font-ui text-[11px] uppercase tracking-wider text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <Gauge size={13} aria-hidden="true" className="hidden sm:block" />
+            {currentSpeed}x
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="min-w-[9rem] bg-card border-border">
+            <DropdownMenuLabel className="font-ui text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+              Narration speed
+            </DropdownMenuLabel>
+            {NARRATION_SPEEDS.map((s) => (
+              <DropdownMenuItem
+                key={s}
+                onSelect={() => setPlaybackRate(s)}
+                className="font-ui text-sm tabular-nums cursor-pointer justify-between"
+              >
+                <span>{s}x{s === 1 ? ' (Normal)' : ''}</span>
+                {s === currentSpeed && <Check size={14} className="text-primary" aria-hidden="true" />}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <button
           onClick={() => setMuted((m) => !m)}

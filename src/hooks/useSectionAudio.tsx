@@ -1,4 +1,16 @@
 import { createContext, useContext, useRef, useState, useCallback, useEffect, ReactNode } from 'react';
+import { nsGet, nsSet } from '@/lib/userStorage';
+
+export const NARRATION_SPEEDS = [0.75, 1, 1.25, 1.5, 1.75, 2] as const;
+const DEFAULT_SPEED = 1;
+
+function readStoredSpeed(): number {
+  const raw = nsGet('narration-speed');
+  const parsed = raw ? Number(raw) : NaN;
+  return NARRATION_SPEEDS.includes(parsed as (typeof NARRATION_SPEEDS)[number])
+    ? parsed
+    : DEFAULT_SPEED;
+}
 
 interface SectionAudioContextType {
   currentSection: string | null;
@@ -6,6 +18,8 @@ interface SectionAudioContextType {
   audioRef: React.MutableRefObject<HTMLAudioElement | null>;
   currentTime: number;
   duration: number;
+  playbackRate: number;
+  setPlaybackRate: (rate: number) => void;
   toggle: (sectionId: string, src: string) => void;
 }
 
@@ -15,6 +29,8 @@ const SectionAudioContext = createContext<SectionAudioContextType>({
   audioRef: { current: null },
   currentTime: 0,
   duration: 0,
+  playbackRate: DEFAULT_SPEED,
+  setPlaybackRate: () => {},
   toggle: () => {},
 });
 
@@ -24,7 +40,14 @@ export const SectionAudioProvider = ({ children }: { children: ReactNode }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [playbackRate, setRate] = useState<number>(() => readStoredSpeed());
   const rafRef = useRef<number | null>(null);
+
+  const setPlaybackRate = useCallback((rate: number) => {
+    setRate(rate);
+    nsSet('narration-speed', String(rate));
+    if (audioRef.current) audioRef.current.playbackRate = rate;
+  }, []);
 
   const stopRaf = useCallback(() => {
     if (rafRef.current !== null) {
@@ -75,9 +98,11 @@ export const SectionAudioProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const audio = new Audio(src);
+    audio.playbackRate = playbackRate;
     audio.addEventListener('ended', handleEnded);
     audio.addEventListener('loadedmetadata', () => {
       setDuration(audio.duration);
+      audio.playbackRate = playbackRate;
     });
     audioRef.current = audio;
     setCurrentSection(sectionId);
@@ -85,14 +110,14 @@ export const SectionAudioProvider = ({ children }: { children: ReactNode }) => {
     audio.play();
     setIsPlaying(true);
     startRaf();
-  }, [currentSection, isPlaying, handleEnded, stopRaf, startRaf]);
+  }, [currentSection, isPlaying, handleEnded, stopRaf, startRaf, playbackRate]);
 
   useEffect(() => {
     return () => stopRaf();
   }, [stopRaf]);
 
   return (
-    <SectionAudioContext.Provider value={{ currentSection, isPlaying, audioRef, currentTime, duration, toggle }}>
+    <SectionAudioContext.Provider value={{ currentSection, isPlaying, audioRef, currentTime, duration, playbackRate, setPlaybackRate, toggle }}>
       {children}
     </SectionAudioContext.Provider>
   );
