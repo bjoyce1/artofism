@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { chapters } from '@/data/bookContent';
 import { chapterReadingMinutes } from '@/lib/bookStats';
@@ -28,6 +28,8 @@ import {
 } from 'lucide-react';
 import ChapterAudioPlayer from '@/components/ChapterAudioPlayer';
 import ChapterNarrationBar from '@/components/ChapterNarrationBar';
+import { useSectionAudio } from '@/hooks/useSectionAudio';
+import { activeUnitIndex, buildSyncUnits, unitsByParagraph } from '@/lib/narrationSync';
 
 const FONT_SIZE_KEY = 'ism-font-size';
 // Body text sizes from compact to extra large; index 1 is the original default.
@@ -69,6 +71,7 @@ const ChapterReader = () => {
   const [selection, setSelection] = useState<SelectionState | null>(null);
   const [selectionSaved, setSelectionSaved] = useState(false);
   const articleRef = useRef<HTMLDivElement>(null);
+  const { currentSection, isPlaying, currentTime, duration, followAlong } = useSectionAudio();
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
@@ -214,6 +217,31 @@ const ChapterReader = () => {
       return nextSize;
     });
   };
+
+  // Follow-along narration: highlight the sentence currently being read and
+  // keep it in view. Active only while this chapter's narration is playing.
+  const narrationActive = currentSection === `chapter-${chapterNum}-narration`;
+  const syncUnits = useMemo(
+    () => (chapter ? buildSyncUnits(chapter.content) : []),
+    [chapter]
+  );
+  const syncGroups = useMemo(() => unitsByParagraph(syncUnits), [syncUnits]);
+  const followActive = followAlong && narrationActive && duration > 0;
+  const activeUnit = followActive
+    ? activeUnitIndex(syncUnits, currentTime, duration)
+    : -1;
+
+  useEffect(() => {
+    if (!followActive || activeUnit < 0 || !isPlaying) return;
+    const el = document.querySelector<HTMLElement>(`[data-sync-unit="${activeUnit}"]`);
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    // Only scroll when the sentence has drifted out of the comfortable band.
+    if (rect.top > window.innerHeight * 0.75 || rect.bottom < window.innerHeight * 0.2) {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      el.scrollIntoView({ block: 'center', behavior: reduced ? 'auto' : 'smooth' });
+    }
+  }, [activeUnit, followActive, isPlaying]);
 
   if (!chapter || Number.isNaN(chapterNum)) {
     return (
@@ -474,10 +502,27 @@ const ChapterReader = () => {
                 );
               }
 
+              const group = syncGroups[i];
+
               return (
                 <AnimatedSection key={i} delay={i * 20}>
                   <p className={`${bodyFont} leading-[1.85] sm:leading-[1.9] text-foreground/90 whitespace-pre-line ${i === 0 ? 'drop-cap' : ''}`}>
-                    {p}
+                    {followActive && group
+                      ? group.map(({ index, unit }, s) => (
+                          <span
+                            key={index}
+                            data-sync-unit={index}
+                            className={
+                              index === activeUnit
+                                ? 'rounded bg-primary/15 text-foreground shadow-[inset_0_-2px_0_0_hsl(var(--primary))] transition-colors duration-200'
+                                : 'transition-colors duration-200'
+                            }
+                          >
+                            {s > 0 ? ' ' : ''}
+                            {unit.text}
+                          </span>
+                        ))
+                      : p}
                   </p>
                 </AnimatedSection>
               );
