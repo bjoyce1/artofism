@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Play, Pause, Mic, Volume2, VolumeX, Check, Gauge } from 'lucide-react';
+import { Play, Pause, Mic, Volume2, VolumeX, Check, Gauge, Highlighter } from 'lucide-react';
 import { useSectionAudio, NARRATION_SPEEDS } from '@/hooks/useSectionAudio';
 import {
   DropdownMenu,
@@ -26,7 +26,7 @@ const ChapterNarrationBar = ({ chapterNumber }: Props) => {
   const fileName = `chapter_${String(chapterNumber).padStart(2, '0')}.mp3`;
   const audioSrc = supabase.storage.from('audio').getPublicUrl(fileName).data.publicUrl;
 
-  const { currentSection, isPlaying, audioRef, currentTime, duration, playbackRate, setPlaybackRate, toggle } = useSectionAudio();
+  const { currentSection, isPlaying, audioRef, currentTime, duration, playbackRate, setPlaybackRate, followAlong, setFollowAlong, toggle } = useSectionAudio();
   const isActive = currentSection === sectionId;
   const playing = isActive && isPlaying;
 
@@ -161,6 +161,20 @@ const ChapterNarrationBar = ({ chapterNumber }: Props) => {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <button
+          onClick={() => setFollowAlong(!followAlong)}
+          aria-label={followAlong ? 'Turn off follow-along highlighting' : 'Turn on follow-along highlighting'}
+          aria-pressed={followAlong}
+          title="Highlight the sentence being narrated"
+          className={`shrink-0 min-h-11 min-w-11 p-1.5 border rounded transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+            followAlong
+              ? 'border-primary text-primary bg-primary/10'
+              : 'border-border text-muted-foreground hover:text-primary hover:border-primary/50'
+          }`}
+        >
+          <Highlighter size={14} aria-hidden="true" />
+        </button>
 
         <button
           onClick={() => setMuted((m) => !m)}

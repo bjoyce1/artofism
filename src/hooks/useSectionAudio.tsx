@@ -12,6 +12,10 @@ function readStoredSpeed(): number {
     : DEFAULT_SPEED;
 }
 
+function readStoredFollow(): boolean {
+  return nsGet('narration-follow') === '1';
+}
+
 interface SectionAudioContextType {
   currentSection: string | null;
   isPlaying: boolean;
@@ -20,6 +24,8 @@ interface SectionAudioContextType {
   duration: number;
   playbackRate: number;
   setPlaybackRate: (rate: number) => void;
+  followAlong: boolean;
+  setFollowAlong: (on: boolean) => void;
   toggle: (sectionId: string, src: string) => void;
 }
 
@@ -31,6 +37,8 @@ const SectionAudioContext = createContext<SectionAudioContextType>({
   duration: 0,
   playbackRate: DEFAULT_SPEED,
   setPlaybackRate: () => {},
+  followAlong: false,
+  setFollowAlong: () => {},
   toggle: () => {},
 });
 
@@ -41,7 +49,13 @@ export const SectionAudioProvider = ({ children }: { children: ReactNode }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playbackRate, setRate] = useState<number>(() => readStoredSpeed());
+  const [followAlong, setFollow] = useState<boolean>(() => readStoredFollow());
   const rafRef = useRef<number | null>(null);
+
+  const setFollowAlong = useCallback((on: boolean) => {
+    setFollow(on);
+    nsSet('narration-follow', on ? '1' : '0');
+  }, []);
 
   const setPlaybackRate = useCallback((rate: number) => {
     setRate(rate);
@@ -117,7 +131,7 @@ export const SectionAudioProvider = ({ children }: { children: ReactNode }) => {
   }, [stopRaf]);
 
   return (
-    <SectionAudioContext.Provider value={{ currentSection, isPlaying, audioRef, currentTime, duration, playbackRate, setPlaybackRate, toggle }}>
+    <SectionAudioContext.Provider value={{ currentSection, isPlaying, audioRef, currentTime, duration, playbackRate, setPlaybackRate, followAlong, setFollowAlong, toggle }}>
       {children}
     </SectionAudioContext.Provider>
   );
