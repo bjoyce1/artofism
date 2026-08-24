@@ -175,3 +175,69 @@ test.describe('accessibility', () => {
     await context.close();
   });
 });
+
+test.describe('announcement banner', () => {
+  const fake = [
+    {
+      id: '11111111-2222-3333-4444-555555555555',
+      title: 'Chapter narration is live',
+      body: 'Every chapter now has full narration.\n\nOpen your library to listen.',
+      link_label: 'Open the library',
+      link_url: '/library',
+      published_at: '2026-01-01T00:00:00Z',
+    },
+  ];
+
+  test('banner renders, opens dialog, closes on Escape, restores focus', async ({ page }) => {
+    // Stub the announcements read so the test is deterministic.
+    await page.route(/\/rest\/v1\/announcements.*/, async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        headers: { 'Access-Control-Allow-Origin': '*' },
+        body: JSON.stringify(fake[0]),
+      });
+    });
+
+    await page.goto('/');
+
+    const trigger = page.getByRole('button', { name: /what's new/i });
+    await expect(trigger).toBeVisible();
+
+    // Touch target height.
+    const box = await trigger.boundingBox();
+    expect(box!.height).toBeGreaterThanOrEqual(44);
+
+    await trigger.click();
+    const dialog = page.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByText(/narration/i).first()).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+
+    const focusedLabel = await page.evaluate(
+      () => document.activeElement?.getAttribute('aria-label') || '',
+    );
+    expect(focusedLabel.toLowerCase()).toContain("what's new");
+  });
+
+  test('banner does not cause horizontal overflow at 320px', async ({ page }) => {
+    await page.route(/\/rest\/v1\/announcements.*/, async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        headers: { 'Access-Control-Allow-Origin': '*' },
+        body: JSON.stringify(fake[0]),
+      });
+    });
+    await page.setViewportSize({ width: 320, height: 800 });
+    await page.goto('/');
+    await expect(page.getByRole('button', { name: /what's new/i })).toBeVisible();
+    const { scrollWidth, clientWidth } = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }));
+    expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
+  });
+});

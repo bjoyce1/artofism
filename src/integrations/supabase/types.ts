@@ -38,6 +38,68 @@ export type Database = {
         }
         Relationships: []
       }
+      announcement_dismissals: {
+        Row: {
+          announcement_id: string
+          dismissed_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          announcement_id: string
+          dismissed_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          announcement_id?: string
+          dismissed_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "announcement_dismissals_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "announcements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      announcements: {
+        Row: {
+          active: boolean
+          body: string
+          created_at: string
+          id: string
+          link_label: string | null
+          link_url: string | null
+          published_at: string
+          title: string
+        }
+        Insert: {
+          active?: boolean
+          body: string
+          created_at?: string
+          id?: string
+          link_label?: string | null
+          link_url?: string | null
+          published_at?: string
+          title: string
+        }
+        Update: {
+          active?: boolean
+          body?: string
+          created_at?: string
+          id?: string
+          link_label?: string | null
+          link_url?: string | null
+          published_at?: string
+          title?: string
+        }
+        Relationships: []
+      }
       chapter_narration: {
         Row: {
           char_count: number | null

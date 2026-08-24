@@ -11,6 +11,7 @@ import { SectionAudioProvider } from "@/hooks/useSectionAudio";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import GatedChapter from "@/components/GatedChapter";
 import ScrollToHash from "@/components/ScrollToHash";
+import AnnouncementBanner from "@/components/AnnouncementBanner";
 
 // Landing page stays eager — it's what 100% of first-time visitors see.
 import Index from "./pages/Index.tsx";
@@ -58,6 +59,7 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <ScrollToHash />
+              <AnnouncementBanner />
               <Suspense fallback={<RouteFallback />}>
                 <Routes>
                   <Route path="/" element={<Index />} />
