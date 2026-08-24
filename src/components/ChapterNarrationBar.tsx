@@ -26,13 +26,12 @@ const ChapterNarrationBar = ({ chapterNumber }: Props) => {
   const fileName = `chapter_${String(chapterNumber).padStart(2, '0')}.mp3`;
   const audioSrc = supabase.storage.from('audio').getPublicUrl(fileName).data.publicUrl;
 
-  const { currentSection, isPlaying, audioRef, currentTime, duration, toggle } = useSectionAudio();
+  const { currentSection, isPlaying, audioRef, currentTime, duration, playbackRate, setPlaybackRate, toggle } = useSectionAudio();
   const isActive = currentSection === sectionId;
   const playing = isActive && isPlaying;
 
   const trackRef = useRef<HTMLDivElement>(null);
   const [missing, setMissing] = useState(false);
-  const [speedIdx, setSpeedIdx] = useState(0);
   const [muted, setMuted] = useState(false);
 
   useEffect(() => {
@@ -45,10 +44,10 @@ const ChapterNarrationBar = ({ chapterNumber }: Props) => {
 
   useEffect(() => {
     if (isActive && audioRef.current) {
-      audioRef.current.playbackRate = SPEEDS[speedIdx];
+      audioRef.current.playbackRate = playbackRate;
       audioRef.current.muted = muted;
     }
-  }, [isActive, speedIdx, muted, audioRef, playing]);
+  }, [isActive, playbackRate, muted, audioRef, playing]);
 
   const handleToggle = () => toggle(sectionId, audioSrc);
 
