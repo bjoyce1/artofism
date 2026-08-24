@@ -137,13 +137,30 @@ const ChapterNarrationBar = ({ chapterNumber }: Props) => {
           {formatTime(shownDuration)}
         </span>
 
-        <button
-          onClick={cycleSpeed}
-          aria-label={`Playback speed, currently ${currentSpeed} times. Activate to cycle.`}
-          className="shrink-0 min-h-11 px-2 py-1 border border-border rounded font-ui text-[11px] uppercase tracking-wider text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-        >
-          {currentSpeed}x
-        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            aria-label={`Narration speed, currently ${currentSpeed} times normal. Open speed menu.`}
+            className="shrink-0 min-h-11 min-w-11 px-2 py-1 flex items-center gap-1.5 border border-border rounded font-ui text-[11px] uppercase tracking-wider text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <Gauge size={13} aria-hidden="true" className="hidden sm:block" />
+            {currentSpeed}x
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="min-w-[9rem] bg-card border-border">
+            <DropdownMenuLabel className="font-ui text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+              Narration speed
+            </DropdownMenuLabel>
+            {NARRATION_SPEEDS.map((s) => (
+              <DropdownMenuItem
+                key={s}
+                onSelect={() => setPlaybackRate(s)}
+                className="font-ui text-sm tabular-nums cursor-pointer justify-between"
+              >
+                <span>{s}x{s === 1 ? ' (Normal)' : ''}</span>
+                {s === currentSpeed && <Check size={14} className="text-primary" aria-hidden="true" />}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <button
           onClick={() => setMuted((m) => !m)}
