@@ -80,14 +80,12 @@ const ChapterNarrationBar = ({ chapterNumber }: Props) => {
     }
   }, [seekBy, seekToPct, duration]);
 
-  const cycleSpeed = () => setSpeedIdx((i) => (i + 1) % SPEEDS.length);
-
   if (missing) return null;
 
   const shownTime = isActive ? currentTime : 0;
   const shownDuration = isActive && duration ? duration : 0;
   const progress = shownDuration > 0 ? (shownTime / shownDuration) * 100 : 0;
-  const currentSpeed = SPEEDS[speedIdx];
+  const currentSpeed = playbackRate;
 
   return (
     <div className="w-full bg-card/80 backdrop-blur-md border-y border-border" role="region" aria-label="Chapter narration">
