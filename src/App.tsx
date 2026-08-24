@@ -31,6 +31,7 @@ const Refund = lazy(() => import("./pages/Refund.tsx"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe.tsx"));
 const Vault = lazy(() => import("./pages/Vault.tsx"));
 const Mint = lazy(() => import("./pages/Mint.tsx"));
+const AnnouncementPreview = lazy(() => import("./pages/AnnouncementPreview.tsx"));
 
 const queryClient = new QueryClient();
 
@@ -97,6 +98,8 @@ const App = () => (
                   <Route path="/unsubscribe" element={<Unsubscribe />} />
                   <Route path="/vault" element={<Vault />} />
                   <Route path="/mint" element={<Mint />} />
+                  <Route path="/announcement-preview" element={<AnnouncementPreview />} />
+
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
