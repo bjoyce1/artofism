@@ -52,7 +52,7 @@ const RouteFallback = () => (
 
 const App = () => (
   <HelmetProvider>
-    <MotionConfig reducedMotion="user">
+    <MotionConfig reducedMotion="user" transition={{ duration: 0.4, ease: 'easeOut' }}>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <AuthProvider>

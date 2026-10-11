@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, Volume2, VolumeX, Music } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import albumArt from '@/assets/album-art.webp';
+import { Button } from '@/components/ui/button';
+
+const MotionButton = motion(Button);
 
 const CHAPTER_SONGS: Record<number, { file: string; title: string }> = {
   1:  { file: '1. 16 LETTER.wav',                title: '16 Letter' },
@@ -126,18 +129,20 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
       {/* Collapsed mini-toggle */}
       <AnimatePresence>
         {!expanded && (
-          <motion.button
+          <MotionButton variant="ghost"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => setExpanded(true)}
-            className="fixed bottom-20 sm:bottom-6 left-4 sm:left-6 z-50 flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 bg-card/90 backdrop-blur-lg border border-primary/30 rounded-full text-xs uppercase tracking-[0.12em] text-primary hover:border-primary/60 transition-all shadow-lg shadow-primary/20"
+            transition={{ duration: 0.3 }}
+            aria-label={`Open ${song.title} audio player`}
+            className="reader-control fixed bottom-20 sm:bottom-6 left-3 sm:left-6 z-50 flex items-center gap-1.5 pl-1.5 pr-2 sm:pr-4 text-[11px] uppercase tracking-[0.04em] hover:border-primary/60"
             style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}
           >
-            <img src={albumArt} alt="The Art of ISM" className="w-8 h-8 rounded-full object-cover shadow-md shadow-primary/30" />
-            <Music size={12} className="shrink-0" />
-            <span className="truncate max-w-[120px] sm:max-w-none">{song.title}</span>
-          </motion.button>
+            <img src={albumArt} alt="" className="w-7 h-7 rounded-full object-cover" />
+            <Music size={12} className="hidden sm:block shrink-0" />
+            <span className="truncate max-w-[60px] sm:max-w-none">{song.title}</span>
+          </MotionButton>
         )}
       </AnimatePresence>
 
@@ -145,10 +150,10 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
       <AnimatePresence>
         {expanded && (
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 40 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            exit={{ opacity: 0, y: 12 }}
+            transition={{ duration: 0.3 }}
             className="fixed bottom-20 sm:bottom-6 left-4 right-4 sm:left-6 sm:right-auto sm:w-[420px] z-50 bg-card/95 backdrop-blur-xl border border-primary/20 rounded-2xl sm:rounded-xl p-4 shadow-2xl shadow-primary/15"
             style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}
           >
