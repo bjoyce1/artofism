@@ -23,6 +23,9 @@ const Footer = () => {
         </div>
 
         <div className="flex flex-wrap gap-6 border-t border-border pt-8 mb-8">
+          <Link to="/acknowledgments" className="text-muted-foreground text-sm hover:text-primary transition-colors">
+            Acknowledgments
+          </Link>
           <Link to="/privacy" className="text-muted-foreground text-sm hover:text-primary transition-colors">
             Privacy Policy
           </Link>

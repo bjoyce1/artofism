@@ -5,14 +5,14 @@ import coverArt from '@/assets/art_of_ism_book_3.webp';
 
 const AboutAuthorSection = () => {
   return (
-    <section id="about" className="relative py-32 px-6">
+    <section id="about" className="relative py-16 md:py-24 px-6">
       <div className="absolute inset-0 bg-gradient-to-b from-deep-black via-smoke/50 to-deep-black pointer-events-none" />
 
       <div className="relative max-w-5xl mx-auto">
         <AnimatedSection>
           <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4 text-center">The Author</p>
           <SectionAudioButton sectionId="about-mrcap" fileName="about-mrcap.mp3" className="mx-auto mb-6" />
-          <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-16">
+          <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-10">
             About <span className="text-gold-gradient">Mr. CAP</span>
           </h2>
         </AnimatedSection>
@@ -32,18 +32,18 @@ const AboutAuthorSection = () => {
             </div>
           </AnimatedSection>
 
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <AnimatedSection delay={300}>
-              <p className="text-lg leading-[1.9] text-foreground/90">{aboutAuthor.bio}</p>
+              <p className="text-base md:text-lg leading-[1.8] text-foreground/90">{aboutAuthor.bio}</p>
             </AnimatedSection>
             <AnimatedSection delay={400}>
-              <p className="text-lg leading-[1.9] text-foreground/90">{aboutAuthor.extended}</p>
+              <p className="text-base md:text-lg leading-[1.8] text-foreground/90">{aboutAuthor.extended}</p>
             </AnimatedSection>
             <AnimatedSection delay={500}>
-              <p className="text-lg leading-[1.9] text-foreground/90">{aboutAuthor.lineage}</p>
+              <p className="text-base md:text-lg leading-[1.8] text-foreground/90">{aboutAuthor.lineage}</p>
             </AnimatedSection>
             <AnimatedSection delay={600}>
-              <p className="text-lg leading-[1.9] text-foreground/90">{aboutAuthor.bookDescription}</p>
+              <p className="text-base md:text-lg leading-[1.8] text-foreground/90">{aboutAuthor.bookDescription}</p>
             </AnimatedSection>
             <AnimatedSection delay={700}>
               <p className="text-base text-muted-foreground">{aboutAuthor.location}</p>
@@ -59,11 +59,6 @@ const AboutAuthorSection = () => {
                   mrcap1.com
                 </a>
               </div>
-            </AnimatedSection>
-            <AnimatedSection delay={900}>
-              <p className="font-display text-2xl text-gold-gradient font-bold mt-8">
-                {aboutAuthor.closing}
-              </p>
             </AnimatedSection>
           </div>
         </div>
