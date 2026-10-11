@@ -32,12 +32,12 @@ const FinalCTA = () => {
             >
               Get Full Access — $9.99
             </Link>
-            <a
-              href="#introduction"
+            <Link
+              to="/chapter/1"
               className="gold-dust px-8 py-3 border border-primary/40 text-primary text-sm uppercase tracking-[0.2em] rounded-full hover:bg-primary/10 transition-all duration-300"
             >
-              Read the Free Preview
-            </a>
+              Read Chapter 1 Free
+            </Link>
           </div>
         </AnimatedSection>
 

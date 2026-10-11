@@ -174,9 +174,6 @@ const FloatingNav = () => {
               className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors duration-300"
             >
               <Search size={16} strokeWidth={1.5} />
-              <kbd className="hidden xl:inline font-ui text-[10px] tracking-widest border border-border rounded px-1.5 py-0.5">
-                ⌘K
-              </kbd>
             </button>
             {user && hasAccess ? (
               <Link to="/library" className="text-[15px] uppercase tracking-[0.2em] text-primary hover:text-primary/80 transition-colors duration-300">

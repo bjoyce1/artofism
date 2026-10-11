@@ -211,7 +211,7 @@ const Unlock = () => {
           <AnimatedSection delay={300}>
             <div className="text-center mt-12">
               <Link to="/chapter/1" className="text-primary hover:underline font-display text-sm">
-                Read the Free Preview →
+                Read Chapter 1 Free
               </Link>
             </div>
           </AnimatedSection>
