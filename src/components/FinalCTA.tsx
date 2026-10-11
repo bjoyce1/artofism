@@ -4,7 +4,7 @@ import { trackEvent } from '@/lib/analytics';
 
 const FinalCTA = () => {
   return (
-    <section className="relative py-32 px-6">
+    <section className="relative py-16 md:py-24 px-6">
       <div className="absolute inset-0 bg-gradient-to-b from-deep-black via-smoke to-deep-black pointer-events-none" />
       <div
         className="absolute inset-0 opacity-20 pointer-events-none"

@@ -1,3 +1,5 @@
+import { codeTitle } from '@/lib/codeTitle';
+
 export interface Chapter {
   number: number;
   title: string;
@@ -755,7 +757,7 @@ export const standoutQuotes = [
 
 export const allCodes = chapters.map(ch => ({
   chapterNumber: ch.number,
-  title: ch.code.title,
+  title: codeTitle(ch.code.title),
   principles: ch.code.principles,
   closing: ch.code.closing,
 }));

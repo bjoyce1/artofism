@@ -2,6 +2,7 @@ import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { chapters } from '@/data/bookContent';
+import { codeTitle } from '@/lib/codeTitle';
 import { chapterReadingMinutes } from '@/lib/bookStats';
 import { useReadingProgress, useFavorites } from '@/hooks/useReadingProgress';
 import { trackEvent } from '@/lib/analytics';
@@ -532,7 +533,7 @@ const ChapterReader = () => {
           {/* Code section */}
           <AnimatedSection delay={200}>
             <div className="mt-16 sm:mt-24 pt-12 sm:pt-16 border-t border-border">
-              <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4">{chapter.code.title}</p>
+              <p className="font-ui text-xs tracking-[0.2em] text-primary mb-4">{codeTitle(chapter.code.title)}</p>
               <div className="grid gap-3 sm:gap-4 mt-6 sm:mt-8">
                 {chapter.code.principles.map((principle, i) => (
                   <div

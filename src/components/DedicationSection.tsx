@@ -4,7 +4,7 @@ import SectionAudioButton from '@/components/SectionAudioButton';
 
 const DedicationSection = () => {
   return (
-    <section className="relative py-24 px-6">
+    <section className="relative py-16 md:py-24 px-6">
       <div className="absolute inset-0 bg-gradient-to-b from-deep-black via-smoke/30 to-deep-black pointer-events-none" />
 
       <div className="relative max-w-2xl mx-auto text-center">

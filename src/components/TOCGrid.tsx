@@ -20,7 +20,7 @@ const TOCGrid = () => {
       : undefined;
 
   return (
-    <section id="chapters" className="relative py-32 px-6">
+    <section id="chapters" className="relative py-16 md:py-24 px-6">
       <div className="absolute inset-0 bg-gradient-to-b from-deep-black via-smoke to-deep-black pointer-events-none" />
 
       <div className="relative max-w-6xl mx-auto">
@@ -29,7 +29,7 @@ const TOCGrid = () => {
           <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-4">
             Table of <span className="text-gold-gradient">Contents</span>
           </h2>
-          <p className="flex items-center justify-center gap-2 text-sm text-muted-foreground text-center mb-16">
+          <p className="flex items-center justify-center gap-2 text-sm text-muted-foreground text-center mb-10">
             <Volume2 size={16} className="text-primary shrink-0" aria-hidden="true" />
             All 11 chapters narrated by Mr. CAP.
           </p>
@@ -57,7 +57,7 @@ const TOCGrid = () => {
           </AnimatedSection>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {chapters.map((chapter, i) => {
             const percent = chapterProgress[chapter.number.toString()] ?? 0;
             const isComplete = percent >= COMPLETE_THRESHOLD;
@@ -66,7 +66,7 @@ const TOCGrid = () => {
               <AnimatedSection key={chapter.number} delay={i * 80}>
                 <Link
                   to={`/chapter/${chapter.number}`}
-                  className="gold-dust group block relative p-6 bg-card border border-border rounded-sm overflow-hidden transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_30px_hsl(355_100%_24%/0.2),inset_0_0_30px_hsl(355_100%_24%/0.05)]"
+                  className="gold-dust group block relative p-5 md:p-6 bg-card border border-border rounded-sm overflow-hidden transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_30px_hsl(355_100%_24%/0.2),inset_0_0_30px_hsl(355_100%_24%/0.05)]"
                 >
                   {/* Chapter number watermark */}
                   <span className="absolute top-2 right-4 font-display text-7xl font-bold text-foreground/[0.03] leading-none select-none">

@@ -1,4 +1,5 @@
 import { chapters, introduction } from '@/data/bookContent';
+import { codeTitle } from '@/lib/codeTitle';
 
 export interface SearchEntry {
   id: string;
@@ -55,7 +56,7 @@ export const searchIndex: SearchEntry[] = (() => {
         id: `ch-${ch.number}-code-${i}`,
         path: `/chapter/${ch.number}`,
         chapter: ch.number,
-        chapterTitle: ch.title,
+        chapterTitle: `${ch.title} · ${codeTitle(ch.code.title)}`,
         kind: 'principle',
         text: snippet(p),
       });
