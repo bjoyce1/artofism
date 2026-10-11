@@ -9,9 +9,9 @@ const links = [
 
 const Footer = () => {
   return (
-    <footer className="border-t border-border bg-deep-black py-8 md:py-12 px-6 text-center md:text-left">
+    <footer className="border-t border-border bg-deep-black py-6 md:py-12 px-6 text-center md:text-left">
       <div className="max-w-6xl mx-auto">
-        <div className="grid md:grid-cols-[1.2fr_1fr_1fr] gap-6 md:gap-12 mb-6">
+        <div className="grid md:grid-cols-[1.2fr_1fr_1fr] gap-3 md:gap-12 mb-3 md:mb-6">
           <div className="space-y-3">
             <Link to="/" className="inline-flex min-h-11" aria-label="The Art of ISM home"><img src={ismLogo} alt="The Art of ISM" className="w-28 h-auto" /></Link>
             <p className="text-foreground/85 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">

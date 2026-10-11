@@ -10,13 +10,13 @@ const DedicationSection = () => {
       <div className="relative max-w-2xl mx-auto text-center">
         <AnimatedSection>
           <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mb-8" />
-          <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-8">Dedication</p>
-          <SectionAudioButton sectionId="dedication" fileName="01_dedication.mp3" />
+          <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-3">Dedication</p>
+          <SectionAudioButton sectionId="dedication" fileName="01_dedication.mp3" className="mb-3" />
         </AnimatedSection>
 
         {dedication.text.map((line, i) => (
           <AnimatedSection key={i} delay={100 + i * 100}>
-            <p className={`font-display text-lg leading-relaxed text-foreground/85 mb-4 italic ${
+            <p className={`font-display text-lg leading-relaxed text-foreground/85 mb-2 md:mb-4 italic ${
               i === dedication.text.length - 1 ? 'not-italic font-semibold text-primary mt-8 text-xl' : ''
             }`}>
               {line}

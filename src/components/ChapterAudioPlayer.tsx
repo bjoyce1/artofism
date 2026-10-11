@@ -136,7 +136,7 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
             onClick={() => setExpanded(true)}
             transition={{ duration: 0.3 }}
             aria-label={`Open ${song.title} audio player`}
-            className="reader-control fixed bottom-20 sm:bottom-6 left-3 sm:left-6 z-50 flex items-center gap-1.5 pl-1.5 pr-2 sm:pr-4 text-[11px] uppercase tracking-[0.04em] hover:border-primary/60"
+            className="reader-control fixed bottom-6 left-3 sm:left-6 z-50 flex items-center gap-1.5 pl-1.5 pr-2 sm:pr-4 text-[11px] uppercase tracking-[0.04em] hover:border-primary/60"
             style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}
           >
             <img src={albumArt} alt="" className="w-7 h-7 rounded-full object-cover" />

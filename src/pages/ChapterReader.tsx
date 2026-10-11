@@ -360,8 +360,9 @@ const ChapterReader = () => {
       )}
 
       {/* Reader controls: font size + reading mode */}
+      <div aria-hidden="true" className="fixed bottom-0 inset-x-0 h-[calc(84px+env(safe-area-inset-bottom))] bg-background border-t border-border z-40 sm:hidden" />
       <div
-        className="fixed z-50 font-ui right-3 sm:right-6 bottom-20 sm:bottom-6 flex items-center gap-2"
+        className="fixed z-50 font-ui right-3 sm:right-6 bottom-6 flex items-center gap-2"
         style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}
       >
         <div className="reader-control flex items-center">

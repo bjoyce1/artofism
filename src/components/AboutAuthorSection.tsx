@@ -17,7 +17,7 @@ const AboutAuthorSection = () => {
           <div className="text-center mb-10"><SectionAudioButton sectionId="about-mrcap" fileName="about-mrcap.mp3" /></div>
         </AnimatedSection>
 
-        <div className="grid md:grid-cols-2 gap-12 items-start">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-start">
           <AnimatedSection delay={200}>
             <div className="relative">
               <img
@@ -49,7 +49,7 @@ const AboutAuthorSection = () => {
               <p className="text-base text-muted-foreground">{aboutAuthor.location}</p>
             </AnimatedSection>
             <AnimatedSection delay={800}>
-              <div className="flex gap-4 mt-8 font-ui">
+              <div className="flex gap-4 mt-4 md:mt-8 font-ui">
                 <a
                   href={aboutAuthor.website}
                   target="_blank"
