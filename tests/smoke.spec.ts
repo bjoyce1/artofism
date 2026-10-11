@@ -7,7 +7,7 @@ test.describe('public smoke', () => {
   test('landing renders hero H1 and primary CTAs', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('h1')).toHaveCount(1);
-    await expect(page.getByRole('link', { name: /begin free chapter/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /read chapter 1 free/i }).first()).toBeVisible();
     await expect(page.getByRole('link', { name: /unlock full book/i })).toBeVisible();
   });
 
@@ -73,8 +73,9 @@ test.describe('mobile responsiveness (320px)', () => {
     await expect(heading).toBeVisible();
     const box = await heading.boundingBox();
     expect(box).not.toBeNull();
-    expect(box!.x).toBeGreaterThanOrEqual(0);
-    expect(box!.x + box!.width).toBeLessThanOrEqual(320);
+    if (!box) throw new Error('Acknowledgments heading has no bounds');
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(320);
     const dims = await page.evaluate(() => ({
       s: document.documentElement.scrollWidth,
       c: document.documentElement.clientWidth,
@@ -82,19 +83,13 @@ test.describe('mobile responsiveness (320px)', () => {
     expect(dims.s).toBeLessThanOrEqual(dims.c);
   });
 
-  test('bottom mobile nav has exactly four primary actions', async ({ page }) => {
+  test('mobile hamburger exposes the navigation links', async ({ page }) => {
     await page.goto('/');
-    // The mobile bottom bar is only visible on small screens; it is nav aria-label="Mobile".
-    const bottomNav = page.locator('nav[aria-label="Mobile" i], nav[data-mobile-nav]').first();
-    // Fall back: the last <nav> element visible at 320px is the bottom bar.
-    const nav = (await bottomNav.count()) ? bottomNav : page.getByRole('navigation').last();
-    await expect(nav).toBeVisible();
-    const actionable = nav.locator('a, button').filter({ has: page.locator(':scope') });
-    // Filter to visible items only.
-    const count = await actionable.evaluateAll((els) =>
-      els.filter((el) => (el as HTMLElement).offsetParent !== null).length,
-    );
-    expect(count).toBe(4);
+    await page.getByRole('button', { name: 'Open menu' }).click();
+    const menu = page.getByRole('dialog');
+    await expect(menu.getByRole('link', { name: 'Codes', exact: true })).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeHidden();
   });
 });
 
@@ -206,7 +201,8 @@ test.describe('announcement banner', () => {
 
     // Touch target height.
     const box = await trigger.boundingBox();
-    expect(box!.height).toBeGreaterThanOrEqual(44);
+    if (!box) throw new Error('Announcement trigger has no bounds');
+    expect(box.height).toBeGreaterThanOrEqual(44);
 
     await trigger.click();
     const dialog = page.getByRole('dialog');

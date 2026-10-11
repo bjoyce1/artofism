@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import { allCodes } from '@/data/bookContent';
+import { codePreviewTitles } from '@/lib/codePreview';
+import { useAuth } from '@/hooks/useAuth';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import { useFavorites } from '@/hooks/useReadingProgress';
 import FloatingNav from '@/components/FloatingNav';
 import SEO from '@/components/SEO';
 import AnimatedSection from '@/components/AnimatedSection';
-import { Heart, Copy, Check, ChevronDown, ChevronUp } from 'lucide-react';
+import { Heart, Copy, Check, ChevronDown, ChevronUp, Lock } from 'lucide-react';
 
 const CodesHub = () => {
+  const { hasAccess } = useAuth();
   const [expandedCode, setExpandedCode] = useState<number | null>(null);
   const { toggleFavorite, isFavorite } = useFavorites();
   const [copiedText, setCopiedText] = useState<string | null>(null);
@@ -34,6 +39,25 @@ const CodesHub = () => {
             </p>
           </AnimatedSection>
 
+          {!hasAccess ? (
+            <>
+              <ul className="divide-y divide-border">
+                {codePreviewTitles.map(code => (
+                  <li key={code.chapterNumber} className="flex items-center justify-between gap-4 py-5">
+                    <h2 className="font-display text-xl text-foreground">{code.title}</h2>
+                    <Lock size={16} className="text-muted-foreground shrink-0" aria-label="Full access required" />
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-12 border-t border-primary/20 pt-8 text-center">
+                <p className="font-display text-xl text-foreground mb-6">Unlock all 10 Codes with the full book — $9.99</p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <Button asChild size="lg"><Link to="/unlock">Unlock Full Book — $9.99</Link></Button>
+                  <Button asChild variant="link" size="lg"><Link to="/chapter/1">Read Chapter 1 Free</Link></Button>
+                </div>
+              </div>
+            </>
+          ) : (
           <div className="space-y-4">
             {allCodes.map((code, i) => {
               const isExpanded = expandedCode === i;
@@ -100,6 +124,7 @@ const CodesHub = () => {
               );
             })}
           </div>
+          )}
         </div>
       </div>
     </div>
