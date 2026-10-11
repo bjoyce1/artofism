@@ -10,14 +10,14 @@ const AboutAuthorSection = () => {
 
       <div className="relative max-w-5xl mx-auto">
         <AnimatedSection>
-          <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4 text-center">The Author</p>
-          <SectionAudioButton sectionId="about-mrcap" fileName="about-mrcap.mp3" className="mx-auto mb-6" />
-          <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-10">
+          <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-4 text-center">The Author</p>
+          <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-4">
             About <span className="text-gold-gradient">Mr. CAP</span>
           </h2>
+          <div className="text-center mb-10"><SectionAudioButton sectionId="about-mrcap" fileName="about-mrcap.mp3" /></div>
         </AnimatedSection>
 
-        <div className="grid md:grid-cols-2 gap-12 items-start">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-start">
           <AnimatedSection delay={200}>
             <div className="relative">
               <img
@@ -49,7 +49,7 @@ const AboutAuthorSection = () => {
               <p className="text-base text-muted-foreground">{aboutAuthor.location}</p>
             </AnimatedSection>
             <AnimatedSection delay={800}>
-              <div className="flex gap-4 mt-8 font-ui">
+              <div className="flex gap-4 mt-4 md:mt-8 font-ui">
                 <a
                   href={aboutAuthor.website}
                   target="_blank"

@@ -24,7 +24,7 @@ const FinalCTA = () => {
         </AnimatedSection>
 
         <AnimatedSection delay={200}>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center font-ui mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center font-ui mb-8 md:mb-12">
             <Link
               to="/unlock"
               onClick={() => trackEvent('get_book_click')}

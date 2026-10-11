@@ -12,7 +12,7 @@ const AcknowledgmentsPreview = () => (
       <p className="text-xs sm:text-sm text-muted-foreground">This section honors those who were part of the journey.</p>
       <AcknowledgmentNames names={[...mentors, ...circle, 'Mr. CAP International']} />
       <div>
-        <p className="font-ui text-[10px] text-muted-foreground mb-1">In memory</p>
+        <p className="font-ui text-[11px] text-muted-foreground mb-1">In memory</p>
         <AcknowledgmentNames names={legacy} />
       </div>
       <div className="flex flex-col items-center gap-1">

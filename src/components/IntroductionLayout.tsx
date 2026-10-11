@@ -32,10 +32,10 @@ const IntroductionLayout = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-deep-black via-smoke/50 to-deep-black pointer-events-none" />
       <div className="relative max-w-3xl mx-auto">
         <AnimatedSection>
-          <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4">Introduction</p>
-          <div className="flex items-center gap-3 mb-8">
+          <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-4">Introduction</p>
+          <div className="mb-8">
             <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-foreground">Enter the <span className="text-gold-gradient">ISM</span></h2>
-            <SectionAudioButton sectionId="introduction" fileName="02_introduction.mp3" />
+            <SectionAudioButton sectionId="introduction" fileName="02_introduction.mp3" className="mt-4" />
           </div>
           <blockquote className="border-l-2 border-primary pl-6 mb-8">
             <p className="font-display text-2xl sm:text-3xl italic text-primary leading-relaxed">"If you don't define your mindset, the world will define it for you."</p>

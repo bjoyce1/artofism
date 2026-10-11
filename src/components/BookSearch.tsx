@@ -94,7 +94,7 @@ const BookSearch = ({ open, onOpenChange }: BookSearchProps) => {
                   <div className="min-w-0 ml-2">
                     <p className="truncate text-foreground/90">{entry.text}</p>
                     {entry.kind !== 'chapter' && (
-                       <p className="font-ui text-[10px] text-muted-foreground mt-0.5">
+                       <p className="font-ui text-[11px] text-muted-foreground mt-0.5">
                         {entry.chapter === 0 ? 'Introduction' : `Chapter ${entry.chapter} · ${entry.chapterTitle}`}
                       </p>
                     )}

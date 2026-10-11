@@ -25,7 +25,7 @@ const TOCGrid = () => {
 
       <div className="relative max-w-6xl mx-auto">
         <AnimatedSection>
-          <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4 text-center">The Chapters</p>
+          <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-4 text-center">The Chapters</p>
           <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-4">
             Table of <span className="text-gold-gradient">Contents</span>
           </h2>
@@ -42,7 +42,7 @@ const TOCGrid = () => {
               className="group flex items-center justify-between max-w-xl mx-auto mb-12 p-5 bg-card border border-primary/30 rounded-sm hover:border-primary/50 transition-colors"
             >
               <div>
-                <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary mb-1">Continue Reading</p>
+                <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-1">Continue Reading</p>
                 <p className="font-display text-lg text-foreground group-hover:text-primary transition-colors">
                   Chapter {continueChapter.number}: {continueChapter.title}
                 </p>
@@ -57,7 +57,7 @@ const TOCGrid = () => {
           </AnimatedSection>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
           {chapters.map((chapter, i) => {
             const percent = chapterProgress[chapter.number.toString()] ?? 0;
             const isComplete = percent >= COMPLETE_THRESHOLD;
@@ -66,7 +66,7 @@ const TOCGrid = () => {
               <AnimatedSection key={chapter.number} delay={i * 80}>
                 <Link
                   to={`/chapter/${chapter.number}`}
-                  className="gold-dust group block relative px-5 py-4 md:p-6 bg-card border border-border rounded-sm overflow-hidden transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_30px_hsl(355_100%_24%/0.2),inset_0_0_30px_hsl(355_100%_24%/0.05)]"
+                  className="gold-dust group block relative px-5 py-3 md:p-6 bg-card border border-border rounded-sm overflow-hidden transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_30px_hsl(355_100%_24%/0.2),inset_0_0_30px_hsl(355_100%_24%/0.05)]"
                 >
                   {/* Chapter number watermark */}
                   <span className="absolute top-2 right-4 font-display text-7xl font-bold text-foreground/[0.03] leading-none select-none">
@@ -74,24 +74,24 @@ const TOCGrid = () => {
                   </span>
 
                   <div className="flex items-center gap-3 mb-2">
-                    <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary">
+                    <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary">
                       Chapter {chapter.number}
                     </p>
                     {chapter.number === 1 ? (
-                      <span className="font-ui text-[10px] uppercase text-primary bg-primary/10 border border-primary/30 rounded-sm px-1.5 py-0.5">Free</span>
+                      <span className="font-ui text-[11px] uppercase text-primary bg-primary/10 border border-primary/30 rounded-sm px-1.5 py-0.5">Free</span>
                     ) : !hasAccess ? (
                       <Lock size={12} className="text-muted-foreground shrink-0" aria-label="Full access required" />
                     ) : null}
                     {isComplete && (
-                      <span className="inline-flex items-center gap-1 font-ui text-[10px] uppercase tracking-wider text-green-500">
+                      <span className="inline-flex items-center gap-1 font-ui text-[11px] uppercase tracking-wider text-green-500">
                         <CheckCircle2 size={12} /> Read
                       </span>
                     )}
                   </div>
-                  <h3 className="font-display text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
+                  <h3 className="font-display text-xl font-semibold text-foreground mb-2 md:mb-3 group-hover:text-primary transition-colors duration-300">
                     {chapter.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground italic mb-3">
+                  <p className="text-sm text-muted-foreground italic mb-2 md:mb-3">
                     {chapter.summary}
                   </p>
                   <p className="inline-flex items-center gap-1.5 font-ui text-[11px] text-muted-foreground">

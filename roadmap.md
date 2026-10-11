@@ -15,3 +15,11 @@
 - [x] Verify heights: 8,934px at 375×812; 6,827px at 1440×900; no horizontal overflow or runtime errors.
 - [x] Verify inline expansion/collapse, quote favorite/copy/share, and acknowledgments navigation; 39 unit and 27 browser tests pass, latest build clean.
 - [x] Run lint: same 25 pre-existing errors and 13 warnings; no new issues.
+
+# Design cleanup — Round 3
+- [x] Speed up entrances; normalize heading font, small typography and contrast.
+- [x] Clear mobile hero nav; standardize labeled section narration, verified real playback and pause.
+- [x] Rebuild footer and desktop Unlock presentation; align mobile reader controls above a reserved bottom strip.
+- [x] Verify six routes at 375px and 1440px: no horizontal overflow or text below 11px; above-fold entrances visible after 600ms. Solid-surface text contrast exceeds 4.5:1; decorative watermarks and image/gradient text excluded from numeric audit.
+- [x] Homepage after fonts load: 8,968px mobile and 7,201px desktop, within existing budgets.
+- [x] All 39 unit and 27 browser tests pass; preview build clean. Lint retains the same 25 existing errors and 13 warnings.

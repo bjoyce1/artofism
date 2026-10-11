@@ -53,7 +53,7 @@ const Mint = () => {
             className="flex justify-center lg:justify-end order-1 lg:order-1"
             initial={{ opacity: 0, scale: 0.9, rotateY: -10 }}
             animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="relative">
               <div className="absolute -inset-8 bg-[radial-gradient(circle,hsl(var(--gold)/0.2),transparent_70%)] blur-2xl animate-pulse" />
@@ -75,17 +75,17 @@ const Mint = () => {
           {/* Right — Copy */}
           <motion.div
             className="order-2 lg:order-2 text-center lg:text-left"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.4, delay: 0.06 }}
           >
-            <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary mb-4">
+            <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-4">
               Limited Edition · Ethereum
             </p>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] mb-6">
               The ISM<br />Founder's Key
             </h1>
-            <p className="font-display text-xl sm:text-2xl text-primary/80 mb-6">
+            <p className="font-display text-xl sm:text-2xl text-primary mb-6">
               111 Keys. One System.
             </p>
             <div className="space-y-2 mb-8">
@@ -150,11 +150,11 @@ const Mint = () => {
         <div className="max-w-4xl mx-auto relative z-10">
           <motion.div
             className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary mb-4">Utility</p>
+            <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-4">Utility</p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">What This Unlocks</h2>
           </motion.div>
 
@@ -165,10 +165,10 @@ const Mint = () => {
                 <motion.div
                   key={item.label}
                   className="flex items-center gap-5 p-5 bg-card/40 border border-primary/10 rounded-xl backdrop-blur-sm hover:border-primary/30 transition-colors"
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -12 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
+                  transition={{ delay: Math.min(i * 0.06, 0.12) }}
                 >
                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                     <Icon size={18} className="text-primary" />
@@ -186,11 +186,11 @@ const Mint = () => {
         <div className="max-w-4xl mx-auto">
           <motion.div
             className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary mb-4">How It Works</p>
+            <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-4">How It Works</p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">Three Steps to Access</h2>
           </motion.div>
 
@@ -201,10 +201,10 @@ const Mint = () => {
                 <motion.div
                   key={step.step}
                   className="relative text-center p-8 bg-card/40 border border-primary/10 rounded-2xl backdrop-blur-sm"
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.15 }}
+                  transition={{ delay: Math.min(i * 0.06, 0.12) }}
                 >
                   <div className="w-14 h-14 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-4">
                     <Icon size={24} className="text-primary" />
@@ -224,7 +224,7 @@ const Mint = () => {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,hsl(var(--crimson)/0.1),transparent_60%)] pointer-events-none" />
         <motion.div
           className="text-center relative z-10"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >

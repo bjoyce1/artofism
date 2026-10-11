@@ -61,7 +61,7 @@ const Auth = () => {
         <AnimatedSection>
           <div className="max-w-md w-full space-y-8 text-center">
             <div className="space-y-3">
-              <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary">Access ISM</p>
+              <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary">Access ISM</p>
               <h1 className="font-display text-3xl sm:text-4xl font-bold text-foreground">Sign In</h1>
               <p className="text-muted-foreground">Enter your email to receive a magic sign-in link.</p>
             </div>

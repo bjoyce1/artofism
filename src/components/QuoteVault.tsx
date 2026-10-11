@@ -30,14 +30,14 @@ const QuoteVault = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-deep-black via-smoke/30 to-deep-black pointer-events-none" />
       <div className="relative max-w-6xl mx-auto">
         <AnimatedSection>
-          <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4 text-center">Words That Remain</p>
+          <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-4 text-center">Words That Remain</p>
           <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-10">Quote <span className="text-gold-gradient">Vault</span></h2>
         </AnimatedSection>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {quotes.map((quote, index) => (
             <AnimatedSection key={quote.text} delay={index * 60} className={index === 0 ? 'md:col-span-2' : ''}>
               <article className={`relative p-4 md:p-8 bg-card border rounded-sm h-full flex flex-col ${index === 0 ? 'border-primary/30' : 'border-border'}`}>
-                <blockquote className={`font-display leading-relaxed text-foreground/90 mb-5 flex-1 ${index === 0 ? 'text-2xl md:text-4xl italic md:max-w-4xl md:mx-auto md:text-center' : 'text-lg'}`}>
+                <blockquote className={`font-display leading-relaxed text-foreground/90 mb-3 md:mb-5 flex-1 ${index === 0 ? 'text-2xl md:text-4xl italic md:max-w-4xl md:mx-auto md:text-center' : 'text-lg'}`}>
                   "{quote.text}"
                 </blockquote>
                 <div className="flex flex-wrap items-center justify-between gap-2">

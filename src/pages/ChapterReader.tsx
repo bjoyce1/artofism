@@ -9,6 +9,7 @@ import { trackEvent } from '@/lib/analytics';
 
 
 import AnimatedSection from '@/components/AnimatedSection';
+import { Button } from '@/components/ui/button';
 import FloatingNav from '@/components/FloatingNav';
 import SEO from '@/components/SEO';
 import { Helmet } from 'react-helmet-async';
@@ -359,36 +360,37 @@ const ChapterReader = () => {
       )}
 
       {/* Reader controls: font size + reading mode */}
+      <div aria-hidden="true" className="fixed bottom-0 inset-x-0 h-[calc(84px+env(safe-area-inset-bottom))] bg-background border-t border-border z-40 sm:hidden" />
       <div
-        className="fixed z-50 font-ui right-4 sm:right-6 bottom-20 sm:bottom-6 flex items-center gap-2"
+        className="fixed z-50 font-ui right-3 sm:right-6 bottom-6 flex items-center gap-2"
         style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}
       >
-        <div className="flex items-center bg-card/90 backdrop-blur-lg border border-border rounded-full sm:rounded-sm shadow-lg shadow-black/30">
-          <button
+        <div className="reader-control flex items-center">
+          <Button variant="ghost" size="icon"
             onClick={() => changeFontSize(-1)}
             disabled={fontSize === 0}
             aria-label="Decrease text size"
-            className="p-2.5 sm:p-2 text-muted-foreground hover:text-primary disabled:opacity-30 disabled:hover:text-muted-foreground active:scale-95 transition-all"
+            className="h-11 w-11 rounded-full text-muted-foreground hover:text-primary"
           >
             <AArrowDown size={16} />
-          </button>
+          </Button>
           <div className="w-px h-4 bg-border" />
-          <button
+          <Button variant="ghost" size="icon"
             onClick={() => changeFontSize(1)}
             disabled={fontSize === FONT_SIZES.length - 1}
             aria-label="Increase text size"
-            className="p-2.5 sm:p-2 text-muted-foreground hover:text-primary disabled:opacity-30 disabled:hover:text-muted-foreground active:scale-95 transition-all"
+            className="h-11 w-11 rounded-full text-muted-foreground hover:text-primary"
           >
             <AArrowUp size={16} />
-          </button>
+          </Button>
         </div>
-        <button
+        <Button variant="ghost"
           onClick={toggleMode}
-          className="flex items-center gap-2 px-4 py-2.5 sm:py-2 bg-card/90 backdrop-blur-lg border border-border rounded-full sm:rounded-sm text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-primary hover:border-primary/40 transition-all duration-300 active:scale-95 shadow-lg shadow-black/30"
+          className="reader-control flex items-center gap-1.5 px-3 text-[11px] sm:text-xs uppercase tracking-[0.08em] hover:text-primary hover:border-primary/40"
         >
           {isExperience ? <Eye size={14} /> : <BookOpen size={14} />}
           {isExperience ? 'Experience' : 'Read'}
-        </button>
+        </Button>
       </div>
 
       {/* Resume reading pill */}
@@ -452,7 +454,7 @@ const ChapterReader = () => {
         )}
       </AnimatePresence>
 
-      <article className="relative z-10 pt-20 sm:pt-24 pb-40 sm:pb-32 px-5 sm:px-6">
+      <article className="relative z-10 pt-20 sm:pt-24 pb-[calc(176px+env(safe-area-inset-bottom))] sm:pb-32 px-5 sm:px-6">
         <div className="max-w-3xl mx-auto">
           {/* Chapter number watermark */}
           {isExperience && (
@@ -471,7 +473,7 @@ const ChapterReader = () => {
             </Link>
 
             <div className="flex items-center gap-4 mb-3">
-              <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary">
+              <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary">
                 Chapter {chapter.number}
               </p>
               <span className="inline-flex items-center gap-1.5 font-ui text-xs text-muted-foreground">
@@ -607,7 +609,7 @@ const ChapterReader = () => {
             )}
           </div>
 
-          <p className="hidden md:block text-center font-ui text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 mt-8">
+          <p className="hidden md:block text-center font-ui text-[11px] uppercase tracking-[0.2em] text-muted-foreground mt-8">
             Tip: use ← and → keys to move between chapters
           </p>
         </div>

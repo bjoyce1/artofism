@@ -43,11 +43,11 @@ const ChapterRelicsGallery = () => {
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary mb-4">
+          <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-4">
             Coming Soon
           </p>
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
@@ -63,7 +63,7 @@ const ChapterRelicsGallery = () => {
             <motion.button
               key={relic.chapter}
               className="group relative aspect-square rounded-xl overflow-hidden border border-primary/10 hover:border-primary/40 transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-primary/40"
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.05 }}
@@ -85,7 +85,7 @@ const ChapterRelicsGallery = () => {
               </div>
               {/* Info */}
               <div className="absolute bottom-0 left-0 right-0 p-4">
-                <p className="font-ui text-[10px] uppercase tracking-widest text-primary mb-1">
+                <p className="font-ui text-[11px] uppercase tracking-widest text-primary mb-1">
                   Chapter {relic.chapter}
                 </p>
                 <h3 className="font-display text-sm sm:text-base font-bold text-foreground leading-tight">
@@ -112,7 +112,7 @@ const ChapterRelicsGallery = () => {
             />
             <motion.div
               className="relative w-full max-w-lg"
-              initial={{ scale: 0.9, y: 20 }}
+              initial={{ scale: 0.9, y: 12 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
             >

@@ -146,7 +146,7 @@ const ChapterNarrationBar = ({ chapterNumber }: Props) => {
             {currentSpeed}x
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-[9rem] bg-card border-border">
-            <DropdownMenuLabel className="font-ui text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+            <DropdownMenuLabel className="font-ui text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
               Narration speed
             </DropdownMenuLabel>
             {NARRATION_SPEEDS.map((s) => (

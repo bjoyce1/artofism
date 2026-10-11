@@ -82,10 +82,10 @@ const AnnouncementBanner = () => {
             ref={triggerRef}
             onClick={handleOpen}
             aria-label={`What's new: ${announcement.title}. Open details.`}
-            className="flex min-h-[44px] flex-1 items-center gap-2 py-2 text-left text-primary transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+            className="flex min-h-[44px] flex-1 items-center gap-2 py-2 text-left text-primary transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
           >
             <Megaphone className="h-4 w-4 shrink-0" aria-hidden="true" />
-            <span className="font-ui text-[11px] uppercase tracking-[0.25em] text-primary/70">
+            <span className="font-ui text-[11px] uppercase tracking-[0.25em] text-primary">
               New
             </span>
             <span className="min-w-0 flex-1 truncate font-body text-sm text-foreground/90">
