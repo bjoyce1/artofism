@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import FloatingNav from '@/components/FloatingNav';
@@ -7,10 +7,26 @@ import AnimatedSection from '@/components/AnimatedSection';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
 import { trackEvent } from '@/lib/analytics';
+import { supabase } from '@/integrations/supabase/client';
+import { PurchaseConfetti } from '@/components/ui/confetti';
+import type { CelebrationPurchase } from '@/lib/purchaseCelebration';
 
 const UnlockSuccess = () => {
-  const { refreshAccess } = useAuth();
+  const { refreshAccess, user, hasAccess, loading, accessLoading } = useAuth();
+  const [purchase, setPurchase] = useState<CelebrationPurchase | null>(null);
   const trackedRef = useRef(false);
+
+  // Read-only confirmation for the visual effect: never infer purchase from this URL.
+  useEffect(() => {
+    setPurchase(null);
+    if (loading || accessLoading || !user || !hasAccess) return;
+    let cancelled = false;
+    supabase.from('purchases').select('id, provider_order_id, status')
+      .eq('user_id', user.id).eq('product_slug', 'art-of-ism-full-access')
+      .eq('status', 'completed').order('created_at', { ascending: false }).limit(1).maybeSingle()
+      .then(({ data, error }) => { if (!cancelled && !error) setPurchase(data); });
+    return () => { cancelled = true; };
+  }, [user, hasAccess, loading, accessLoading]);
 
   useEffect(() => {
     refreshAccess();
@@ -29,6 +45,7 @@ const UnlockSuccess = () => {
         noindex
       />
       <FloatingNav />
+      <PurchaseConfetti purchase={purchase} hasAccess={!loading && !accessLoading && hasAccess} />
       <AnimatedSection>
         <div className="max-w-lg text-center space-y-8">
           <div className="w-20 h-20 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center mx-auto">

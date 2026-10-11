@@ -2,13 +2,13 @@ import { test, expect } from '@playwright/test';
 import { introduction } from '../src/data/bookContent';
 
 for (const width of [375, 1440]) {
-  test(`homepage fits the Round 2 height budget at ${width}px`, async ({ page }) => {
+  test(`homepage fits the height budget including the short text reveal at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(1200);
     const dimensions = await page.evaluate(() => ({ height: document.documentElement.scrollHeight, width: document.documentElement.scrollWidth }));
-    expect(dimensions.height).toBeLessThan(width === 375 ? 9000 : 7500);
+    expect(dimensions.height).toBeLessThan(width === 375 ? 9600 : 8100);
     expect(dimensions.width).toBeLessThanOrEqual(width);
   });
 }

@@ -267,6 +267,70 @@
   html { scroll-behavior: auto !important; }
 }
 
+/* Magic UI ports: token-driven, Tailwind v3-compatible and dark-only. */
+.border-beam-mask {
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid transparent;
+  border-radius: inherit;
+  pointer-events: none;
+  overflow: hidden;
+  -webkit-mask: linear-gradient(hsl(var(--deep-black)) 0 0) padding-box, linear-gradient(hsl(var(--deep-black)) 0 0) border-box;
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(hsl(var(--deep-black)) 0 0) padding-box, linear-gradient(hsl(var(--deep-black)) 0 0) border-box;
+  mask-composite: exclude;
+}
+.border-beam-segment {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  offset-path: rect(0 auto auto 0 round 2px);
+  background: linear-gradient(to left, hsl(var(--gold)), hsl(var(--gold-bright)), transparent);
+}
+.magic-card-border, .magic-card-glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  z-index: -1;
+}
+.magic-card-border {
+  padding: 1px;
+  -webkit-mask: linear-gradient(hsl(var(--deep-black)) 0 0) content-box, linear-gradient(hsl(var(--deep-black)) 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(hsl(var(--deep-black)) 0 0) content-box, linear-gradient(hsl(var(--deep-black)) 0 0);
+  mask-composite: exclude;
+}
+.magic-card-glow { inset: 0; }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .magic-card:hover .magic-card-border, .magic-card:hover .magic-card-glow { opacity: 1; }
+}
+.text-reveal-track {
+  height: min(110svh, 640px);
+  position: relative;
+  margin-bottom: 2.5rem;
+}
+.text-reveal-sticky {
+  position: sticky;
+  top: 25svh;
+  min-height: min(55svh, 320px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+@media (min-width: 768px) {
+  .text-reveal-track { height: min(130svh, 660px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .border-beam-mask, .purchase-confetti { display: none; }
+  .unlock-price-card { border: 1px solid hsl(var(--gold) / 0.4); }
+  .text-reveal-track { height: auto; }
+  .text-reveal-sticky { position: static; min-height: 0; }
+  .text-reveal-sticky span { opacity: 1 !important; }
+}
+
 /* Universal focus-visible ring — meets WCAG 2.4.7 on interactive controls
    whose Tailwind classes don't set one. */
 :focus-visible {
