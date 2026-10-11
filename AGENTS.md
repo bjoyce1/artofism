@@ -1,3 +1,4 @@
 # Architecture rules
 - `/codes` owns its entitlement-based presentation: non-members receive a title-only projection of paid chapter codes; the existing full hub renders only with confirmed access. This keeps navigation public without exposing paid text in the rendered page.
 - Public code preview data is projected in `src/lib/codePreview.ts`, excluding the free chapter, so the ten-title boundary is independently testable without changing manuscript content.
+- Browser tests use the standard Playwright configuration against the existing local preview, avoiding an unavailable proprietary configuration dependency.
