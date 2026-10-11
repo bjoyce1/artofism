@@ -6,7 +6,7 @@ import AlbumDownload from './AlbumDownload';
 
 const AcknowledgmentsPreview = () => (
   <section id="acknowledgments" className="relative py-16 md:py-24 px-6 text-center bg-deep-black">
-    <div className="max-w-3xl mx-auto space-y-3">
+    <div className="max-w-3xl mx-auto space-y-2 sm:space-y-3">
       <h2 className="font-display text-3xl sm:text-5xl text-foreground">Acknowledgments</h2>
       <p className="font-display text-primary italic">No journey is built alone.</p>
       <p className="text-xs sm:text-sm text-muted-foreground">This section honors those who were part of the journey.</p>
