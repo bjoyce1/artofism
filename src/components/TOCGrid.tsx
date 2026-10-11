@@ -66,7 +66,7 @@ const TOCGrid = () => {
               <AnimatedSection key={chapter.number} delay={i * 80}>
                 <Link
                   to={`/chapter/${chapter.number}`}
-                  className="gold-dust group block relative p-5 md:p-6 bg-card border border-border rounded-sm overflow-hidden transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_30px_hsl(355_100%_24%/0.2),inset_0_0_30px_hsl(355_100%_24%/0.05)]"
+                  className="gold-dust group block relative px-5 py-4 md:p-6 bg-card border border-border rounded-sm overflow-hidden transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_30px_hsl(355_100%_24%/0.2),inset_0_0_30px_hsl(355_100%_24%/0.05)]"
                 >
                   {/* Chapter number watermark */}
                   <span className="absolute top-2 right-4 font-display text-7xl font-bold text-foreground/[0.03] leading-none select-none">

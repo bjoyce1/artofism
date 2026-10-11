@@ -36,7 +36,7 @@ const QuoteVault = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {quotes.map((quote, index) => (
             <AnimatedSection key={quote.text} delay={index * 60} className={index === 0 ? 'md:col-span-2' : ''}>
-              <article className={`relative p-5 md:p-8 bg-card border rounded-sm h-full flex flex-col ${index === 0 ? 'border-primary/30' : 'border-border'}`}>
+              <article className={`relative p-4 md:p-8 bg-card border rounded-sm h-full flex flex-col ${index === 0 ? 'border-primary/30' : 'border-border'}`}>
                 <blockquote className={`font-display leading-relaxed text-foreground/90 mb-5 flex-1 ${index === 0 ? 'text-2xl md:text-4xl italic md:max-w-4xl md:mx-auto md:text-center' : 'text-lg'}`}>
                   "{quote.text}"
                 </blockquote>

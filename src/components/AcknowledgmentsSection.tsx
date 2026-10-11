@@ -1,6 +1,7 @@
 import AnimatedSection from './AnimatedSection';
 import SectionAudioButton from './SectionAudioButton';
-import AcknowledgmentNames, { mentors, legacy, circle } from './AcknowledgmentNames';
+import AcknowledgmentNames from './AcknowledgmentNames';
+import { mentors, legacy, circle } from '@/data/acknowledgments';
 import AlbumDownload from './AlbumDownload';
 
 const AcknowledgmentsSection = () => (

@@ -46,7 +46,7 @@ const IntroductionLayout = () => {
             <div ref={excerptRef} className="space-y-5 pb-5">
               {introduction.paragraphs.slice(0, boundary).map(paragraph)}
             </div>
-            <div inert={expanded ? undefined : ''} className="space-y-5">
+            <div {...(expanded ? {} : { inert: '' })} className="space-y-5">
               {introduction.paragraphs.slice(boundary).map((text, index) => paragraph(text, boundary + index))}
               <Button variant="link" className="px-0" aria-expanded={expanded} aria-controls="introduction-text" onClick={() => {
                 setExpanded(false);

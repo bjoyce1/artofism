@@ -32,7 +32,7 @@ const AboutAuthorSection = () => {
             </div>
           </AnimatedSection>
 
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <AnimatedSection delay={300}>
               <p className="text-base md:text-lg leading-[1.8] text-foreground/90">{aboutAuthor.bio}</p>
             </AnimatedSection>
