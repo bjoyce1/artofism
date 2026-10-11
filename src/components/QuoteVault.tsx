@@ -1,108 +1,58 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useFavorites } from '@/hooks/useReadingProgress';
 import { Heart, Copy, Check, Share2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import AnimatedSection from './AnimatedSection';
 
 const quotes = [
-  { text: "If you don't define your mindset, the world will define it for you.", source: "Introduction" },
-  { text: "P was never just a letter. It was a ladder.", source: "Chapter 1" },
-  { text: "Confidence doesn't perform. It exists.", source: "Chapter 3" },
-  { text: "Money reveals people.", source: "Chapter 9" },
-  { text: "CAPISM isn't something you say. It's something you live.", source: "Chapter 11" },
+  { text: "If you don't define your mindset, the world will define it for you.", source: 'Introduction' },
+  { text: 'P was never just a letter. It was a ladder.', source: 'Chapter 1' },
+  { text: "Confidence doesn't perform. It exists.", source: 'Chapter 3' },
+  { text: 'Money reveals people.', source: 'Chapter 9' },
+  { text: "CAPISM isn't something you say. It's something you live.", source: 'Chapter 11' },
 ];
 
 const QuoteVault = () => {
   const { toggleFavorite, isFavorite } = useFavorites();
   const [copiedText, setCopiedText] = useState<string | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const copyText = (text: string) => {
-    navigator.clipboard.writeText(text);
+  const copyText = async (text: string) => {
+    await navigator.clipboard.writeText(text);
     setCopiedText(text);
     setTimeout(() => setCopiedText(null), 2000);
   };
-
   const shareText = async (text: string) => {
-    if (navigator.share) {
-      await navigator.share({ text: `"${text}" — The Art of ISM` });
-    } else {
-      copyText(text);
-    }
+    if (navigator.share) await navigator.share({ text: `"${text}" — The Art of ISM` });
+    else await copyText(text);
   };
 
   return (
-    <section id="quotes" className="relative py-32 px-6">
+    <section id="quotes" className="relative py-16 md:py-24 px-6">
       <div className="absolute inset-0 bg-gradient-to-b from-deep-black via-smoke/30 to-deep-black pointer-events-none" />
-
       <div className="relative max-w-6xl mx-auto">
         <AnimatedSection>
           <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4 text-center">Words That Remain</p>
-          <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-16">
-            Quote <span className="text-gold-gradient">Vault</span>
-          </h2>
+          <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-10">Quote <span className="text-gold-gradient">Vault</span></h2>
         </AnimatedSection>
-
-        {/* Mobile: horizontal swipeable */}
-        <div
-          ref={scrollRef}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 sm:hidden scrollbar-hide"
-          style={{ WebkitOverflowScrolling: 'touch' }}
-        >
-          {quotes.map((quote, i) => (
-            <div
-              key={i}
-              className="snap-center shrink-0 w-[85vw] relative group p-8 bg-card border border-border rounded-sm"
-            >
-              <span className="absolute top-3 left-4 font-display text-5xl text-primary/20 leading-none select-none">"</span>
-              <p className="font-display text-lg leading-relaxed text-foreground/90 mb-4 pt-6">
-                "{quote.text}"
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="font-ui text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  {quote.source}
-                </span>
-                <div className="flex items-center gap-2">
-                  <button onClick={() => toggleFavorite(quote.text)} className="p-1">
-                    <Heart size={16} className={isFavorite(quote.text) ? 'fill-primary text-primary' : 'text-muted-foreground hover:text-primary'} />
-                  </button>
-                  <button onClick={() => copyText(quote.text)} className="p-1">
-                    {copiedText === quote.text ? <Check size={16} className="text-green-500" /> : <Copy size={16} className="text-muted-foreground hover:text-primary" />}
-                  </button>
-                  <button onClick={() => shareText(quote.text)} className="p-1">
-                    <Share2 size={16} className="text-muted-foreground hover:text-primary" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Desktop: uniform grid */}
-        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {quotes.map((quote, i) => (
-            <AnimatedSection key={i} delay={i * 60}>
-              <div className="relative group p-8 bg-card border border-border rounded-sm hover:border-primary/30 transition-all duration-500 h-full flex flex-col">
-                <span className="absolute top-3 left-4 font-display text-5xl text-primary/20 leading-none select-none">"</span>
-                <p className="font-display text-lg leading-relaxed text-foreground/90 mb-4 pt-6 flex-1">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          {quotes.map((quote, index) => (
+            <AnimatedSection key={quote.text} delay={index * 60} className={index === 0 ? 'md:col-span-2' : ''}>
+              <article className={`relative p-5 md:p-8 bg-card border rounded-sm h-full flex flex-col ${index === 0 ? 'border-primary/30' : 'border-border'}`}>
+                <blockquote className={`font-display leading-relaxed text-foreground/90 mb-5 flex-1 ${index === 0 ? 'text-2xl md:text-4xl italic md:max-w-4xl md:mx-auto md:text-center' : 'text-lg'}`}>
                   "{quote.text}"
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="font-ui text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                    {quote.source}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => toggleFavorite(quote.text)} className="p-1 transition-colors duration-300">
-                      <Heart size={16} className={isFavorite(quote.text) ? 'fill-primary text-primary' : 'text-muted-foreground hover:text-primary'} />
-                    </button>
-                    <button onClick={() => copyText(quote.text)} className="p-1 transition-colors duration-300">
-                      {copiedText === quote.text ? <Check size={16} className="text-green-500" /> : <Copy size={16} className="text-muted-foreground hover:text-primary" />}
-                    </button>
-                    <button onClick={() => shareText(quote.text)} className="p-1 transition-colors duration-300">
-                      <Share2 size={16} className="text-muted-foreground hover:text-primary" />
-                    </button>
+                </blockquote>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="font-ui text-xs text-muted-foreground">{quote.source}</span>
+                  <div className="flex items-center">
+                    <Button variant="ghost" size="icon" className="h-11 w-11" aria-label={isFavorite(quote.text) ? 'Unfavorite quote' : 'Favorite quote'} aria-pressed={isFavorite(quote.text)} title="Favorite quote" onClick={() => toggleFavorite(quote.text)}>
+                      <Heart className={isFavorite(quote.text) ? 'fill-primary text-primary' : 'text-muted-foreground'} />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-11 w-11" aria-label="Copy quote" title={copiedText === quote.text ? 'Copied' : 'Copy quote'} onClick={() => copyText(quote.text)}>
+                      {copiedText === quote.text ? <Check className="text-primary" /> : <Copy className="text-muted-foreground" />}
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-11 w-11" aria-label="Share quote" title="Share quote" onClick={() => shareText(quote.text)}><Share2 className="text-muted-foreground" /></Button>
                   </div>
                 </div>
-              </div>
+              </article>
             </AnimatedSection>
           ))}
         </div>

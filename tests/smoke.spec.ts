@@ -67,7 +67,7 @@ test.describe('mobile responsiveness (320px)', () => {
   });
 
   test('acknowledgments "Mentors, Influence, and Foundation" heading fits within 320px viewport', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/acknowledgments');
     await page.evaluate(() => document.getElementById('acknowledgments')?.scrollIntoView());
     const heading = page.getByRole('heading', { name: /mentors,\s*influence,\s*and\s*foundation/i });
     await expect(heading).toBeVisible();
