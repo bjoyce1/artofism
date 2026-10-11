@@ -2,17 +2,11 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useRef } from 'react';
 import { trackEvent } from '@/lib/analytics';
+import { Button } from '@/components/ui/button';
 import SectionAudioButton from '@/components/SectionAudioButton';
 import heroBg from '@/assets/hero-bg.webp';
 import mobileHeroBg from '@/assets/mobile-hero-bg.webp';
 import ismLogo from '@/assets/ism-logo.webp';
-
-const stats = [
-  { value: '11', label: 'Chapters' },
-  { value: '10', label: 'ISM Codes' },
-  { value: '∞', label: 'Mindset' },
-  { value: '1', label: 'Mission' },
-];
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -24,11 +18,11 @@ const HeroSection = () => {
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '8%']);
 
   return (
-    <section ref={sectionRef} className="relative min-h-[100dvh] flex items-center overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-[95dvh] sm:min-h-[100dvh] flex items-center overflow-hidden bg-deep-black">
       {/* Real H1 for SEO/a11y — visually hidden but paired with the logo image below. */}
       <h1 className="sr-only">The Art of ISM — A Code of Thought, Movement, and Mastery by Mr. CAP</h1>
       {/* Background image with parallax — only one source actually downloads per breakpoint */}
-      <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
+      <motion.div className="absolute top-0 left-0 right-0 h-[55dvh] sm:h-full z-0" style={{ y: bgY }}>
         <picture>
           <source media="(min-width: 640px)" srcSet={heroBg} />
           <img
@@ -36,7 +30,7 @@ const HeroSection = () => {
             alt=""
             width={1920}
             height={1080}
-            className="w-full h-[115%] object-cover object-[50%_25%] sm:object-[calc(0%_-_40px)_top]"
+            className="w-full h-full sm:h-[115%] object-cover object-[50%_25%] sm:object-[calc(0%_-_40px)_top]"
             {...{ fetchpriority: 'high' } /* React 18 only forwards the lowercase form to the DOM */}
             decoding="async"
           />
@@ -44,12 +38,12 @@ const HeroSection = () => {
         {/* Base vignette */}
         <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--deep-black))] via-transparent to-[hsl(var(--deep-black)/0.35)]" />
         {/* Mobile overlay */}
-        <div className="absolute inset-0 bg-[hsl(var(--deep-black)/0.45)] sm:bg-transparent" />
+        <div className="absolute inset-0 bg-deep-black/10 sm:bg-transparent" />
         {/* Desktop: left-to-right gradient for text readability */}
         <div className="absolute inset-0 hidden sm:block bg-gradient-to-l from-[hsl(var(--deep-black)/0.80)] via-[hsl(var(--deep-black)/0.20)] to-transparent" />
         {/* Bottom fade */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-[25%]"
+          className="absolute bottom-0 left-0 right-0 h-[30%]"
           style={{
             background: 'linear-gradient(to top, hsl(var(--deep-black)), hsl(var(--deep-black) / 0.85) 40%, transparent)',
           }}
@@ -75,149 +69,64 @@ const HeroSection = () => {
         ))}
       </div>
 
-      {/* Content */}
+      {/* Mobile photo ends at 55dvh; the logo overlaps its fading lower edge. */}
       <motion.div
         style={{ y: contentY }}
-        className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-10 lg:px-20 flex items-center justify-center sm:justify-end min-h-[100dvh]"
+        className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex items-center justify-center sm:justify-end"
       >
-        <div className="flex flex-col items-center text-center sm:items-end sm:text-right sm:max-w-[55%] lg:max-w-[50%] pt-[55dvh] pb-8 sm:pt-16 sm:pb-10">
-          {/* Logo */}
+        <div className="flex flex-col items-center text-center sm:items-end sm:text-right w-full sm:w-auto sm:max-w-[80%] lg:max-w-[60%] pt-[43dvh] pb-5 sm:pt-24 sm:pb-16">
           <motion.img
             src={ismLogo}
             alt="The Art of ISM"
             initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-            className="w-56 sm:w-80 md:w-[400px] lg:w-[460px] h-auto mb-4 sm:mb-5 drop-shadow-[0_0_60px_hsl(43_76%_52%/0.25)]"
+            className="w-[260px] max-w-full sm:w-80 md:w-[400px] lg:w-[460px] h-auto mb-2 sm:mb-5 drop-shadow-[0_0_60px_hsl(43_76%_52%/0.25)]"
           />
-
-          {/* Subhead */}
           <motion.h2
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.5 }}
-            className="font-heading text-sm sm:text-base md:text-lg uppercase tracking-[0.15em] sm:tracking-[0.18em] text-foreground/85 mb-3 sm:mb-4 leading-relaxed"
+            className="hidden sm:block font-heading text-base md:text-lg uppercase tracking-[0.1em] text-foreground/85 mb-4 leading-relaxed max-w-md"
           >
-            A Code of Thought,
-            <br />
-            Movement, and Mastery
+            A Code of Thought, Movement, and Mastery
           </motion.h2>
-
-          {/* Power line / hook */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.7 }}
-            className="mb-3 sm:mb-4"
+            className="mb-4 sm:mb-6"
           >
-            <p className="font-display text-base sm:text-lg md:text-xl text-foreground/95 leading-relaxed">
-              This is not motivation.
-            </p>
-            <p className="font-display text-base sm:text-lg md:text-xl text-primary font-semibold leading-relaxed">
-              This is a system.
-            </p>
+            <p className="font-display text-lg md:text-xl text-foreground/95 leading-relaxed">This is not motivation.</p>
+            <p className="font-display text-lg md:text-xl text-primary font-semibold leading-relaxed">This is a system.</p>
           </motion.div>
-
-          {/* Micro copy */}
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.85 }}
-            className="font-body text-[13px] sm:text-base text-foreground/75 max-w-xs sm:max-w-sm mb-3 sm:mb-4 leading-relaxed"
-          >
-            Learn how to think sharper, move smarter, and operate beyond limits.
-          </motion.p>
-
-          {/* Tagline */}
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1.0 }}
-            className="font-heading italic text-base sm:text-xl md:text-2xl text-primary mb-6 sm:mb-8"
-            style={{ textShadow: '0 0 30px hsl(43 76% 52% / 0.3)' }}
-          >
-            It's all ISM.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.1 }}
-            className="mb-6 sm:mb-8"
-          >
-            <SectionAudioButton sectionId="hero" fileName="00_hero.mp3" />
-          </motion.div>
-
-          {/* Primary CTAs — clear two-action hierarchy above the fold */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 1.15 }}
-            className="flex flex-col gap-3 font-ui mb-4 sm:mb-5 w-full sm:w-auto sm:flex-row"
+            className="flex flex-col gap-2 sm:gap-3 font-ui w-full sm:w-auto sm:flex-row"
           >
-            <a
-              href="#introduction"
-              onClick={() => trackEvent('landing_cta_click', { cta: 'begin_free_chapter' })}
-              className="gold-dust inline-flex items-center justify-center gap-2 min-h-11 px-6 py-3.5 sm:px-7 sm:py-3 bg-primary text-primary-foreground text-xs uppercase tracking-[0.2em] font-medium rounded-full hover:shadow-[0_0_30px_hsl(43_76%_52%/0.4)] hover:brightness-110 transition-all duration-500 active:scale-[0.97]"
-            >
-              Begin Free Chapter
-              <span className="text-sm">→</span>
-            </a>
-            <Link
-              to="/unlock"
-              onClick={() => trackEvent('landing_cta_click', { cta: 'unlock_full_book' })}
-              className="gold-dust inline-flex items-center justify-center gap-2 min-h-11 px-6 py-3.5 sm:px-7 sm:py-3 border border-primary/50 text-primary text-xs uppercase tracking-[0.2em] rounded-full hover:bg-primary/10 hover:border-primary/70 transition-all duration-500 backdrop-blur-sm active:scale-[0.97]"
-            >
-              Unlock Full Book — $9.99
-              <span className="text-sm">→</span>
-            </Link>
+            <Button asChild size="lg" className="gold-dust rounded-full px-5 text-xs uppercase tracking-[0.08em] whitespace-nowrap hover:brightness-110 active:scale-[0.97]">
+              <Link to="/chapter/1" onClick={() => trackEvent('landing_cta_click', { cta: 'read_chapter_1_free' })}>
+                Read Chapter 1 Free
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="gold-dust rounded-full px-5 border-primary/50 text-primary text-xs uppercase tracking-[0.08em] whitespace-nowrap bg-transparent hover:bg-primary/10 hover:text-primary active:scale-[0.97]">
+              <Link to="/unlock" onClick={() => trackEvent('landing_cta_click', { cta: 'unlock_full_book' })}>
+                Unlock Full Book — $9.99
+              </Link>
+            </Button>
           </motion.div>
-
-          {/* Tertiary links — demoted below the primary CTA group */}
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1.25 }}
-            className="flex flex-wrap items-center justify-center sm:justify-end gap-x-5 gap-y-2 font-ui mb-8 sm:mb-10"
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.25 }} className="mt-3">
+            <SectionAudioButton sectionId="hero" fileName="00_hero.mp3" label="Listen" className="min-h-9" />
+          </motion.div>
+          <motion.a
+            href="#chapters"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.35 }}
+            className="inline-flex items-center min-h-11 mt-1 font-ui text-[11px] sm:text-xs text-foreground/70 hover:text-primary transition-colors underline-offset-4 hover:underline"
           >
-            <a
-              href="#chapters"
-              className="text-[11px] sm:text-xs uppercase tracking-[0.2em] text-foreground/70 hover:text-primary transition-colors underline-offset-4 hover:underline"
-            >
-              Explore the Chapters
-            </a>
-            <span className="hidden sm:inline w-px h-3 bg-muted-foreground/25" aria-hidden="true" />
-            <Link
-              to="/codes"
-              className="text-[11px] sm:text-xs uppercase tracking-[0.2em] text-foreground/70 hover:text-primary transition-colors underline-offset-4 hover:underline"
-            >
-              View the Codes
-            </Link>
-          </motion.div>
-
-          {/* Stats bar */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1.35 }}
-            className="grid grid-cols-4 gap-0 sm:flex sm:items-center"
-          >
-            {stats.map((stat, i) => (
-              <div key={stat.label} className="flex items-center">
-                <div className="text-center px-3 sm:px-6">
-                  <div className="text-lg sm:text-2xl md:text-3xl font-heading text-primary leading-none mb-0.5 sm:mb-1">
-                    {stat.value}
-                  </div>
-                  <div className="text-[8px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.25em] text-muted-foreground font-ui whitespace-nowrap">
-                    {stat.label}
-                  </div>
-                </div>
-                {i < stats.length - 1 && (
-                  <div className="w-px h-6 sm:h-10 bg-muted-foreground/15" />
-                )}
-              </div>
-            ))}
-          </motion.div>
+            Explore the chapters
+          </motion.a>
         </div>
       </motion.div>
 
@@ -231,7 +140,7 @@ const HeroSection = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.2, duration: 1 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
+        className="hidden sm:block absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
       >
         <div className="w-[1px] h-10 bg-gradient-to-b from-transparent via-primary/40 to-transparent animate-pulse" />
       </motion.div>

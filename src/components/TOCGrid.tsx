@@ -1,17 +1,16 @@
 import { Link } from 'react-router-dom';
-import { Volume2, Clock, CheckCircle2, ChevronRight } from 'lucide-react';
+import { Volume2, Clock, CheckCircle2, ChevronRight, Lock } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 import AnimatedSection from './AnimatedSection';
 import { chapters } from '@/data/bookContent';
 import { chapterReadingMinutes } from '@/lib/bookStats';
 import { useReadingProgress } from '@/hooks/useReadingProgress';
 
-// Chapters that have audio available in storage
-const audioAvailableChapters = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-
 // Progress at which a chapter counts as read.
 const COMPLETE_THRESHOLD = 95;
 
 const TOCGrid = () => {
+  const { hasAccess } = useAuth();
   const { chapterProgress, lastChapter } = useReadingProgress();
 
   const continueChapter =
@@ -27,9 +26,13 @@ const TOCGrid = () => {
       <div className="relative max-w-6xl mx-auto">
         <AnimatedSection>
           <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4 text-center">The Chapters</p>
-          <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-16">
+          <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-4">
             Table of <span className="text-gold-gradient">Contents</span>
           </h2>
+          <p className="flex items-center justify-center gap-2 text-sm text-muted-foreground text-center mb-16">
+            <Volume2 size={16} className="text-primary shrink-0" aria-hidden="true" />
+            All 11 chapters narrated by Mr. CAP.
+          </p>
         </AnimatedSection>
 
         {continueChapter && (
@@ -70,18 +73,15 @@ const TOCGrid = () => {
                     {String(chapter.number).padStart(2, '0')}
                   </span>
 
-                  {/* Audio indicator */}
-                  {audioAvailableChapters.includes(chapter.number) && (
-                    <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2 py-1 bg-card/80 backdrop-blur-sm border border-border/60 rounded-full">
-                      <Volume2 size={12} className="text-primary" />
-                      <span className="font-ui text-[10px] uppercase tracking-wider text-muted-foreground">Audio</span>
-                    </div>
-                  )}
-
                   <div className="flex items-center gap-3 mb-2">
                     <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary">
                       Chapter {chapter.number}
                     </p>
+                    {chapter.number === 1 ? (
+                      <span className="font-ui text-[10px] uppercase text-primary bg-primary/10 border border-primary/30 rounded-sm px-1.5 py-0.5">Free</span>
+                    ) : !hasAccess ? (
+                      <Lock size={12} className="text-muted-foreground shrink-0" aria-label="Full access required" />
+                    ) : null}
                     {isComplete && (
                       <span className="inline-flex items-center gap-1 font-ui text-[10px] uppercase tracking-wider text-green-500">
                         <CheckCircle2 size={12} /> Read

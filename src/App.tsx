@@ -76,14 +76,7 @@ const App = () => (
                     }
                   />
                   <Route path="/chapter/:id" element={<GatedChapter />} />
-                  <Route
-                    path="/codes"
-                    element={
-                      <ProtectedRoute>
-                        <CodesHub />
-                      </ProtectedRoute>
-                    }
-                  />
+                  <Route path="/codes" element={<CodesHub />} />
                   <Route
                     path="/quote-vault"
                     element={
