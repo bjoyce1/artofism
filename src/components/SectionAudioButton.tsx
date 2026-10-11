@@ -1,4 +1,4 @@
-import { Mic, Pause, Play } from 'lucide-react';
+import { Pause, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSectionAudio } from '@/hooks/useSectionAudio';
 import { supabase } from '@/integrations/supabase/client';
@@ -12,7 +12,15 @@ interface Props {
   label?: string;
 }
 
-const SectionAudioButton = ({ sectionId, fileName, className = '', label }: Props) => {
+const sectionNames: Record<string, string> = {
+  hero: 'Introduction to The Art of ISM',
+  dedication: 'the Dedication',
+  introduction: 'the Introduction',
+  'about-mrcap': 'About Mr. CAP',
+  acknowledgments: 'the Acknowledgments',
+};
+
+const SectionAudioButton = ({ sectionId, fileName, className = '', label = 'Listen' }: Props) => {
   const { currentSection, isPlaying, toggle } = useSectionAudio();
   const active = currentSection === sectionId && isPlaying;
 
@@ -22,18 +30,17 @@ const SectionAudioButton = ({ sectionId, fileName, className = '', label }: Prop
     <Button
       variant="ghost"
       onClick={() => toggle(sectionId, audioSrc)}
-      className={`inline-flex items-center justify-center gap-1.5 rounded-full border transition-all duration-300 active:scale-90 ${
-        label ? 'h-auto px-3 py-1.5' : 'w-8 h-8 p-0'
-      } ${
+      className={`inline-flex h-11 items-center justify-center gap-2 rounded-full border px-4 transition-colors duration-200 ${
         active
           ? 'bg-primary/20 border-primary/50 text-primary'
           : 'bg-card/60 border-border hover:border-primary/30 text-muted-foreground hover:text-primary'
       } ${className}`}
-      aria-label={active ? `Pause ${sectionId} audio` : `Play ${sectionId} audio`}
+      aria-label={`${active ? 'Pause' : 'Listen to'} ${sectionNames[sectionId] ?? sectionId}`}
+      aria-pressed={active}
     >
-      {active ? <Pause size={14} /> : label === 'Listen' ? <Play size={14} /> : <Mic size={14} />}
+      {active ? <Pause size={14} /> : <Play size={14} />}
       {label && (
-        <span className="text-[10px] font-ui uppercase tracking-[0.1em] font-medium">
+        <span className="text-xs font-ui uppercase tracking-[0.1em] font-medium">
           {active ? 'Pause' : label}
         </span>
       )}

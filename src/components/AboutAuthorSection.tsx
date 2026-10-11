@@ -11,10 +11,10 @@ const AboutAuthorSection = () => {
       <div className="relative max-w-5xl mx-auto">
         <AnimatedSection>
           <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4 text-center">The Author</p>
-          <SectionAudioButton sectionId="about-mrcap" fileName="about-mrcap.mp3" className="mx-auto mb-6" />
-          <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-10">
+          <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-4">
             About <span className="text-gold-gradient">Mr. CAP</span>
           </h2>
+          <div className="text-center mb-10"><SectionAudioButton sectionId="about-mrcap" fileName="about-mrcap.mp3" /></div>
         </AnimatedSection>
 
         <div className="grid md:grid-cols-2 gap-12 items-start">
