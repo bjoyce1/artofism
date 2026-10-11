@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import AnimatedSection from './AnimatedSection';
 import { trackEvent } from '@/lib/analytics';
+import { TextReveal } from '@/components/ui/text-reveal';
 
 const FinalCTA = () => {
   return (
@@ -14,14 +15,7 @@ const FinalCTA = () => {
       />
 
       <div className="relative max-w-3xl mx-auto text-center">
-        <AnimatedSection>
-          <p className="font-display text-xl sm:text-2xl md:text-3xl text-foreground/90 mb-2 leading-relaxed">
-            This is not something you read once.
-          </p>
-          <p className="font-display text-xl sm:text-2xl md:text-3xl text-primary font-semibold mb-10 leading-relaxed">
-            This is something you live.
-          </p>
-        </AnimatedSection>
+        <TextReveal />
 
         <AnimatedSection delay={200}>
           <div className="flex flex-col sm:flex-row gap-4 justify-center font-ui mb-8 md:mb-12">

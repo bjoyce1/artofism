@@ -10,6 +10,7 @@ import AnimatedSection from '@/components/AnimatedSection';
 import { Button } from '@/components/ui/button';
 import { BookOpen, Code2, Quote, Infinity, Smartphone } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import { BorderBeam } from '@/components/ui/border-beam';
 
 const features = [
   { icon: BookOpen, text: 'Full online access' },
@@ -182,7 +183,7 @@ const Unlock = () => {
           </div>
           <div className="lg:sticky lg:top-28">
           <AnimatedSection delay={60}>
-            <div className="bg-card border border-primary/30 rounded-sm p-8 sm:p-12 text-center space-y-6">
+            <div className="unlock-price-card relative overflow-hidden bg-card border border-primary/40 rounded-sm p-8 sm:p-12 text-center space-y-6">
               <div className="space-y-2">
                 <p className="font-ui text-xs uppercase tracking-[0.2em] text-muted-foreground">One-time payment</p>
                 <p className="font-display text-5xl font-bold text-foreground">$9.99</p>
@@ -209,6 +210,7 @@ const Unlock = () => {
                 </div>
               )}
               <Button asChild variant="link" className="min-h-11"><Link to="/chapter/1">Read Chapter 1 Free</Link></Button>
+              <BorderBeam />
             </div>
           </AnimatedSection>
           </div>
