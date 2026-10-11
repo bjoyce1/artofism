@@ -271,13 +271,13 @@
 .border-beam-mask {
   position: absolute;
   inset: 0;
-  border: 1.5px solid transparent;
+  padding: 1.5px;
   border-radius: inherit;
   pointer-events: none;
   overflow: hidden;
-  -webkit-mask: linear-gradient(hsl(var(--deep-black)) 0 0) padding-box, linear-gradient(hsl(var(--deep-black)) 0 0) border-box;
+  -webkit-mask: linear-gradient(hsl(var(--deep-black)) 0 0) content-box, linear-gradient(hsl(var(--deep-black)) 0 0);
   -webkit-mask-composite: xor;
-  mask: linear-gradient(hsl(var(--deep-black)) 0 0) padding-box, linear-gradient(hsl(var(--deep-black)) 0 0) border-box;
+  mask: linear-gradient(hsl(var(--deep-black)) 0 0) content-box, linear-gradient(hsl(var(--deep-black)) 0 0);
   mask-composite: exclude;
 }
 .border-beam-segment {
