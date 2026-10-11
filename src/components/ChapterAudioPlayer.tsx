@@ -199,7 +199,7 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
 
             {/* Time + controls */}
             <div className="flex items-center justify-between">
-              <span className="text-[10px] text-muted-foreground font-ui tabular-nums">{formatTime(currentTime)}</span>
+              <span className="text-[11px] text-muted-foreground font-ui tabular-nums">{formatTime(currentTime)}</span>
 
               <div className="flex items-center gap-3">
                 <button
@@ -221,7 +221,7 @@ const ChapterAudioPlayer = ({ chapterNumber }: Props) => {
                 </button>
               </div>
 
-              <span className="text-[10px] text-muted-foreground font-ui tabular-nums">{formatTime(duration)}</span>
+              <span className="text-[11px] text-muted-foreground font-ui tabular-nums">{formatTime(duration)}</span>
             </div>
           </motion.div>
         )}

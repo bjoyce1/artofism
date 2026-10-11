@@ -132,11 +132,11 @@ const Vault = () => {
 
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.4 }}
           >
-            <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-6">
+            <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-6">
               The Vault
             </p>
             <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl font-bold text-foreground mb-6 leading-[1.1]">
@@ -176,10 +176,10 @@ const Vault = () => {
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <motion.div
             className="relative flex justify-center"
-            initial={{ opacity: 0, x: -40 }}
+            initial={{ opacity: 0, x: -12 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.4 }}
           >
             <div className="relative">
               <div className="absolute -inset-8 bg-primary/10 rounded-full blur-[60px]" />
@@ -194,12 +194,12 @@ const Vault = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
+            initial={{ opacity: 0, x: 12 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.4, delay: 0.06 }}
           >
-            <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary mb-4">
+            <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-4">
               Primary Artifact
             </p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-6">
@@ -250,11 +250,11 @@ const Vault = () => {
         <div className="max-w-6xl mx-auto">
           <motion.div
             className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary mb-4">
+            <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-4">
               The Collection
             </p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">
@@ -269,10 +269,10 @@ const Vault = () => {
                 <motion.button
                   key={item.id}
                   className="group relative text-left bg-card/40 backdrop-blur-sm border border-primary/10 rounded-xl p-6 transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_30px_hsl(43,76%,52%,0.1)] hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-primary/40"
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: idx * 0.1 }}
+                  transition={{ duration: 0.5, delay: Math.min(idx * 0.06, 0.12) }}
                   onClick={() => setSelectedItem(item)}
                 >
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
@@ -289,7 +289,7 @@ const Vault = () => {
                       {item.supply}
                     </span>
                     {item.status === 'coming-soon' && (
-                      <span className="font-ui text-[10px] uppercase tracking-widest text-muted-foreground bg-muted px-2 py-1 rounded">
+                      <span className="font-ui text-[11px] uppercase tracking-widest text-muted-foreground bg-muted px-2 py-1 rounded">
                         Soon
                       </span>
                     )}
@@ -324,7 +324,7 @@ const Vault = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-secondary/5 to-transparent pointer-events-none" />
         <div className="relative z-10 max-w-2xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
@@ -366,11 +366,11 @@ const Vault = () => {
       {/* ── CLOSING LINE ── */}
       <section className="py-20 text-center">
         <motion.p
-          className="font-display text-2xl sm:text-3xl italic text-primary/80"
+          className="font-display text-2xl sm:text-3xl italic text-primary"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 1.5 }}
+          transition={{ duration: 0.4 }}
         >
           It's all ISM.
         </motion.p>

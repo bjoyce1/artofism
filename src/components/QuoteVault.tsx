@@ -30,7 +30,7 @@ const QuoteVault = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-deep-black via-smoke/30 to-deep-black pointer-events-none" />
       <div className="relative max-w-6xl mx-auto">
         <AnimatedSection>
-          <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4 text-center">Words That Remain</p>
+          <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-4 text-center">Words That Remain</p>
           <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-10">Quote <span className="text-gold-gradient">Vault</span></h2>
         </AnimatedSection>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">

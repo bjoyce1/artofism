@@ -106,7 +106,7 @@ const Library = () => {
           <AnimatedSection>
             <div className="flex items-center justify-between mb-4">
               <div>
-                <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-2">Your Access is Unlocked</p>
+                <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-2">Your Access is Unlocked</p>
                 <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
                   Welcome to <span className="text-gold-gradient">ISM</span>
                 </h1>
@@ -122,7 +122,7 @@ const Library = () => {
               Your access is unlocked. Enter the full interactive book experience.
             </p>
             {completedCount > 0 && (
-              <p className="font-ui text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-12">
+              <p className="font-ui text-[11px] uppercase tracking-[0.2em] text-muted-foreground mb-12">
                 {completedCount} of {totalChapters} chapters read
               </p>
             )}
@@ -139,13 +139,13 @@ const Library = () => {
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-ui text-[11px] uppercase tracking-[0.3em] mb-2" style={{ color: '#c9a227' }}>
+                      <p className="font-ui text-[11px] uppercase tracking-[0.2em] mb-2" style={{ color: '#c9a227' }}>
                         Complete
                       </p>
                       <p className="font-display text-xl" style={{ color: '#ece6d9' }}>
                         You've read the code.
                       </p>
-                      <p className="font-ui text-[11px] uppercase tracking-[0.3em] mt-2 text-muted-foreground">
+                      <p className="font-ui text-[11px] uppercase tracking-[0.2em] mt-2 text-muted-foreground">
                         Enter the Quote Vault
                       </p>
                     </div>
@@ -160,7 +160,7 @@ const Library = () => {
                 >
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <p className="font-ui text-[11px] uppercase tracking-[0.3em] mb-2" style={{ color: '#c9a227' }}>
+                      <p className="font-ui text-[11px] uppercase tracking-[0.2em] mb-2" style={{ color: '#c9a227' }}>
                         Continue Reading
                       </p>
                       <p className="font-display text-xl mb-3" style={{ color: '#ece6d9' }}>
@@ -172,7 +172,7 @@ const Library = () => {
                           style={{ width: `${resumeRow!.progress_percent}%`, background: '#c9a227' }}
                         />
                       </div>
-                      <p className="font-ui text-[11px] uppercase tracking-[0.3em] mt-2 text-muted-foreground">
+                      <p className="font-ui text-[11px] uppercase tracking-[0.2em] mt-2 text-muted-foreground">
                         {resumeRow!.progress_percent}% through
                       </p>
                     </div>
@@ -187,7 +187,7 @@ const Library = () => {
                 >
                   <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="font-ui text-[11px] uppercase tracking-[0.3em] mb-2" style={{ color: '#c9a227' }}>
+                      <p className="font-ui text-[11px] uppercase tracking-[0.2em] mb-2" style={{ color: '#c9a227' }}>
                         Up Next
                       </p>
                       <p className="font-display text-xl" style={{ color: '#ece6d9' }}>

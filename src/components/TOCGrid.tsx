@@ -25,7 +25,7 @@ const TOCGrid = () => {
 
       <div className="relative max-w-6xl mx-auto">
         <AnimatedSection>
-          <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4 text-center">The Chapters</p>
+          <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-4 text-center">The Chapters</p>
           <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-4">
             Table of <span className="text-gold-gradient">Contents</span>
           </h2>
@@ -42,7 +42,7 @@ const TOCGrid = () => {
               className="group flex items-center justify-between max-w-xl mx-auto mb-12 p-5 bg-card border border-primary/30 rounded-sm hover:border-primary/50 transition-colors"
             >
               <div>
-                <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary mb-1">Continue Reading</p>
+                <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-1">Continue Reading</p>
                 <p className="font-display text-lg text-foreground group-hover:text-primary transition-colors">
                   Chapter {continueChapter.number}: {continueChapter.title}
                 </p>
@@ -74,16 +74,16 @@ const TOCGrid = () => {
                   </span>
 
                   <div className="flex items-center gap-3 mb-2">
-                    <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary">
+                    <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary">
                       Chapter {chapter.number}
                     </p>
                     {chapter.number === 1 ? (
-                      <span className="font-ui text-[10px] uppercase text-primary bg-primary/10 border border-primary/30 rounded-sm px-1.5 py-0.5">Free</span>
+                      <span className="font-ui text-[11px] uppercase text-primary bg-primary/10 border border-primary/30 rounded-sm px-1.5 py-0.5">Free</span>
                     ) : !hasAccess ? (
                       <Lock size={12} className="text-muted-foreground shrink-0" aria-label="Full access required" />
                     ) : null}
                     {isComplete && (
-                      <span className="inline-flex items-center gap-1 font-ui text-[10px] uppercase tracking-wider text-green-500">
+                      <span className="inline-flex items-center gap-1 font-ui text-[11px] uppercase tracking-wider text-green-500">
                         <CheckCircle2 size={12} /> Read
                       </span>
                     )}

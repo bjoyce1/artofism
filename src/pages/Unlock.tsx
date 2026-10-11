@@ -146,29 +146,30 @@ const Unlock = () => {
 
 
 
-      <div className="pt-24 pb-32 px-6">
-        <div className="max-w-3xl mx-auto">
+      <div className="pt-24 pb-24 px-6 lg:pt-32">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 items-start">
+          <div>
           <AnimatedSection>
-            <div className="text-center space-y-6 mb-16">
-              <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary">Full Access</p>
+            <div className="text-center lg:text-left space-y-5 mb-8">
+              <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary">Full Access</p>
               <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-foreground">
                 Unlock The Art of <span className="text-gold-gradient">ISM</span>
               </h1>
-              <p className="font-body text-lg text-muted-foreground max-w-lg mx-auto">
+              <p className="font-body text-lg text-muted-foreground max-w-lg mx-auto lg:mx-0">
                 A Code of Thought, Movement, and Mastery
               </p>
               <div className="pt-4 space-y-2">
                 <p className="font-display text-xl text-foreground italic">This is not motivation.</p>
                 <p className="font-display text-xl text-primary italic">This is a system.</p>
               </div>
-              <p className="text-muted-foreground leading-relaxed max-w-md mx-auto pt-4">
+              <p className="text-muted-foreground leading-relaxed max-w-md mx-auto lg:mx-0 pt-2">
                 You're not buying a book. You're unlocking a way of thinking, moving, and operating.
               </p>
             </div>
           </AnimatedSection>
 
           <AnimatedSection delay={100}>
-            <div className="grid sm:grid-cols-2 gap-4 mb-16">
+            <div className="grid sm:grid-cols-2 gap-4">
               {features.map((f, i) => (
                 <div key={i} className="flex items-center gap-3 p-4 bg-card border border-border rounded-sm">
                   <f.icon size={18} className="text-primary shrink-0" />
@@ -178,10 +179,12 @@ const Unlock = () => {
             </div>
           </AnimatedSection>
 
-          <AnimatedSection delay={200}>
-            <div className="bg-card border border-primary/30 rounded-sm p-8 sm:p-12 text-center space-y-8">
+          </div>
+          <div className="lg:sticky lg:top-28">
+          <AnimatedSection delay={60}>
+            <div className="bg-card border border-primary/30 rounded-sm p-8 sm:p-12 text-center space-y-6">
               <div className="space-y-2">
-                <p className="font-ui text-xs uppercase tracking-[0.3em] text-muted-foreground">One-time payment</p>
+                <p className="font-ui text-xs uppercase tracking-[0.2em] text-muted-foreground">One-time payment</p>
                 <p className="font-display text-5xl font-bold text-foreground">$9.99</p>
                 <p className="text-muted-foreground text-sm">Lifetime access • No subscription</p>
               </div>
@@ -205,16 +208,10 @@ const Unlock = () => {
                   {error && <p className="text-destructive text-sm" role="alert">{error}</p>}
                 </div>
               )}
+              <Button asChild variant="link" className="min-h-11"><Link to="/chapter/1">Read Chapter 1 Free</Link></Button>
             </div>
           </AnimatedSection>
-
-          <AnimatedSection delay={300}>
-            <div className="text-center mt-12">
-              <Link to="/chapter/1" className="text-primary hover:underline font-display text-sm">
-                Read Chapter 1 Free
-              </Link>
-            </div>
-          </AnimatedSection>
+          </div>
         </div>
       </div>
     </div>

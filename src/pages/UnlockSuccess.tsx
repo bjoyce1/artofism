@@ -36,7 +36,7 @@ const UnlockSuccess = () => {
           </div>
 
           <div className="space-y-4">
-            <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary">Access Granted</p>
+            <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary">Access Granted</p>
             <h1 className="font-display text-4xl sm:text-5xl font-bold text-foreground">
               Welcome to <span className="text-gold-gradient">ISM</span>
             </h1>

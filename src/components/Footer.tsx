@@ -12,7 +12,7 @@ const Footer = () => {
             </p>
           </div>
           <div className="space-y-3">
-            <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary mb-2">Support</p>
+            <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-2">Support</p>
             <a
               href="mailto:support@theartofism.com"
               className="block text-muted-foreground text-sm hover:text-primary transition-colors"

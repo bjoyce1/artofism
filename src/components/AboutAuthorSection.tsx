@@ -10,7 +10,7 @@ const AboutAuthorSection = () => {
 
       <div className="relative max-w-5xl mx-auto">
         <AnimatedSection>
-          <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4 text-center">The Author</p>
+          <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-4 text-center">The Author</p>
           <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground text-center mb-4">
             About <span className="text-gold-gradient">Mr. CAP</span>
           </h2>

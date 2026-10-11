@@ -471,7 +471,7 @@ const ChapterReader = () => {
             </Link>
 
             <div className="flex items-center gap-4 mb-3">
-              <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary">
+              <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary">
                 Chapter {chapter.number}
               </p>
               <span className="inline-flex items-center gap-1.5 font-ui text-xs text-muted-foreground">
@@ -607,7 +607,7 @@ const ChapterReader = () => {
             )}
           </div>
 
-          <p className="hidden md:block text-center font-ui text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 mt-8">
+          <p className="hidden md:block text-center font-ui text-[11px] uppercase tracking-[0.2em] text-muted-foreground mt-8">
             Tip: use ← and → keys to move between chapters
           </p>
         </div>

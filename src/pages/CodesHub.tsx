@@ -30,7 +30,7 @@ const CodesHub = () => {
       <div className="pt-24 pb-32 px-6">
         <div className="max-w-4xl mx-auto">
           <AnimatedSection>
-            <p className="font-ui text-xs uppercase tracking-[0.4em] text-primary mb-4 text-center">The System</p>
+            <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-4 text-center">The System</p>
             <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-foreground text-center mb-4">
               The <span className="text-gold-gradient">Codes</span>
             </h1>
@@ -73,7 +73,7 @@ const CodesHub = () => {
                       className="w-full flex items-center justify-between p-6 text-left"
                     >
                       <div>
-                        <p className="font-ui text-xs uppercase tracking-[0.3em] text-primary mb-1">
+                        <p className="font-ui text-xs uppercase tracking-[0.2em] text-primary mb-1">
                           Chapter {code.chapterNumber}
                         </p>
                         <h3 className="font-display text-xl font-semibold text-foreground">

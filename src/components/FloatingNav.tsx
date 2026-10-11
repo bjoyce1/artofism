@@ -153,7 +153,7 @@ const FloatingNav = () => {
                 <button
                   key={item.label}
                   onClick={() => handleNavClick(item.path)}
-                  className="text-[15px] uppercase tracking-[0.2em] text-foreground/80 hover:text-primary transition-colors duration-300"
+                  className="text-[15px] uppercase tracking-[0.2em] text-foreground/85 hover:text-primary transition-colors duration-300"
                 >
                   {item.label}
                 </button>
@@ -161,7 +161,7 @@ const FloatingNav = () => {
                 <Link
                   key={item.label}
                   to={item.path}
-                  className="text-[15px] uppercase tracking-[0.2em] text-foreground/80 hover:text-primary transition-colors duration-300"
+                  className="text-[15px] uppercase tracking-[0.2em] text-foreground/85 hover:text-primary transition-colors duration-300"
                 >
                   {item.label}
                 </Link>
@@ -176,11 +176,11 @@ const FloatingNav = () => {
               <Search size={16} strokeWidth={1.5} />
             </button>
             {user && hasAccess ? (
-              <Link to="/library" className="text-[15px] uppercase tracking-[0.2em] text-primary hover:text-primary/80 transition-colors duration-300">
+              <Link to="/library" className="text-[15px] uppercase tracking-[0.2em] text-primary hover:text-primary transition-colors duration-300">
                 Library
               </Link>
             ) : (
-              <Link to={user ? "/unlock" : "/auth"} className="text-[15px] uppercase tracking-[0.2em] text-primary hover:text-primary/80 transition-colors duration-300">
+              <Link to={user ? "/unlock" : "/auth"} className="text-[15px] uppercase tracking-[0.2em] text-primary hover:text-primary transition-colors duration-300">
                 {user ? "Get Access" : "Sign In"}
               </Link>
             )}

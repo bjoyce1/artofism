@@ -40,7 +40,7 @@ const AmbientAudioToggle = () => {
     <motion.button
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ delay: 2.5, duration: 1 }}
+      transition={{ delay: 0.06, duration: 0.4 }}
       onClick={toggleAudio}
       className="fixed bottom-24 sm:bottom-8 right-4 sm:right-8 z-50 w-10 h-10 flex items-center justify-center rounded-full border border-primary/30 bg-deep-black/80 backdrop-blur-sm text-muted-foreground hover:text-primary hover:border-primary/60 transition-all duration-300"
       aria-label={isMuted ? 'Unmute ambient audio' : 'Mute ambient audio'}

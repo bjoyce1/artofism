@@ -22,7 +22,7 @@ const HeroSection = () => {
       {/* Real H1 for SEO/a11y — visually hidden but paired with the logo image below. */}
       <h1 className="sr-only">The Art of ISM — A Code of Thought, Movement, and Mastery by Mr. CAP</h1>
       {/* Background image with parallax — only one source actually downloads per breakpoint */}
-      <motion.div className="absolute top-0 left-0 right-0 h-[55dvh] sm:h-full z-0" style={{ y: bgY }}>
+      <motion.div className="absolute top-0 left-0 right-0 h-[55dvh] sm:h-full z-0 pt-14 sm:pt-0" style={{ y: bgY }}>
         <picture>
           <source media="(min-width: 640px)" srcSet={heroBg} />
           <img
@@ -78,32 +78,32 @@ const HeroSection = () => {
           <motion.img
             src={ismLogo}
             alt="The Art of ISM"
-            initial={{ opacity: 0, scale: 0.92 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="w-[260px] max-w-full sm:w-80 md:w-[400px] lg:w-[460px] h-auto mb-2 sm:mb-5 drop-shadow-[0_0_60px_hsl(43_76%_52%/0.25)]"
           />
           <motion.h2
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.5 }}
+            transition={{ duration: 0.35, delay: 0.04 }}
             className="hidden sm:block font-heading text-base md:text-lg uppercase tracking-[0.1em] text-foreground/85 mb-4 leading-relaxed max-w-md"
           >
-            A Code of Thought, Movement, and Mastery
+            A Code of Thought,<br />Movement, and Mastery
           </motion.h2>
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.7 }}
+            transition={{ duration: 0.35, delay: 0.08 }}
             className="mb-4 sm:mb-6"
           >
             <p className="font-display text-lg md:text-xl text-foreground/95 leading-relaxed">This is not motivation.</p>
             <p className="font-display text-lg md:text-xl text-primary font-semibold leading-relaxed">This is a system.</p>
           </motion.div>
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1.15 }}
+            transition={{ duration: 0.35, delay: 0.12 }}
             className="flex flex-col gap-2 sm:gap-3 font-ui w-full sm:w-auto sm:flex-row"
           >
             <Button asChild size="lg" className="gold-dust rounded-full px-5 text-xs uppercase tracking-[0.08em] whitespace-nowrap hover:brightness-110 active:scale-[0.97]">
@@ -117,13 +117,13 @@ const HeroSection = () => {
               </Link>
             </Button>
           </motion.div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.25 }} className="mt-3">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.16 }} className="mt-3">
             <SectionAudioButton sectionId="hero" fileName="00_hero.mp3" label="Listen" className="min-h-9" />
           </motion.div>
           <motion.a
             href="#chapters"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.35 }}
-            className="inline-flex items-center min-h-11 mt-1 font-ui text-[11px] sm:text-xs text-foreground/70 hover:text-primary transition-colors underline-offset-4 hover:underline"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.2 }}
+            className="inline-flex items-center min-h-11 mt-1 font-ui text-[11px] sm:text-xs text-foreground/85 hover:text-primary transition-colors underline-offset-4 hover:underline"
           >
             Explore the chapters
           </motion.a>
@@ -139,7 +139,7 @@ const HeroSection = () => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2.2, duration: 1 }}
+        transition={{ delay: 0.2, duration: 0.3 }}
         className="hidden sm:block absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
       >
         <div className="w-[1px] h-10 bg-gradient-to-b from-transparent via-primary/40 to-transparent animate-pulse" />
