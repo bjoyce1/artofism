@@ -1,7 +1,7 @@
 // Public analytics ingest. Optionally accepts a user JWT to attach user_id.
 // Rate limited per source IP using an in-memory token bucket. Writes with the
 // service role so the analytics_events table can enforce strict INSERT RLS.
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { createClient } from "npm:@supabase/supabase-js@2";
 import { ALLOWED_ORIGINS } from "../_shared/paypal.ts";
 
 const ALLOWED_EVENTS = new Set([

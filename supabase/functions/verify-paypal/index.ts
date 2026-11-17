@@ -1,7 +1,7 @@
 // Verify + capture + atomically persist a PayPal order. Only returns success
 // after the finalize_paypal_purchase RPC commits and an entitlement lookup
 // confirms the buyer's access is active. Never log-and-continue.
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { createClient } from "npm:@supabase/supabase-js@2";
 import {
   buildCorsHeaders,
   paypalAccessToken,

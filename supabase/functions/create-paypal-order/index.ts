@@ -2,7 +2,7 @@
 // amount or currency. This function ensures every checkout order is exactly
 // $9.99 USD for the lifetime access product and is tagged with the buyer's
 // user id so verify-paypal can validate ownership before capture.
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { createClient } from "npm:@supabase/supabase-js@2";
 import {
   buildCorsHeaders,
   paypalAccessToken,

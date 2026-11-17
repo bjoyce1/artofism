@@ -1,7 +1,7 @@
 // PayPal webhook receiver. Verifies signatures against PayPal's REST API
 // using PAYPAL_WEBHOOK_ID before mutating any data. Every DB call is
 // checked; any reconciliation failure returns a non-2xx so PayPal retries.
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { createClient } from "npm:@supabase/supabase-js@2";
 import {
   paypalAccessToken,
   PAYPAL_API_BASE,
