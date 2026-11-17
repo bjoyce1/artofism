@@ -566,6 +566,15 @@ export type Database = {
         Args: { _order_id: string; _reason: string }
         Returns: boolean
       }
+      vault_locked_previews: {
+        Args: never
+        Returns: {
+          chapter_slug: string
+          chapter_title: string
+          code_number: number
+          id: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "user"

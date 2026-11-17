@@ -41,14 +41,25 @@ const QuoteVaultPage = () => {
         .from('vault_quotes')
         .select('id, code_number, quote_text, chapter_slug, chapter_title, is_free')
         .order('code_number', { ascending: true });
+      let rows = (!error && data ? data : []) as VaultQuote[];
+      if (!hasAccess) {
+        // Locked codes come from a title-only teaser; their text never reaches non-members.
+        const { data: locked } = await supabase.rpc('vault_locked_previews');
+        const placeholders: VaultQuote[] = (locked ?? []).map((l) => ({
+          ...l,
+          quote_text: 'This code is sealed inside the vault. Unlock the full book to read it.',
+          is_free: false,
+        }));
+        rows = [...rows, ...placeholders].sort((a, b) => a.code_number - b.code_number);
+      }
       if (cancelled) return;
-      if (!error && data) setQuotes(data as VaultQuote[]);
+      setQuotes(rows);
       setLoading(false);
     })();
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [hasAccess]);
 
   const chapters = useMemo(() => {
     const seen = new Set<string>();
