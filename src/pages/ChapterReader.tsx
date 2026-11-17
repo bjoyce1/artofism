@@ -511,7 +511,7 @@ const ChapterReader = () => {
                 <AnimatedSection key={i} delay={i * 20}>
                   <p className={`${bodyFont} leading-[1.85] sm:leading-[1.9] text-foreground/90 whitespace-pre-line ${i === 0 ? 'drop-cap' : ''}`}>
                     {followActive && group
-                      ? group.map(({ index, unit }, s) => (
+                      ? group.map(({ index, unit }) => (
                           <span
                             key={index}
                             data-sync-unit={index}
@@ -521,7 +521,6 @@ const ChapterReader = () => {
                                 : 'transition-colors duration-200'
                             }
                           >
-                            {s > 0 ? ' ' : ''}
                             {unit.text}
                           </span>
                         ))

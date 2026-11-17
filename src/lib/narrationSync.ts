@@ -31,11 +31,16 @@ export function splitSentences(paragraph: string): string[] {
   const parts = paragraph.match(/[^.!?…]+(?:[.!?…]+["'”’)\]]*)?\s*/g) ?? [paragraph];
   const out: string[] = [];
   for (const raw of parts) {
-    const piece = raw.replace(/\s+$/, '');
-    if (!piece.trim()) continue;
+    // Keep whitespace (including the author's line breaks) so joined pieces
+    // reproduce the paragraph exactly.
+    const piece = raw;
+    if (!piece.trim()) {
+      if (out.length > 0) out[out.length - 1] += piece;
+      continue;
+    }
     // Merge stubs (initials, "Mr.", stray punctuation) into the previous piece.
     if (out.length > 0 && piece.trim().length < 3) {
-      out[out.length - 1] = `${out[out.length - 1]} ${piece.trim()}`;
+      out[out.length - 1] += piece;
       continue;
     }
     out.push(piece);

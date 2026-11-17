@@ -8,7 +8,7 @@ import {
 
 describe('splitSentences', () => {
   it('keeps punctuation attached and drops empties', () => {
-    expect(splitSentences('One. Two! Three?')).toEqual(['One.', 'Two!', 'Three?']);
+    expect(splitSentences('One. Two! Three?')).toEqual(['One. ', 'Two! ', 'Three?']);
   });
 
   it('falls back to the whole paragraph when there is no punctuation', () => {
