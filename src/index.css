@@ -340,3 +340,78 @@
 }
 
 
+
+/* ---------- Flip book ---------- */
+:root {
+  --paper: 40 42% 91%;
+  --paper-shade: 36 30% 78%;
+  --paper-edge: 38 28% 80%;
+  --ink: 20 12% 9%;
+}
+.flip-room {
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 55%, hsl(var(--crimson) / 0.16), transparent 70%),
+    radial-gradient(ellipse at 50% 120%, hsl(var(--gold) / 0.08), transparent 60%),
+    hsl(var(--deep-black));
+}
+.flip-leaf { will-change: transform; }
+.flip-face {
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  overflow: hidden; container-type: inline-size;
+}
+.flip-face-front { border-radius: 0 4px 4px 0; }
+.flip-face-back { transform: rotateY(180deg); border-radius: 4px 0 0 4px; }
+.flip-face-cover { border-radius: 2px 6px 6px 2px; box-shadow: inset 3px 0 6px hsl(var(--deep-black) / 0.6); }
+.flip-face-back.flip-face-cover { border-radius: 6px 2px 2px 6px; }
+.flip-paper {
+  background:
+    radial-gradient(ellipse at 30% 20%, hsl(0 0% 100% / 0.35), transparent 60%),
+    repeating-linear-gradient(0deg, hsl(var(--paper-shade) / 0.05) 0 1px, transparent 1px 3px),
+    hsl(var(--paper));
+}
+.flip-paper-reverse { filter: brightness(0.94); }
+.flip-endpaper {
+  background:
+    repeating-linear-gradient(45deg, hsl(var(--gold) / 0.08) 0 1px, transparent 1px 12px),
+    repeating-linear-gradient(-45deg, hsl(var(--gold) / 0.08) 0 1px, transparent 1px 12px),
+    hsl(var(--crimson) / 0.9);
+}
+.flip-cover { background: hsl(var(--deep-black)); }
+.flip-back-cover {
+  background:
+    radial-gradient(ellipse at 50% 30%, hsl(var(--crimson) / 0.28), transparent 65%),
+    linear-gradient(160deg, hsl(0 0% 7%), hsl(var(--deep-black)) 60%);
+}
+.flip-cover-sheen {
+  background: linear-gradient(105deg, transparent 35%, hsl(var(--gold-bright) / 0.12) 48%, transparent 60%),
+    linear-gradient(90deg, hsl(var(--deep-black) / 0.55), transparent 6%, hsl(0 0% 100% / 0.05) 8%, transparent 12%);
+}
+.flip-gutter-right, .flip-gutter-left { position: absolute; top: 0; bottom: 0; width: 14%; pointer-events: none; }
+.flip-gutter-right { left: 0; background: linear-gradient(90deg, hsl(var(--ink) / 0.28), hsl(var(--ink) / 0.08) 35%, transparent); }
+.flip-gutter-left { right: 0; background: linear-gradient(270deg, hsl(var(--ink) / 0.28), hsl(var(--ink) / 0.08) 35%, transparent); }
+.flip-shade-front, .flip-shade-back { position: absolute; inset: 0; pointer-events: none; }
+.flip-shade-front { background: linear-gradient(90deg, hsl(var(--ink) / 0.0) 0%, hsl(var(--ink) / 0.35) 100%); }
+.flip-shade-back { background: linear-gradient(270deg, hsl(var(--ink) / 0.0) 0%, hsl(var(--ink) / 0.4) 100%); }
+.flip-glint {
+  position: absolute; top: 0; bottom: 0; width: 18%; pointer-events: none; transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent, hsl(0 0% 100% / 0.22), transparent);
+  mix-blend-mode: soft-light;
+}
+.flip-cast-shadow {
+  position: absolute; inset: 4% -6% 0 0; pointer-events: none; transform: translateZ(-1px);
+  background: radial-gradient(ellipse at 0% 50%, hsl(var(--deep-black) / 0.6), transparent 70%);
+  filter: blur(8px);
+}
+.flip-block { position: absolute; top: 0; bottom: 0; width: 50%; background: hsl(var(--paper-edge)); border-radius: 3px; }
+.flip-floor-shadow {
+  position: absolute; left: 2%; right: 2%; bottom: -4%; height: 10%; pointer-events: none;
+  background: radial-gradient(ellipse at center, hsl(var(--deep-black) / 0.9), transparent 70%); filter: blur(10px);
+}
+
+.flip-spine {
+  position: absolute; top: 0; bottom: 0; left: 50%; width: 3%; transform: translateX(-50%); pointer-events: none; z-index: 9999;
+  background: linear-gradient(90deg, transparent, hsl(var(--ink) / 0.22) 45%, hsl(var(--ink) / 0.3) 50%, hsl(var(--ink) / 0.22) 55%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .flip-glint, .flip-cast-shadow { display: none; }
+}

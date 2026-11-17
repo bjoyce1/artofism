@@ -1,3 +1,4 @@
+import { BookOpen } from "lucide-react";
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useRef } from 'react';
@@ -127,6 +128,12 @@ const HeroSection = () => {
           >
             Explore the chapters
           </motion.a>
+          <Link
+            to="/flipbook"
+            className="inline-flex items-center gap-1.5 min-h-11 font-ui text-[11px] sm:text-xs text-primary hover:text-gold-bright transition-colors underline-offset-4 hover:underline"
+          >
+            <BookOpen className="h-3.5 w-3.5" aria-hidden /> Open the flip book
+          </Link>
         </div>
       </motion.div>
 

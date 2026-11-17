@@ -9,4 +9,4 @@
 - Reader floating controls share a semantic surface and height token, with article bottom clearance for the mobile controls and safe area.
 - Shared scroll reveals cap stagger delays and global motion defaults keep entrances fast without altering ambient effects.
 - Magic UI effects are local Tailwind v3/Framer Motion ports with semantic CSS tokens and explicit pointer/reduced-motion gates, avoiding incompatible registry dependencies.
-- Purchase celebration independently reads completed purchases and active access, then claims an order-keyed session flag; it never mutates checkout or entitlement logic.
+- Purchase celebration independently reads completed purchases and active access, then claims an order-keyed session flag; it never mutates checkout or entitlement logic.- The flip book (/flipbook) paginates manuscript text in src/lib/flipbookPages.ts with entitlement-based page lists and synthesises page-turn audio in code, so no paid text or audio files ship to non-members.
