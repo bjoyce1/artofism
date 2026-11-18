@@ -8,7 +8,7 @@ for (const width of [375, 1440]) {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(1200);
     const dimensions = await page.evaluate(() => ({ height: document.documentElement.scrollHeight, width: document.documentElement.scrollWidth }));
-    expect(dimensions.height).toBeLessThan(width === 375 ? 9600 : 8100);
+    expect(dimensions.height).toBeLessThan(width === 375 ? 9900 : 8100);
     expect(dimensions.width).toBeLessThanOrEqual(width);
   });
 }

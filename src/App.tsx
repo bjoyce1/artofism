@@ -21,6 +21,7 @@ import NotFound from "./pages/NotFound.tsx";
 // because Vault, Mint, ChapterReader etc. each pull in their own dependencies.
 const Auth = lazy(() => import("./pages/Auth.tsx"));
 const FlipBookPage = lazy(() => import("./pages/FlipBookPage.tsx"));
+const FlipBookPromo = lazy(() => import("./pages/FlipBookPromo.tsx"));
 const Unlock = lazy(() => import("./pages/Unlock.tsx"));
 const UnlockSuccess = lazy(() => import("./pages/UnlockSuccess.tsx"));
 const Library = lazy(() => import("./pages/Library.tsx"));
@@ -80,6 +81,7 @@ const App = () => (
                   />
                   <Route path="/chapter/:id" element={<GatedChapter />} />
                   <Route path="/flipbook" element={<FlipBookPage />} />
+                  <Route path="/flipbook-edition" element={<FlipBookPromo />} />
                   <Route path="/codes" element={<CodesHub />} />
                   <Route
                     path="/quote-vault"

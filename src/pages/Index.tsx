@@ -5,6 +5,7 @@ import HeroSection from '@/components/HeroSection';
 import DedicationSection from '@/components/DedicationSection';
 import IntroductionLayout from '@/components/IntroductionLayout';
 import TOCGrid from '@/components/TOCGrid';
+import FlipBookBand from '@/components/FlipBookBand';
 import QuoteVault from '@/components/QuoteVault';
 import AboutAuthorSection from '@/components/AboutAuthorSection';
 import AcknowledgmentsPreview from '@/components/AcknowledgmentsPreview';
@@ -25,6 +26,7 @@ const Index = () => {
       <DedicationSection />
       <IntroductionLayout />
       <TOCGrid />
+      <FlipBookBand />
       <QuoteVault />
       <AboutAuthorSection />
       <AcknowledgmentsPreview />
