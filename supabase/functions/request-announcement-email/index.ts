@@ -1,3 +1,4 @@
+import { sendTemplateEmailLogged } from '../_shared/send-and-log.ts'
 import { createClient } from 'npm:@supabase/supabase-js@2'
 
 // A signed-in reader taps "Email me the details" on an in-app announcement.
@@ -73,15 +74,8 @@ Deno.serve(async (req) => {
     return json({ error: 'This update is no longer available' }, 404)
   }
 
-  const sendRes = await fetch(`${supabaseUrl}/functions/v1/send-transactional-email`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${serviceKey}`,
-    },
-    body: JSON.stringify({
-      templateName: 'announcement',
-      recipientEmail: user.email,
+  try {
+    const result = await sendTemplateEmailLogged(admin, 'announcement', user.email, {
       idempotencyKey: `announcement-${announcement.id}-${user.id}`,
       templateData: {
         title: announcement.title,
@@ -89,13 +83,13 @@ Deno.serve(async (req) => {
         linkLabel: announcement.link_label ?? undefined,
         linkUrl: announcement.link_url ?? undefined,
       },
-    }),
-  })
-
-  if (!sendRes.ok) {
-    const details = await sendRes.text()
-    console.error(`send-transactional-email failed [${sendRes.status}]: ${details}`)
-    return json({ error: 'Could not send the email right now', status: sendRes.status }, 502)
+    })
+    if (!result.sent) {
+      return json({ success: false, reason: 'recipient_suppressed' })
+    }
+  } catch (e) {
+    console.error('announcement email failed', e instanceof Error ? e.message : e)
+    return json({ error: 'Could not send the email right now' }, 502)
   }
 
   return json({ success: true })

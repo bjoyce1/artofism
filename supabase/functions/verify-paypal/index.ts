@@ -1,3 +1,4 @@
+import { sendTemplateEmailLogged } from "../_shared/send-and-log.ts";
 // Verify + capture + atomically persist a PayPal order. Only returns success
 // after the finalize_paypal_purchase RPC commits and an entitlement lookup
 // confirms the buyer's access is active. Never log-and-continue.
@@ -182,13 +183,9 @@ Deno.serve(async (req) => {
     //    doesn't kill the outbound request when the response is returned.
     try {
       if (userEmail) {
-        await supabaseAdmin.functions.invoke("send-transactional-email", {
-          body: {
-            templateName: "purchase-confirmation",
-            recipientEmail: userEmail,
-            idempotencyKey: `purchase-confirm-${orderId}`,
-            templateData: { name: userEmail.split("@")[0], amount: PRODUCT_AMOUNT, currency: PRODUCT_CURRENCY, orderId },
-          },
+        await sendTemplateEmailLogged(supabaseAdmin, "purchase-confirmation", userEmail, {
+          idempotencyKey: `purchase-confirm-${orderId}`,
+          templateData: { name: userEmail.split("@")[0], amount: PRODUCT_AMOUNT, currency: PRODUCT_CURRENCY, orderId },
         });
       }
     } catch (e) {
