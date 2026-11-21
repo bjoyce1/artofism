@@ -32,4 +32,4 @@
 
 # Monitoring review — checkout and legacy unsubscribe
 - [x] Verify signed-in checkout: real order returns HTTP 200 and PayPal opens with PayPal/card options; resolve checkout finding as stale.
-- [ ] Restore old email unsubscribe links: confirmed missing handler returns HTTP 404. Blocked on a supported legacy-token handoff to Lovable-managed preferences; no documented compatibility API is available. Review the plan before implementing.
+- [ ] Restore old email unsubscribe links: confirmed missing handler returns HTTP 404. Approved plan investigated: the email SDK supports recipient-based preferences, but no supported legacy-token-to-recipient handoff is documented. Blocked on that mapping; do not rebuild or query retired email token/suppression tables or falsely report an opt-out.
